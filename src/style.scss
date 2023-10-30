@@ -15,10 +15,12 @@ $size-7: clamp(3.36rem, 2.56vw + 2.72rem, 4.77rem);
 
 /* Color */
 $black: #2c2c2c;
-$darkgray: #494845;
+$darkGray: #494845;
 $gray: #767676;
-$skyblue: #ccd2e1;
 $white: #fff;
+
+$lightGray1: #f2f2f2;
+$lightGray2: #e1e1e1;
 
 $beige: #ece3ce;
 $softRed: #c97777;
@@ -26,12 +28,15 @@ $red: #c93f3f;
 $darkRed: #8c3333;
 
 $green: #026530;
-$lightgreen: #00a637;
+$lightGreen: #00a637;
 $softGreen-dark: #3a4d39;
 $softGreen: #4f6f52;
 $softGreen-light: #739072;
 
-$overlay: rgba(0, 0, 0, 0.7);
+$lightBlue: #64ccc5;
+$skyblue: #ccd2e1;
+
+$overlay: rgba(0, 0, 0, 0.76);
 
 /* Mixin */
 @mixin set-center($direction: column, $align: center, $justify: center) {

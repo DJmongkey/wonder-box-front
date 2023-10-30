@@ -2,7 +2,7 @@
 
 .wonderBox_info {
   width: 80%;
-  background-color: #f2f2f2;
+  background-color: $lightGray1;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -38,7 +38,7 @@
 
 .button {
   background-color: $green;
-  color: #fff;
+  color: $white;
   border: none;
   margin-left: 20px;
   padding: 0.5rem 1rem;
