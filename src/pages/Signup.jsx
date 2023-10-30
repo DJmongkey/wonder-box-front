@@ -33,7 +33,7 @@ export default function Signup() {
     },
   };
 
-  function validateAndSetError(name, value, otherState = null) {
+  function validateInput(name, value, otherState = null) {
     const rule = validationRules[name];
 
     if (name === 'passwordConfirm') {
@@ -70,18 +70,18 @@ export default function Signup() {
     }
 
     if (name === 'passwordConfirm') {
-      validateAndSetError(name, value, password);
+      validateInput(name, value, password);
     } else {
-      validateAndSetError(name, value);
+      validateInput(name, value);
     }
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const isEmailValid = validateAndSetError('email', email);
-    const isPasswordValid = validateAndSetError('password', password);
-    const isPasswordConfirmValid = validateAndSetError(
+    const isEmailValid = validateInput('email', email);
+    const isPasswordValid = validateInput('password', password);
+    const isPasswordConfirmValid = validateInput(
       'passwordConfirm',
       passwordConfirm,
       password,
