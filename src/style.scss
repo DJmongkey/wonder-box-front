@@ -4,14 +4,14 @@ $enFont: 'Roboto', sans-serif;
 $enSubFont: 'Playpen Sans', cursive;
 
 /* Font Size */
-$size-0: clamp(1.13rem, 0.23vw + 1.07rem, 1.25rem);
-$size-1: clamp(1.35rem, 0.39vw + 1.25rem, 1.56rem);
-$size-2: clamp(1.62rem, 0.61vw + 1.47rem, 1.95rem);
-$size-3: clamp(1.94rem, 0.9vw + 1.72rem, 2.44rem);
-$size-4: clamp(2.33rem, 1.31vw + 2.01rem, 3.05rem);
-$size-5: clamp(2.8rem, 1.85vw + 2.34rem, 3.81rem);
-$size-6: clamp(3.36rem, 2.56vw + 2.72rem, 4.77rem);
-$size-7: clamp(4.03rem, 3.51vw + 3.15rem, 5.96rem);
+$size-0: clamp(0.5rem, 0.15vw + 0.7rem, 0.875rem);
+$size-1: clamp(0.875rem, 0.23vw + 1rem, 1.125rem);
+$size-2: clamp(1.35rem, 0.39vw + 1.25rem, 1.56rem);
+$size-3: clamp(1.62rem, 0.61vw + 1.47rem, 1.95rem);
+$size-4: clamp(1.94rem, 0.9vw + 1.72rem, 2.44rem);
+$size-5: clamp(2.33rem, 1.31vw + 2.01rem, 3.05rem);
+$size-6: clamp(2.8rem, 1.85vw + 2.34rem, 3.81rem);
+$size-7: clamp(3.36rem, 2.56vw + 2.72rem, 4.77rem);
 
 /* Color */
 $black: #2c2c2c;
@@ -31,7 +31,7 @@ $softGreen-dark: #3a4d39;
 $softGreen: #4f6f52;
 $softGreen-light: #739072;
 
-$toggleBg: rgba(0, 0, 0, 0.67);
+$overlay: rgba(0, 0, 0, 0.7);
 
 /* Mixin */
 @mixin set-center($direction: column, $align: center, $justify: center) {
@@ -42,9 +42,11 @@ $toggleBg: rgba(0, 0, 0, 0.67);
   text-align: center;
 }
 
-@mixin button($w: 100%, $h: 100%, $r: 0) {
+@mixin button($w: 100%, $h: auto, $p: 10px, $m: 0 auto, $r: 0) {
   width: $w;
   height: $h;
+  padding: $p;
+  margin: $m;
   @content;
 
   &:hover,

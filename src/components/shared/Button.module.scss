@@ -1,0 +1,15 @@
+@import '../../style.scss';
+
+.button {
+  @include button($w: 50%, $r: 6px) {
+    font-size: $size-1;
+    font-family: $krFont;
+    background-color: $softGreen;
+    color: $white;
+    font-weight: 500;
+    &:hover,
+    &:focus {
+      background-color: $softGreen-dark;
+    }
+  }
+}
