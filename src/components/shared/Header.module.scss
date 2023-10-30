@@ -1,0 +1,47 @@
+@import '../../style.scss';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 2px solid $darkgray;
+}
+
+.logo {
+  font-size: $size-3;
+  font-weight: bold;
+}
+
+.buttons {
+  display: flex;
+  gap: 2rem;
+
+  .button {
+    color: $black;
+    font-weight: bold;
+    border: 1px solid $softGreen;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      font-weight 0.2s;
+  }
+}
+
+@include mobile {
+  .header {
+    flex-direction: column;
+    align-items: center;
+
+    .buttons {
+      flex-direction: column;
+      margin-top: 1rem;
+
+      .button {
+        width: 100%;
+      }
+    }
+  }
+}
