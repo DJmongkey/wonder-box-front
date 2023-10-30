@@ -5,41 +5,35 @@ import styles from './Header.module.scss';
 import { useAuthContext } from '../../context/AuthContext';
 
 export default function Header() {
-  const { user, login, logout } = useAuthContext();
-  const navigate = useNavigate();
+  const { user, logout } = useAuthContext();
+  const nevigate = useNavigate();
 
-  const handleClick = () => {
-    if (user) {
-      logout();
-      navigate('/');
-      return;
-    }
-
-    login();
+  const handleLogoutClick = () => {
+    logout();
+    nevigate('/');
   };
 
-  const handleSignupClick = () => {
-    navigate('/signup');
-  };
-
-  const handleMyWonderBoxClick = () => {
-    navigate('/calendars/:calendarId/share');
-  };
   return (
     <div className={styles.header}>
       <Link to="/" className={styles.logo}>
         WonderBox
       </Link>
       <div className={styles.buttons}>
-        <Button className={styles.button} onClick={handleClick}>
-          {user ? '로그아웃' : ' 로그인'}
-        </Button>
+        {user ? (
+          <Button className={styles.button} onClick={handleLogoutClick}>
+            로그아웃
+          </Button>
+        ) : (
+          <Button className={styles.button} to="/login">
+            로그인
+          </Button>
+        )}
         {!user ? (
-          <Button className={styles.button} onClick={handleSignupClick}>
+          <Button className={styles.button} to="/signup">
             회원가입
           </Button>
         ) : (
-          <Button className={styles.button} onClick={handleMyWonderBoxClick}>
+          <Button className={styles.button} to="/calendars">
             My Wonderbox
           </Button>
         )}
