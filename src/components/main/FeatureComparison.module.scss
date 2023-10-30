@@ -4,7 +4,7 @@ table {
   width: 80%;
   border-collapse: collapse;
   margin: 5rem auto;
-  border: 1px solid $lightgreen;
+  border: 1px solid $lightGreen;
 
   th,
   td {
@@ -16,7 +16,7 @@ table {
 
   tr {
     td {
-      border-bottom: 1px solid #e1e1e1;
+      border-bottom: 1px solid $lightGray1;
     }
   }
 
@@ -25,17 +25,17 @@ table {
 
     span {
       font-weight: bold;
-      color: $lightgreen;
+      color: $lightGreen;
     }
   }
 
   th {
     width: 50%;
-    border-bottom: 1px solid $lightgreen;
+    border-bottom: 1px solid $lightGreen;
   }
 
   strong {
-    color: #c93f3f;
+    color: $red;
   }
 
   button {
@@ -54,9 +54,9 @@ table {
 }
 
 .td_border_bottom {
-  border-bottom: 1px solid $lightgreen;
+  border-bottom: 1px solid $lightGreen;
 }
 
 .td_border_right {
-  border-right: 1px solid #e1e1e1;
+  border-right: 1px solid $lightGray1;
 }
