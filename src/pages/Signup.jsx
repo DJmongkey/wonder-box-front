@@ -15,47 +15,47 @@ export default function Signup() {
   const [passwordError, setPasswordError] = useState('');
   const [passwordConfirmError, setPasswordConfirmError] = useState('');
 
-  const SPECIAL_CHARACTER = `!@#$%^&*()-_=+₩~\\{\\}\\[\\]\\|\\:\\;\\"\\'\\<\\>\\,.\\?\\/`;
   const navigate = useNavigate();
 
-  function validateEmail(email) {
-    const emailRegex = new RegExp(
-      `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$`,
-    );
+  const SPECIAL_CHARACTER = `!@#$%^&*()-_=+₩~\\{\\}\\[\\]\\|\\:\\;\\"\\'\\<\\>\\,.\\?\\/`;
 
-    if (!emailRegex.test(email)) {
-      setEmailError('올바르지 않은 이메일 주소입니다.');
-      return false;
-    }
-
-    setEmailError('');
-    return true;
-  }
-
-  function validatePassword(password) {
-    const passwordRegex = new RegExp(
-      `^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[${SPECIAL_CHARACTER}])[A-Za-z\\d${SPECIAL_CHARACTER}]{8,16}$`,
-    );
-
-    if (!passwordRegex.test(password)) {
-      setPasswordError(
+  const validationRules = {
+    email: {
+      regex: new RegExp(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$`),
+      message: '올바르지 않은 이메일 주소입니다.',
+    },
+    password: {
+      regex: new RegExp(
+        `^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[${SPECIAL_CHARACTER}])[A-Za-z\\d${SPECIAL_CHARACTER}]{8,16}$`,
+      ),
+      message:
         '비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자가 포함되어야 합니다.',
-      );
-      return false;
+    },
+  };
+
+  function validateAndSetError(name, value, otherState = null) {
+    const rule = validationRules[name];
+
+    if (name === 'passwordConfirm') {
+      if (value !== otherState) {
+        setPasswordConfirmError('비밀번호와 일치하지 않습니다.');
+        return false;
+      }
+      setPasswordConfirmError('');
+      return true;
     }
 
-    setPasswordError('');
+    if (rule && !rule.regex.test(value)) {
+      setErrorState(name, rule.message);
+      return false;
+    }
+    setErrorState(name, '');
     return true;
   }
 
-  function validatePasswordConfirm(password, passwordConfirm) {
-    if (password !== passwordConfirm) {
-      setPasswordConfirmError('비밀번호와 일치하지 않습니다.');
-      return false;
-    }
-
-    setPasswordConfirmError('');
-    return true;
+  function setErrorState(name, message) {
+    if (name === 'email') setEmailError(message);
+    if (name === 'password') setPasswordError(message);
   }
 
   function handleInputChange(event) {
@@ -63,46 +63,29 @@ export default function Signup() {
 
     if (name === 'email') {
       setEmail(value);
-      validateEmail(value);
     } else if (name === 'password') {
       setPassword(value);
-      validatePassword(value);
     } else if (name === 'passwordConfirm') {
       setPasswordConfirm(value);
-      validatePasswordConfirm(password, value);
+    }
+
+    if (name === 'passwordConfirm') {
+      validateAndSetError(name, value, password);
+    } else {
+      validateAndSetError(name, value);
     }
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    let isEmailValid = true;
-    let isPasswordValid = true;
-    let isPasswordConfirmValid = true;
-
-    if (!email) {
-      setEmailError('이메일을 입력해주세요.');
-      isEmailValid = false;
-    } else {
-      isEmailValid = validateEmail(email);
-    }
-
-    if (!password) {
-      setPasswordError('비밀번호를 입력해주세요.');
-      isPasswordValid = false;
-    } else {
-      isPasswordValid = validatePassword(password);
-    }
-
-    if (!passwordConfirm) {
-      setPasswordConfirmError('비밀번호 확인을 입력해주세요');
-      isPasswordConfirmValid = false;
-    } else {
-      isPasswordConfirmValid = validatePasswordConfirm(
-        password,
-        passwordConfirm,
-      );
-    }
+    const isEmailValid = validateAndSetError('email', email);
+    const isPasswordValid = validateAndSetError('password', password);
+    const isPasswordConfirmValid = validateAndSetError(
+      'passwordConfirm',
+      passwordConfirm,
+      password,
+    );
 
     if (!isEmailValid || !isPasswordValid || !isPasswordConfirmValid) {
       return;
@@ -120,11 +103,12 @@ export default function Signup() {
         body: JSON.stringify(payload),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
         throw new Error(data.message);
       }
       setIsLoading(false);
-      const data = await res.json();
 
       localStorage.setItem('accessToken', data.accessToken);
       navigate('/custom/base-info');
