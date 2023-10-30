@@ -5,12 +5,14 @@ const AuthContext = createContext();
 export function AuthContextProvider({ children }) {
   const [user, setUser] = useState(false);
 
-  const login = () => {
+  const login = async () => {
     setUser(true);
   };
 
-  const logout = () => {
+  const logout = async () => {
     setUser(false);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
   };
 
   return (
