@@ -19,7 +19,7 @@ export default function Button({
   return (
     <>
       {to && (
-        <Link to={to} className={styles.button}>
+        <Link to={to} className={className}>
           {children}
         </Link>
       )}
