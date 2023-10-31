@@ -9,17 +9,26 @@ export default function Button({
   onClick,
   disabled,
   customClass,
+  customLink,
+  customMove,
+  isLinkDisabled,
 }) {
   const className = [
     styles.button,
-    disabled ? styles['button--disabled'] : '',
+    disabled ? `disabled ${styles['button--disabled']}` : '',
     customClass || '',
+    customLink ? `${styles['link']} ${customLink}` : '',
+    customMove ? `${styles['moveBtn']} ${customMove}` : '',
   ].join(' ');
 
   return (
     <>
       {to && (
-        <Link to={to} className={className}>
+        <Link
+          to={to}
+          className={className}
+          onClick={isLinkDisabled ? (e) => e.preventDefault() : ''}
+        >
           {children}
         </Link>
       )}

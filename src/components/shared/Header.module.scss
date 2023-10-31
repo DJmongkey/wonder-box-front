@@ -1,46 +1,51 @@
 @import '../../style.scss';
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 2px solid $darkGray;
-}
+  @include set-center($direction: row, $justify: space-between);
+  padding: 5px 40px;
+  border-bottom: 1px solid $softGreen-light;
+  height: 70px;
 
-.logo {
-  font-size: $size-3;
-  font-weight: bold;
-}
+  .logo {
+    font-family: $enSubFont;
+    font-size: $size-2;
+    font-weight: 900;
+  }
 
-.buttons {
-  display: flex;
-  gap: 2rem;
+  .buttons {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
 
-  .button {
-    color: $black;
-    font-weight: bold;
-    border: 1px solid $softGreen;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition:
-      background-color 0.2s,
-      font-weight 0.2s;
+    .headerBtn {
+      width: auto;
+      padding: 8px 20px;
+      font-size: $size-1;
+      &:hover,
+      &:focus {
+        background-color: $softGreen-dark;
+      }
+    }
   }
 }
 
 @include mobile {
   .header {
-    flex-direction: column;
-    align-items: center;
+    padding: 0 10px;
+    height: 50px;
+
+    .logo {
+      font-size: $size-1;
+    }
 
     .buttons {
-      flex-direction: column;
-      margin-top: 1rem;
+      gap: 8px;
 
-      .button {
-        width: 100%;
+      .headerBtn {
+        width: auto;
+        padding: 5px 10px;
+        font-size: $size-0;
+        transition: all 0.2s ease-in-out;
       }
     }
   }
