@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import { FiChevronRight } from 'react-icons/fi';
 
 import { useFormContext } from '../../context/FormContext';
@@ -6,15 +7,21 @@ import styles from './Navbar.module.scss';
 
 export default function Navbar() {
   const { isDailyBoxesValid, isStyleValid, isPreviewValid } = useFormContext();
+  const calendarId = useParams().calendarId;
 
   return (
     <nav>
-      <Button to="/custom/base-info" customClass={styles.navBtn}>
+      <Button
+        to={
+          calendarId ? `/custom/base-info/${calendarId}` : '/custom/base-info'
+        }
+        customClass={styles.navBtn}
+      >
         기본정보
       </Button>
       <FiChevronRight />
       <Button
-        to="/custom/daily-boxes"
+        to={`/custom/daily-boxes/${calendarId}`}
         customLink={styles.navBtn}
         isLinkDisabled={!isDailyBoxesValid}
         disabled={!isDailyBoxesValid}
@@ -23,7 +30,7 @@ export default function Navbar() {
       </Button>
       <FiChevronRight />
       <Button
-        to="/custom/style"
+        to={`/custom/style/${calendarId}`}
         customLink={styles.navBtn}
         isLinkDisabled={!isStyleValid}
         disabled={!isStyleValid}
@@ -32,7 +39,7 @@ export default function Navbar() {
       </Button>
       <FiChevronRight />
       <Button
-        to="/custom/preview"
+        to={`/custom/preview/${calendarId}`}
         customLink={styles.navBtn}
         isLinkDisabled={!isPreviewValid}
         disabled={!isPreviewValid}
