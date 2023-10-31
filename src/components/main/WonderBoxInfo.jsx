@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+
 import Button from '../shared/Button';
 import styles from './WonderBoxInfo.module.scss';
 
@@ -22,7 +23,7 @@ export default function WonderBoxInfo() {
           </div>
         </div>
         <div>
-          사진, 동영상, 메세지를 업로드해서 나만의 어드밴트 캘린더를 만들어
+          사진, 동영상, 메세지를 업로드해서 나만의 어드벤트 캘린더를 만들어
           소중한 사람들에게 공유하세요!
         </div>
       </div>
@@ -33,7 +34,8 @@ export default function WonderBoxInfo() {
             Simple Wonder Box - For free
           </Button>
         </div>
-        회원가입 유무에 따라 Awesome WonderBox의 모든 기능을 이용하실 수 있어요!
+        회원가입 유무에 따라 Awesome Wonder Box의 모든 기능을 이용하실 수
+        있어요!
       </div>
     </>
   );

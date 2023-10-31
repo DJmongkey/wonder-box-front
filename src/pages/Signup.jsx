@@ -1,9 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { FiMail, FiKey, FiCheck } from 'react-icons/fi';
 import Button from '../components/shared/Button';
 import styles from './Signup.module.scss';
-import { FiMail, FiKey, FiCheck } from 'react-icons/fi';
 import Loading from '../components/shared/Loading';
+import { useAuthContext } from '../context/AuthContext';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ export default function Signup() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordConfirmError, setPasswordConfirmError] = useState('');
+  const { login } = useAuthContext();
 
   const navigate = useNavigate();
 
@@ -111,6 +113,7 @@ export default function Signup() {
       setIsLoading(false);
 
       localStorage.setItem('accessToken', data.accessToken);
+      login();
       navigate('/custom/base-info');
     } catch (error) {
       setIsLoading(false);
@@ -174,7 +177,7 @@ export default function Signup() {
 
         <Button type="submit">회원가입</Button>
       </form>
-      <div className={styles.divider}></div>
+      <div className={styles.divider} />
       <div className={styles.link__block}>
         <p>이미 가입하셨나요?</p>
         <Link to="/login">Awesome WonderBox 만들러가기</Link>

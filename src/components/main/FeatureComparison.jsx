@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
+
 import Button from '../shared/Button';
-import styles from './FeatureComparison.module.scss';
 import { useAuthContext } from '../../context/AuthContext';
+import styles from './FeatureComparison.module.scss';
 
 export default function FeatureComparison() {
   const { user } = useAuthContext();
@@ -34,7 +35,7 @@ export default function FeatureComparison() {
       </tr>
       <tr>
         <td className={styles.td_border_right}>
-          WonderBox 어드벤트 캘린더 생성
+          Wonder Box 어드벤트 캘린더 생성
         </td>
         <td>무제한</td>
       </tr>
@@ -53,7 +54,7 @@ export default function FeatureComparison() {
       </tr>
       <tr>
         <th>
-          Asesome Wonder Box - <span>For free</span> / 회원가입 필요
+          Awesome Wonder Box - <span>For free</span> / 회원가입 필요
         </th>
         <th>
           <Button onClick={handleAwesomClick}>
@@ -62,7 +63,7 @@ export default function FeatureComparison() {
         </th>
       </tr>
       <tr>
-        <td colSpan={2}>+ simple WonderBox의 모든 기능</td>
+        <td colSpan={2}>+ Simple Wonder Box의 모든 기능</td>
       </tr>
       <tr>
         <td className={styles.td_border_right}>업로드 가능한 미디어</td>
@@ -72,7 +73,7 @@ export default function FeatureComparison() {
       </tr>
       <tr>
         <td colSpan={2}>
-          완성된 WonderBox 캘린더 <strong>저장</strong>, 완성 후{' '}
+          완성된 Wonder Box 캘린더 <strong>저장</strong>, 완성 후{' '}
           <strong>수정</strong>
         </td>
       </tr>

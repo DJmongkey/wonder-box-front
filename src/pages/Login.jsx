@@ -1,15 +1,18 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { FiMail, FiKey } from 'react-icons/fi';
+
 import Button from '../components/shared/Button';
 import styles from './Login.module.scss';
-import { FiMail, FiKey } from 'react-icons/fi';
 import Loading from '../components/shared/Loading';
+import { useAuthContext } from '../context/AuthContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { login } = useAuthContext();
 
   const navigate = useNavigate();
 
@@ -36,6 +39,7 @@ export default function Login() {
       setIsLoading(false);
 
       localStorage.setItem('jwt', data.accessToken);
+      login();
       navigate('/');
     } catch (error) {
       setIsLoading(false);
@@ -79,7 +83,7 @@ export default function Login() {
 
         <Button type="submit">로그인</Button>
       </form>
-      <div className={styles.divider}></div>
+      <div className={styles.divider} />
       <div className={styles.link__block}>
         <p>아직 회원이 아니신가요?</p>
         <Link to="/signup">가입하고 Awesome WonderBox 만들러가기</Link>

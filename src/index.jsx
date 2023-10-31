@@ -14,6 +14,7 @@ import DailyBoxesForm from './pages/DailyBoxesForm';
 import StyleForm from './pages/StyleForm';
 import Preview from './pages/Preview';
 import SharedCalendar from './pages/SharedCalendar';
+import { AuthContextProvider } from './context/AuthContext';
 
 import './index.scss';
 import './style.scss';
@@ -45,6 +46,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthContextProvider>
+      <RouterProvider router={router} />
+    </AuthContextProvider>
   </React.StrictMode>,
 );
