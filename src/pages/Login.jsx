@@ -1,11 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiMail, FiKey } from 'react-icons/fi';
 
-import Button from '../components/shared/Button';
-import styles from './Login.module.scss';
-import Loading from '../components/shared/Loading';
 import { useAuthContext } from '../context/AuthContext';
+import Button from '../components/shared/Button';
+import Loading from '../components/shared/Loading';
+import styles from './Login.module.scss';
 
 const BASE_URL = 'http://localhost:3030/auth/login';
 
@@ -40,7 +40,8 @@ export default function Login() {
       }
       setIsLoading(false);
 
-      localStorage.setItem('jwt', data.accessToken);
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
       login();
       navigate('/');
     } catch (error) {

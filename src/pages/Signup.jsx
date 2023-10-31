@@ -1,10 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiMail, FiKey, FiCheck } from 'react-icons/fi';
-import Button from '../components/shared/Button';
-import styles from './Signup.module.scss';
-import Loading from '../components/shared/Loading';
+
 import { useAuthContext } from '../context/AuthContext';
+import Button from '../components/shared/Button';
+import Loading from '../components/shared/Loading';
+import styles from './Signup.module.scss';
 
 const BASE_URL = 'http://localhost:3030/auth/signup';
 const SPECIAL_CHARACTER = `!@#$%^&*()-_=+₩~\\{\\}\\[\\]\\|\\:\\;\\"\\'\\<\\>\\,.\\?\\/`;
@@ -32,6 +33,7 @@ export default function Signup() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordConfirmError, setPasswordConfirmError] = useState('');
+
   const { login } = useAuthContext();
 
   const navigate = useNavigate();
@@ -115,6 +117,7 @@ export default function Signup() {
       setIsLoading(false);
 
       localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
       login();
       navigate('/custom/base-info');
     } catch (error) {
