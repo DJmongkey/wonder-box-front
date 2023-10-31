@@ -12,7 +12,7 @@ export default function FeatureComparison() {
     navigate('/custom/base-info');
   };
 
-  const handleAwesomClick = () => {
+  const handleAwesomeClick = () => {
     if (user) {
       navigate('/custom/base-info');
       return;
@@ -57,7 +57,7 @@ export default function FeatureComparison() {
           Awesome Wonder Box - <span>For free</span> / 회원가입 필요
         </th>
         <th>
-          <Button onClick={handleAwesomClick}>
+          <Button onClick={handleAwesomeClick}>
             Awesome Wonder Box 만들러 가기
           </Button>
         </th>

@@ -27,7 +27,7 @@ export default function Button({
         <Link
           to={to}
           className={className}
-          onClick={isLinkDisabled ? (e) => e.preventDefault() : ''}
+          onClick={isLinkDisabled ? (e) => e.preventDefault() : onClick}
         >
           {children}
         </Link>
