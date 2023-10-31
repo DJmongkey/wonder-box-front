@@ -7,6 +7,8 @@ import styles from './Login.module.scss';
 import Loading from '../components/shared/Loading';
 import { useAuthContext } from '../context/AuthContext';
 
+const BASE_URL = 'http://localhost:3030/auth/login';
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +25,7 @@ export default function Login() {
 
     try {
       setIsLoading(true);
-      const res = await fetch('http://localhost:3030/auth/login', {
+      const res = await fetch(BASE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
