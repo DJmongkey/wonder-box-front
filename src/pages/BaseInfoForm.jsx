@@ -121,17 +121,19 @@ export default function BaseInfoForm() {
       }
 
       if (!user) {
-        const localCalendarId = Date.now();
+        const localCalendarId = calendarId ? calendarId : Date.now();
         payload.calendarId = localCalendarId;
 
-        if (!localStorage.getItem('idList')) {
-          localStorage.setItem('idList', JSON.stringify([]));
+        if (!calendarId) {
+          if (!localStorage.getItem('idList')) {
+            localStorage.setItem('idList', JSON.stringify([]));
+          }
+
+          let existingValue = JSON.parse(localStorage.getItem('idList'));
+
+          existingValue.push(localCalendarId);
+          localStorage.setItem('idList', JSON.stringify(existingValue));
         }
-
-        let existingValue = JSON.parse(localStorage.getItem('idList'));
-
-        existingValue.push(localCalendarId);
-        localStorage.setItem('idList', JSON.stringify(existingValue));
 
         const localData = JSON.stringify(payload);
 
