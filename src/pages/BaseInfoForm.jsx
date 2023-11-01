@@ -61,6 +61,11 @@ export default function BaseInfoForm() {
       isValid = false;
     }
 
+    if (title.length < 2) {
+      setTitleError('WonderBox 이름은 최소 2자 이상이어야 합니다.');
+      isValid = false;
+    }
+
     if (!creator) {
       setCreatorError('보내는 사람의 이름을 입력해주세요');
       isValid = false;
@@ -95,8 +100,14 @@ export default function BaseInfoForm() {
           navigate('/notfound');
         }
 
-        const res = await fetch(BASE_INFO_URL, {
-          method: calendarId ? 'PUT' : 'POST',
+        const fetchUrl = calendarId
+          ? `${BASE_INFO_URL}/${calendarId}/base-info`
+          : BASE_INFO_URL;
+
+        const fetchMethod = calendarId ? 'PUT' : 'POST';
+
+        const res = await fetch(fetchUrl, {
+          method: fetchMethod,
           headers: {
             'Content-Type': 'application/json',
             Authorization: accessToken,
@@ -106,6 +117,8 @@ export default function BaseInfoForm() {
 
         const data = await res.json();
 
+        const postCalendarId = await data.calendarId;
+
         if (!res.ok) {
           navigate('/notfound', {
             state: {
@@ -113,11 +126,12 @@ export default function BaseInfoForm() {
               errorStatus: data.status,
             },
           });
-          throw new Error(data.message);
         }
 
         setIsLoading(false);
-        navigate(`/custom/daily-boxes/${calendarId}`);
+        navigate(
+          `/custom/daily-boxes/${calendarId ? calendarId : postCalendarId}`,
+        );
       }
 
       if (!user) {
