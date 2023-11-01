@@ -47,6 +47,10 @@
       margin-top: 50px;
       font-weight: 500;
       padding: 12px 0;
+      &:hover,
+      &:focus {
+        background-color: $softGreen-dark;
+      }
     }
   }
 

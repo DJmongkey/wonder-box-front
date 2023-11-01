@@ -22,7 +22,7 @@ $white: #fff;
 $lightGray1: #f2f2f2;
 $lightGray2: #e1e1e1;
 
-$beige: #ece3ce;
+$beige: #f7efe5;
 $softRed: #c97777;
 $red: #c93f3f;
 $darkRed: #8c3333;
@@ -35,6 +35,7 @@ $softGreen-light: #739072;
 
 $lightBlue: #64ccc5;
 $skyblue: #ccd2e1;
+$bg: #ebf1ff;
 
 $overlay: rgba(0, 0, 0, 0.76);
 
@@ -47,16 +48,17 @@ $overlay: rgba(0, 0, 0, 0.76);
   text-align: center;
 }
 
-@mixin button($w: 100%, $h: auto, $p: 10px, $m: 0 auto, $r: 0) {
+@mixin button($w: auto, $h: auto, $p: 10px, $m: 0 auto, $r: 0) {
   width: $w;
   height: $h;
   padding: $p;
   margin: $m;
+  transition: all 0.2s ease-in-out;
   @content;
 
   &:hover,
   &:focus {
-    font-weight: 700;
+    font-weight: 500;
     @content;
   }
 
