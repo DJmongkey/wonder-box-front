@@ -1,10 +1,28 @@
-import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiMail, FiKey, FiCheck } from 'react-icons/fi';
-import Button from '../components/shared/Button';
-import styles from './Signup.module.scss';
-import Loading from '../components/shared/Loading';
+
 import { useAuthContext } from '../context/AuthContext';
+import Button from '../components/shared/Button';
+import Loading from '../components/shared/Loading';
+import styles from './Signup.module.scss';
+
+const BASE_URL = 'http://localhost:3030/auth/signup';
+const SPECIAL_CHARACTER = `!@#$%^&*()-_=+₩~\\{\\}\\[\\]\\|\\:\\;\\"\\'\\<\\>\\,.\\?\\/`;
+
+const validationRules = {
+  email: {
+    regex: new RegExp(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$`),
+    message: '올바르지 않은 이메일 주소입니다.',
+  },
+  password: {
+    regex: new RegExp(
+      `^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[${SPECIAL_CHARACTER}])[A-Za-z\\d${SPECIAL_CHARACTER}]{8,16}$`,
+    ),
+    message:
+      '비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자가 포함되어야 합니다.',
+  },
+};
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -15,25 +33,10 @@ export default function Signup() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordConfirmError, setPasswordConfirmError] = useState('');
+
   const { login } = useAuthContext();
 
   const navigate = useNavigate();
-
-  const SPECIAL_CHARACTER = `!@#$%^&*()-_=+₩~\\{\\}\\[\\]\\|\\:\\;\\"\\'\\<\\>\\,.\\?\\/`;
-
-  const validationRules = {
-    email: {
-      regex: new RegExp(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$`),
-      message: '올바르지 않은 이메일 주소입니다.',
-    },
-    password: {
-      regex: new RegExp(
-        `^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[${SPECIAL_CHARACTER}])[A-Za-z\\d${SPECIAL_CHARACTER}]{8,16}$`,
-      ),
-      message:
-        '비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자가 포함되어야 합니다.',
-    },
-  };
 
   function validateInput(name, value, otherState = null) {
     const rule = validationRules[name];
@@ -97,7 +100,8 @@ export default function Signup() {
 
     try {
       setIsLoading(true);
-      const res = await fetch('http://localhost:3030/auth/signup', {
+
+      const res = await fetch(BASE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -113,6 +117,7 @@ export default function Signup() {
       setIsLoading(false);
 
       localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
       login();
       navigate('/custom/base-info');
     } catch (error) {

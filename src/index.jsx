@@ -32,9 +32,10 @@ const router = createBrowserRouter([
         element: <CustomFormLayout />,
         children: [
           { path: 'base-info', element: <BaseInfoForm /> },
-          { path: 'daily-boxes', element: <DailyBoxesForm /> },
-          { path: 'style', element: <StyleForm /> },
-          { path: 'preview', element: <Preview /> },
+          { path: 'base-info/:calendarId', element: <BaseInfoForm /> },
+          { path: 'daily-boxes/:calendarId', element: <DailyBoxesForm /> },
+          { path: 'style/:calendarId', element: <StyleForm /> },
+          { path: 'preview/:calendarId', element: <Preview /> },
         ],
       },
     ],

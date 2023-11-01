@@ -1,16 +1,16 @@
 import { Link, useNavigate } from 'react-router-dom';
 
+import { useAuthContext } from '../../context/AuthContext';
 import Button from './Button';
 import styles from './Header.module.scss';
-import { useAuthContext } from '../../context/AuthContext';
 
 export default function Header() {
   const { user, logout } = useAuthContext();
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogoutClick = () => {
     logout();
-    nevigate('/');
+    navigate('/');
   };
 
   return (
@@ -20,21 +20,21 @@ export default function Header() {
       </Link>
       <div className={styles.buttons}>
         {user ? (
-          <Button className={styles.button} onClick={handleLogoutClick}>
+          <Button customClass={styles.headerBtn} onClick={handleLogoutClick}>
             로그아웃
           </Button>
         ) : (
-          <Button className={styles.button} to="/login">
+          <Button customClass={styles.headerBtn} to="/login">
             로그인
           </Button>
         )}
         {!user ? (
-          <Button className={styles.button} to="/signup">
+          <Button customClass={styles.headerBtn} to="/signup">
             회원가입
           </Button>
         ) : (
-          <Button className={styles.button} to="/calendars">
-            My Wonderbox
+          <Button customClass={styles.headerBtn} to="/calendars">
+            My WonderBox
           </Button>
         )}
         {}
