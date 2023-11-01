@@ -100,8 +100,14 @@ export default function BaseInfoForm() {
           navigate('/notfound');
         }
 
-        const res = await fetch(BASE_INFO_URL, {
-          method: calendarId ? 'PUT' : 'POST',
+        const fetchUrl = calendarId
+          ? `${BASE_INFO_URL}/${calendarId}/base-info`
+          : BASE_INFO_URL;
+
+        const fetchMethod = calendarId ? 'PUT' : 'POST';
+
+        const res = await fetch(fetchUrl, {
+          method: fetchMethod,
           headers: {
             'Content-Type': 'application/json',
             Authorization: accessToken,
@@ -111,7 +117,7 @@ export default function BaseInfoForm() {
 
         const data = await res.json();
 
-        const postCalendarId = data.calendarId;
+        const postCalendarId = await data.calendarId;
 
         if (!res.ok) {
           navigate('/notfound', {
