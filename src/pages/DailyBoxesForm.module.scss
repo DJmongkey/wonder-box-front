@@ -1,0 +1,49 @@
+@import '../style.scss';
+
+.dailyBoxes_container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 80px;
+  text-align: center;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 160px;
+  margin-top: 80px;
+}
+
+// .button_container {
+//   font-size: $size-0;
+//   width: 300px;
+//   margin-top: 30px;
+//   padding: 5px 10px;
+//   border: 1px solid $softRed;
+//   background-color: $softRed;
+
+//   &:hover,
+//   &:focus {
+//     color: $softRed;
+//     background-color: $white;
+//   }
+// }
+button {
+  display: flex;
+  flex-direction: row; /* 요소를 수평으로 정렬 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+  margin-top: 50px;
+
+  .moveBtn {
+    font-size: $size-0;
+    width: auto;
+    margin: auto;
+    padding: 5px 10px;
+    border: 1px solid $softRed;
+    background-color: $softRed;
+
+    &:hover,
+    &:focus {
+      color: $softRed;
+      background-color: $white;
+    }
+  }
+}
