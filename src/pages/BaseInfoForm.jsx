@@ -7,8 +7,6 @@ import Loading from '../components/shared/Loading';
 import { calculateDateDiffer, formatDate, isDateValid } from '../utils/date';
 import styles from './BaseInfoForm.module.scss';
 
-const BASE_INFO_URL = 'http://localhost:3030';
-
 export default function BaseInfoForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState('');
@@ -103,8 +101,8 @@ export default function BaseInfoForm() {
         }
 
         const fetchUrl = calendarId
-          ? `${BASE_INFO_URL}/calendars/${calendarId}/base-info`
-          : `${BASE_INFO_URL}/calendars`;
+          ? `${import.meta.env.VITE_BASE_URL}/calendars/${calendarId}/base-info`
+          : `${import.meta.env.VITE_BASE_URL}/calendars`;
 
         const fetchMethod = calendarId ? 'PUT' : 'POST';
 
@@ -175,7 +173,9 @@ export default function BaseInfoForm() {
           }
 
           const res = await fetch(
-            `${BASE_INFO_URL}/calendars/${calendarId}/base-info`,
+            `${
+              import.meta.env.VITE_BASE_URL
+            }/calendars/${calendarId}/base-info`,
             {
               method: 'GET',
               headers: {

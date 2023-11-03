@@ -23,3 +23,7 @@ export function isDateValid(startDate, endDate) {
 export function formatDate(date) {
   return date.slice(0, 10);
 }
+
+export function formattedDate(date) {
+  return new Date(date).toLocaleDateString();
+}
