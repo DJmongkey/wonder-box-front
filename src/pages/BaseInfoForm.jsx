@@ -92,7 +92,6 @@ export default function BaseInfoForm() {
 
         setTimeout(() => {
           localStorage.setItem(localCalendarId, localData);
-          // setIsLoading(false);
           navigate(`/custom/daily-boxes/${localCalendarId}`);
         }, 1000);
       }
