@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Modal from '../shared/Modal';
 import Button from '../shared/Button';
-import { formatDate, plusDay } from '../../utils/date';
+import { plusDay } from '../../utils/date';
 import { useAuthContext } from '../../context/AuthContext';
 import { useFormContext } from '../../context/FormContext';
 import styles from './DailyBox.module.scss';
@@ -20,9 +20,9 @@ export default function DailyBox({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
-  const [videoUrl, setVideoUrl] = useState('');
+  const [videoFile, setVideoFile] = useState('');
   const [imageFile, setImageFile] = useState(null);
-  const [audio, setAudio] = useState(null);
+  const [audioFile, setAudioFile] = useState(null);
   const [message, setMessage] = useState('내용을 입력해주세요');
   const [error, setError] = useState('');
 
@@ -55,14 +55,19 @@ export default function DailyBox({
     setStateFunction(value);
   }
 
+  function handleFileChange(event, setFile) {
+    const file = event.target.files[0];
+    setFile(file);
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
 
     const newContent = {
-      image: imageUrl || '',
-      video: videoUrl || '',
+      image: imageUrl || imageFile || '',
+      video: videoFile || '',
       text: message || '',
-      audio: audio || '',
+      audio: audioFile || '',
     };
 
     setIsModalOpen(false);
@@ -71,14 +76,17 @@ export default function DailyBox({
       if (calendarId) {
         const existingValue = JSON.parse(localStorage.getItem(calendarId));
         const dailyBoxes = existingValue.dailyBoxes || [];
+
         const newDailyBox = {
           dailyBoxId: Date.now().toString(),
-          date: localDays,
+          date: new Date(),
           content: newContent,
           isOpen: false,
         };
+
         dailyBoxes[index] = newDailyBox;
         existingValue.dailyBoxes = dailyBoxes;
+
         localStorage.setItem(calendarId, JSON.stringify(existingValue));
       }
     }
@@ -89,77 +97,45 @@ export default function DailyBox({
       }
 
       try {
-        if (dailyBoxId) {
-          const res = await fetch(
-            `${BASE_INFO_URL}/${calendarId}/daily-boxes`,
-            {
-              method: dailyBoxId ? 'PUT' : 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-              },
-              body: JSON.stringify({
-                date: formatDate(Date.now().toString()),
-                content: newContent,
-                isOpen: false,
-              }),
+        const formData = new FormData();
+
+        formData.append('date', userDays);
+        formData.append(
+          'content',
+          new Blob([JSON.stringify(newContent)], { type: 'application/json' }),
+        );
+        formData.append('isOpen', 'false');
+        formData.append('image', imageFile);
+        formData.append('audio', audioFile);
+        formData.append('video', videoFile);
+
+        const res = await fetch(`${BASE_INFO_URL}/${calendarId}/daily-boxes`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          navigate('/notfound', {
+            state: {
+              errorMessage: data.message,
+              errorStatus: data.status,
             },
-          );
-
-          const data = await res.json();
-
-          if (!res.ok) {
-            navigate('/notfound', {
-              state: {
-                errorMessage: data.message,
-                errorStatus: data.status,
-              },
-            });
-          }
-
-          const { text, image, video, audio } = data.content;
-
-          setMessage(text);
-          setImageUrl(image);
-          setVideoUrl(video);
-          setAudio(audio);
-          setIsDailyBoxesValid(true);
-        } else {
-          const requestBody = {
-            content: { ...newContent },
-          };
-
-          const res = await fetch(
-            `${BASE_INFO_URL}/${calendarId}/daily-boxes/${dailyBoxId}`,
-            {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-              },
-              body: JSON.stringify(requestBody),
-            },
-          );
-
-          const data = await res.json();
-
-          if (!res.ok) {
-            navigate('/notfound', {
-              state: {
-                errorMessage: data.message,
-                errorStatus: data.status,
-              },
-            });
-          }
-
-          const { text, image, video, audio } = data.content;
-
-          setMessage(text);
-          setImageUrl(image);
-          setVideoUrl(video);
-          setAudio(audio);
-          setIsDailyBoxesValid(true);
+          });
         }
+
+        const { text, image, video, audio } = data.content;
+
+        setMessage(text);
+        setImageUrl(image);
+        setVideoFile(video);
+        setAudioFile(audio);
+        setImageFile(image);
+        setIsDailyBoxesValid(true);
       } catch (error) {
         setError(
           error.message ||
@@ -175,11 +151,9 @@ export default function DailyBox({
         {!user && localStartDate && localDays}
         {user && userDays}
       </div>
-      <div className={styles.box} onClick={openModal}>
+      <div onClick={openModal}>
         {imageUrl && <img src={imageUrl} alt="image" />}
-        <div className={styles.messageContainer}>
-          {imageUrl ? null : message}
-        </div>
+        <div>{imageUrl ? null : message}</div>
       </div>
       {isModalOpen ? (
         <Modal isOpen={isModalOpen}>
@@ -200,7 +174,7 @@ export default function DailyBox({
                     type="file"
                     id="image"
                     name="image"
-                    onChange={(event) => handleInputChange(event, setImageFile)}
+                    onChange={(event) => handleFileChange(event, setImageFile)}
                     className={styles.disabledInput}
                   />
                 </>
@@ -224,11 +198,21 @@ export default function DailyBox({
             <div>
               <label htmlFor="video">동영상</label>
               <input
-                type="text"
+                type="file"
                 id="video"
                 name="video"
-                value={videoUrl}
-                onChange={(event) => handleInputChange(event, setVideoUrl)}
+                onChange={(event) => handleFileChange(event, setVideoFile)}
+                disabled={!user}
+                className={styles.disabledInput}
+              />
+            </div>
+            <div>
+              <label htmlFor="video">동영상</label>
+              <input
+                type="file"
+                id="audio"
+                name="audio"
+                onChange={(event) => handleFileChange(event, setAudioFile)}
                 disabled={!user}
                 className={styles.disabledInput}
               />
