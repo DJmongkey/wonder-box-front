@@ -90,7 +90,9 @@ export default function BaseInfoForm() {
       return;
     }
 
-    const payload = { title, creator, startDate, endDate, options };
+    const createdAt = new Date();
+
+    const payload = { title, creator, startDate, endDate, options, createdAt };
 
     try {
       setIsLoading(true);
@@ -219,7 +221,8 @@ export default function BaseInfoForm() {
         const localId = idList[idList.length - 1].toString();
         const localBaseInfo = JSON.parse(localStorage.getItem(localId));
 
-        const { title, creator, startDate, endDate, options } = localBaseInfo;
+        const { title, creator, startDate, endDate, options, createdAt } =
+          localBaseInfo;
 
         const formattedStartDate = formatDate(startDate);
         const formattedEndDate = formatDate(endDate);
