@@ -24,6 +24,15 @@ export function formatDate(date) {
   return date.slice(0, 10);
 }
 
+export function plusDay(startDate, index) {
+  const newDate = new Date(startDate);
+  newDate.setDate(newDate.getDate() + index);
+
+  const formattedDate = formatDate(newDate.toISOString());
+
+  return formattedDate;
+}
+
 export function formattedDate(date) {
   return new Date(date).toLocaleDateString();
 }
