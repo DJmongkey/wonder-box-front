@@ -32,3 +32,7 @@ export function plusDay(startDate, index) {
 
   return formattedDate;
 }
+
+export function formattedDate(date) {
+  return new Date(date).toLocaleDateString();
+}

@@ -7,8 +7,6 @@ import Loading from '../components/shared/Loading';
 import { calculateDateDiffer, formatDate, isDateValid } from '../utils/date';
 import styles from './BaseInfoForm.module.scss';
 
-const BASE_INFO_URL = 'http://localhost:3030/calendars';
-
 export default function BaseInfoForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState('');
@@ -92,7 +90,7 @@ export default function BaseInfoForm() {
 
     const createdAt = new Date();
 
-    const payload = { title, creator, startDate, endDate, options, createdAt };
+    const payload = { title, creator, createdAt, startDate, endDate, options };
 
     try {
       setIsLoading(true);
@@ -103,8 +101,8 @@ export default function BaseInfoForm() {
         }
 
         const fetchUrl = calendarId
-          ? `${BASE_INFO_URL}/${calendarId}/base-info`
-          : BASE_INFO_URL;
+          ? `${import.meta.env.VITE_BASE_URL}/calendars/${calendarId}/base-info`
+          : `${import.meta.env.VITE_BASE_URL}/calendars`;
 
         const fetchMethod = calendarId ? 'PUT' : 'POST';
 
@@ -174,13 +172,18 @@ export default function BaseInfoForm() {
             navigate('/notfound');
           }
 
-          const res = await fetch(`${BASE_INFO_URL}/${calendarId}/base-info`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
+          const res = await fetch(
+            `${
+              import.meta.env.VITE_BASE_URL
+            }/calendars/${calendarId}/base-info`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
             },
-          });
+          );
 
           const data = await res.json();
 
