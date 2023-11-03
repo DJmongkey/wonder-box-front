@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
+import { useEffect, useState } from 'react';
 import Modal from '../shared/Modal';
 import Button from '../shared/Button';
 import { formatDate, plusDay } from '../../utils/date';
 import { useAuthContext } from '../../context/AuthContext';
+import { useFormContext } from '../../context/FormContext';
 import styles from './DailyBox.module.scss';
 
 const BASE_INFO_URL = 'http://localhost:3030/calendars';
@@ -30,6 +32,7 @@ export default function DailyBox({
   const navigate = useNavigate();
 
   const { user } = useAuthContext();
+  const { setIsDailyBoxesValid } = useFormContext();
 
   const userDays = startDate && plusDay(startDate, index);
   const localDays = localStartDate && plusDay(localStartDate, index);
@@ -46,21 +49,12 @@ export default function DailyBox({
   function openModal() {
     setIsModalOpen(true);
   }
-  function handleImageClick(event) {
-    setImageUrl(event.target.value);
+
+  function handleInputChange(event, setStateFunction) {
+    const { value } = event.target;
+    setStateFunction(value);
   }
 
-  function handleVideoClick(event) {
-    setVideoUrl(event.target.value);
-  }
-
-  function handleFileClick(event) {
-    setImageFile(event.target.value);
-  }
-
-  function handleMessageClick(event) {
-    setMessage(event.target.value);
-  }
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -74,30 +68,19 @@ export default function DailyBox({
     setIsModalOpen(false);
 
     if (!user) {
-      const id = existingData ? existingData.dailyBoxId : Date.now().toString();
-
-      const newDailyBox = {
-        dailyBoxId: id,
-        date: formatDate(Date.now().toString()),
-        content: newContent,
-        isOpen: false,
-      };
-
-      const existingDailyBoxes =
-        JSON.parse(localStorage.getItem('dailyBoxes')) || [];
-
-      if (existingData) {
-        const contentIndex = existingDailyBoxes.findIndex(
-          (item) => item.dailyBoxId === id,
-        );
-        if (contentIndex !== -1) {
-          existingDailyBoxes[contentIndex] = newDailyBox;
-        }
-      } else {
-        existingDailyBoxes.push(newDailyBox);
+      if (calendarId) {
+        const existingValue = JSON.parse(localStorage.getItem(calendarId));
+        const dailyBoxes = existingValue.dailyBoxes || [];
+        const newDailyBox = {
+          dailyBoxId: Date.now().toString(),
+          date: localDays,
+          content: newContent,
+          isOpen: false,
+        };
+        dailyBoxes[index] = newDailyBox;
+        existingValue.dailyBoxes = dailyBoxes;
+        localStorage.setItem(calendarId, JSON.stringify(existingValue));
       }
-
-      localStorage.setItem('dailyBoxes', JSON.stringify(existingDailyBoxes));
     }
 
     if (user) {
@@ -106,36 +89,77 @@ export default function DailyBox({
       }
 
       try {
-        const res = await fetch(`${BASE_INFO_URL}/${calendarId}/daily-boxes`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            date: formatDate(Date.now().toString()),
-            content: newContent,
-            isOpen: false,
-          }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          navigate('/notfound', {
-            state: {
-              errorMessage: data.message,
-              errorStatus: data.status,
+        if (dailyBoxId) {
+          const res = await fetch(
+            `${BASE_INFO_URL}/${calendarId}/daily-boxes`,
+            {
+              method: dailyBoxId ? 'PUT' : 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify({
+                date: formatDate(Date.now().toString()),
+                content: newContent,
+                isOpen: false,
+              }),
             },
-          });
+          );
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            navigate('/notfound', {
+              state: {
+                errorMessage: data.message,
+                errorStatus: data.status,
+              },
+            });
+          }
+
+          const { text, image, video, audio } = data.content;
+
+          setMessage(text);
+          setImageUrl(image);
+          setVideoUrl(video);
+          setAudio(audio);
+          setIsDailyBoxesValid(true);
+        } else {
+          const requestBody = {
+            content: { ...newContent },
+          };
+
+          const res = await fetch(
+            `${BASE_INFO_URL}/${calendarId}/daily-boxes/${dailyBoxId}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify(requestBody),
+            },
+          );
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            navigate('/notfound', {
+              state: {
+                errorMessage: data.message,
+                errorStatus: data.status,
+              },
+            });
+          }
+
+          const { text, image, video, audio } = data.content;
+
+          setMessage(text);
+          setImageUrl(image);
+          setVideoUrl(video);
+          setAudio(audio);
+          setIsDailyBoxesValid(true);
         }
-
-        const { text, image, video, audio } = data.content;
-
-        setMessage(text);
-        setImageUrl(image);
-        setVideoUrl(video);
-        setAudio(audio);
       } catch (error) {
         setError(
           error.message ||
@@ -170,13 +194,13 @@ export default function DailyBox({
                     id="image"
                     name="image"
                     value={imageUrl}
-                    onChange={handleImageClick}
+                    onChange={(event) => handleInputChange(event, setImageUrl)}
                   />
                   <input
                     type="file"
                     id="image"
                     name="image"
-                    onChange={handleFileClick}
+                    onChange={(event) => handleInputChange(event, setImageFile)}
                     className={styles.disabledInput}
                   />
                 </>
@@ -186,13 +210,16 @@ export default function DailyBox({
                   id="image"
                   name="image"
                   value={imageUrl}
-                  onChange={handleImageClick}
+                  onChange={(event) => handleInputChange(event, setImageUrl)}
                 />
               )}
             </div>
             <div>
               <label htmlFor="message">메시지</label>
-              <textarea onChange={handleMessageClick} value={message} />
+              <textarea
+                onChange={() => handleInputChange(event, setMessage)}
+                value={message}
+              />
             </div>
             <div>
               <label htmlFor="video">동영상</label>
@@ -201,7 +228,7 @@ export default function DailyBox({
                 id="video"
                 name="video"
                 value={videoUrl}
-                onChange={handleVideoClick}
+                onChange={(event) => handleInputChange(event, setVideoUrl)}
                 disabled={!user}
                 className={styles.disabledInput}
               />
