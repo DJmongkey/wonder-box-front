@@ -7,7 +7,7 @@ import Loading from '../components/shared/Loading';
 import { calculateDateDiffer, formatDate, isDateValid } from '../utils/date';
 import styles from './BaseInfoForm.module.scss';
 
-const BASE_INFO_URL = 'http://localhost:3030/calendars';
+const BASE_INFO_URL = 'http://localhost:3030';
 
 export default function BaseInfoForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +25,7 @@ export default function BaseInfoForm() {
   const { user } = useAuthContext();
 
   const navigate = useNavigate();
-  const calendarId = useParams().calendarId;
+  const { calendarId } = useParams();
 
   const stateSetters = {
     title: setTitle,
@@ -90,7 +90,9 @@ export default function BaseInfoForm() {
       return;
     }
 
-    const payload = { title, creator, startDate, endDate, options };
+    const createdAt = new Date();
+
+    const payload = { title, creator, createdAt, startDate, endDate, options };
 
     try {
       setIsLoading(true);
@@ -101,8 +103,8 @@ export default function BaseInfoForm() {
         }
 
         const fetchUrl = calendarId
-          ? `${BASE_INFO_URL}/${calendarId}/base-info`
-          : BASE_INFO_URL;
+          ? `${BASE_INFO_URL}/calendars/${calendarId}/base-info`
+          : `${BASE_INFO_URL}/calendars`;
 
         const fetchMethod = calendarId ? 'PUT' : 'POST';
 
@@ -110,7 +112,7 @@ export default function BaseInfoForm() {
           method: fetchMethod,
           headers: {
             'Content-Type': 'application/json',
-            Authorization: accessToken,
+            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify(payload),
         });
@@ -129,13 +131,11 @@ export default function BaseInfoForm() {
         }
 
         setIsLoading(false);
-        navigate(
-          `/custom/daily-boxes/${calendarId ? calendarId : postCalendarId}`,
-        );
+        navigate(`/custom/daily-boxes/${calendarId || postCalendarId}`);
       }
 
       if (!user) {
-        const localCalendarId = calendarId ? calendarId : Date.now();
+        const localCalendarId = calendarId || Date.now();
         payload.calendarId = localCalendarId;
 
         if (!calendarId) {
@@ -143,7 +143,7 @@ export default function BaseInfoForm() {
             localStorage.setItem('idList', JSON.stringify([]));
           }
 
-          let existingValue = JSON.parse(localStorage.getItem('idList'));
+          const existingValue = JSON.parse(localStorage.getItem('idList'));
 
           existingValue.push(localCalendarId);
           localStorage.setItem('idList', JSON.stringify(existingValue));
@@ -174,13 +174,16 @@ export default function BaseInfoForm() {
             navigate('/notfound');
           }
 
-          const res = await fetch(`${BASE_INFO_URL}/${calendarId}/base-info`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: accessToken,
+          const res = await fetch(
+            `${BASE_INFO_URL}/calendars/${calendarId}/base-info`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
             },
-          });
+          );
 
           const data = await res.json();
 
