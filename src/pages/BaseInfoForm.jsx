@@ -177,8 +177,11 @@ export default function BaseInfoForm() {
             onChange={handleInputChange}
             label="WonderBox 이름"
             className={styles.input__block}
-            error={formErrors.title}
           />
+          {formErrors.title && (
+            <div className={styles.error}>{formErrors.title}</div>
+          )}
+
           <Input
             id="creator"
             name="creator"
@@ -186,8 +189,10 @@ export default function BaseInfoForm() {
             onChange={handleInputChange}
             label="보내는 사람"
             className={styles.input__block}
-            error={formErrors.creator}
           />
+          {formErrors.creator && (
+            <div className={styles.error}>{formErrors.creator}</div>
+          )}
           <div className={styles.input__block__date}>
             <Input
               type="date"
