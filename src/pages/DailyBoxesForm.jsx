@@ -2,10 +2,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { useEffect, useState } from 'react';
 import DailyBox from '../components/DailyBox/DailyBox';
-import { calculateDateDiffer, formatDate } from '../utils/date';
-import styles from './DailyBoxesForm.module.scss';
 import { useAuthContext } from '../context/AuthContext';
 import Button from '../components/shared/Button';
+import { calculateDateDiffer, formatDate } from '../utils/date';
+import styles from './DailyBoxesForm.module.scss';
+import Modal from '../components/shared/Modal';
 
 const BASE_INFO_URL = 'http://localhost:3030/calendars';
 
@@ -17,30 +18,40 @@ export default function DailyBoxesForm() {
   const [error, setError] = useState('');
   const [dailyBoxes, setDailyBoxes] = useState([]);
   const [localDailyBoxes, setDailyLocalDailyBoxes] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const totalDays =
     calculateDateDiffer(startDate || localStartDate, endDate || localEndDate) +
     1;
 
   const { calendarId } = useParams();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const { user } = useAuthContext();
 
   const accessToken = localStorage.getItem('accessToken') || '';
 
+  function openModal() {
+    if (
+      dailyBoxes.every((box) => !box) ||
+      localDailyBoxes.every((box) => !box)
+    ) {
+      setIsModalOpen(true);
+      setIsOpen(!isOpen);
+    }
+  }
+
   useEffect(() => {
     if (!calendarId) {
-      navigator('/notfound');
+      navigate('/notfound');
     }
 
     if (!user) {
-      const idList = JSON.parse(localStorage.getItem(calendarId));
+      const id = JSON.parse(localStorage.getItem(calendarId));
 
-      console.log(idList);
-
-      if (idList) {
-        setLocalStartDate(idList.startDate);
-        setLocalEndDate(idList.endDate);
+      if (id) {
+        setLocalStartDate(id.startDate);
+        setLocalEndDate(id.endDate);
       }
 
       const dailyBoxData = JSON.parse(localStorage.getItem('dailyBoxes')) || [];
@@ -51,7 +62,7 @@ export default function DailyBoxesForm() {
   useEffect(() => {
     if (user) {
       if (!accessToken) {
-        navigator('/notfound');
+        navigate('/notfound');
       }
       async function getBaseInfo() {
         try {
@@ -85,6 +96,7 @@ export default function DailyBoxesForm() {
 
           setStartDate(formattedStartDate);
           setEndDate(formattedEndDate);
+          setCreatedAt(createdAt);
         } catch (error) {
           setError(
             error.message ||
@@ -95,7 +107,7 @@ export default function DailyBoxesForm() {
         async function getAllBoxes() {
           try {
             if (!accessToken) {
-              navigator('/notfound');
+              navigate('/notfound');
             }
 
             const res = await fetch(
@@ -137,20 +149,24 @@ export default function DailyBoxesForm() {
   }, [accessToken, calendarId, user]);
 
   function handlePreviousClick() {
-    navigator(`/custom/base-info/${calendarId}`);
+    navigate(`/custom/base-info/${calendarId}`);
   }
 
   function handleNextClick() {
-    navigator(`/custom/style/${calendarId}`);
+    navigate(`/custom/style/${calendarId}`);
   }
-  console.log(localDailyBoxes);
+  function generateUniqueKey(index) {
+    const uuid = crypto.randomUUID();
+    return `${uuid}-${index}`;
+  }
+
   return (
     <>
       <div className={styles.dailyBoxes_container}>
         {Array.from({ length: totalDays }).map((_, index) => (
           <DailyBox
             index={index}
-            key={index}
+            key={generateUniqueKey(index)}
             localStartDate={localStartDate}
             startDate={startDate}
             existingData={
@@ -166,8 +182,18 @@ export default function DailyBoxesForm() {
           </Button>
         </div>
         <div>
-          <Button customMove={styles.moveBtn} onClick={handleNextClick}>
+          <Button customMove={styles.moveBtn} onClick={openModal}>
             다음
+            {isOpen ? (
+              <Modal isOpen={isOpen}>
+                <p>
+                  아무것도 입력하지 않은 날짜에는 임의의 사진이 보여집니다.
+                  그래도 저장하시겠습니까?
+                </p>
+                <button onClick={handleNextClick}>예</button>
+                <button onClick={() => setIsOpen(false)}>아니요</button>
+              </Modal>
+            ) : null}
           </Button>
         </div>
       </div>
