@@ -25,7 +25,7 @@ export default function BaseInfoForm() {
   const { user } = useAuthContext();
 
   const navigate = useNavigate();
-  const calendarId = useParams().calendarId;
+  const { calendarId } = useParams();
 
   const stateSetters = {
     title: setTitle,
@@ -90,7 +90,9 @@ export default function BaseInfoForm() {
       return;
     }
 
-    const payload = { title, creator, startDate, endDate, options };
+    const createdAt = new Date();
+
+    const payload = { title, creator, startDate, endDate, options, createdAt };
 
     try {
       setIsLoading(true);
@@ -110,7 +112,7 @@ export default function BaseInfoForm() {
           method: fetchMethod,
           headers: {
             'Content-Type': 'application/json',
-            Authorization: accessToken,
+            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify(payload),
         });
@@ -129,13 +131,11 @@ export default function BaseInfoForm() {
         }
 
         setIsLoading(false);
-        navigate(
-          `/custom/daily-boxes/${calendarId ? calendarId : postCalendarId}`,
-        );
+        navigate(`/custom/daily-boxes/${calendarId || postCalendarId}`);
       }
 
       if (!user) {
-        const localCalendarId = calendarId ? calendarId : Date.now();
+        const localCalendarId = calendarId || Date.now();
         payload.calendarId = localCalendarId;
 
         if (!calendarId) {
@@ -143,7 +143,7 @@ export default function BaseInfoForm() {
             localStorage.setItem('idList', JSON.stringify([]));
           }
 
-          let existingValue = JSON.parse(localStorage.getItem('idList'));
+          const existingValue = JSON.parse(localStorage.getItem('idList'));
 
           existingValue.push(localCalendarId);
           localStorage.setItem('idList', JSON.stringify(existingValue));
@@ -178,7 +178,7 @@ export default function BaseInfoForm() {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: accessToken,
+              Authorization: `Bearer ${accessToken}`,
             },
           });
 
@@ -221,7 +221,8 @@ export default function BaseInfoForm() {
         const localId = idList[idList.length - 1].toString();
         const localBaseInfo = JSON.parse(localStorage.getItem(localId));
 
-        const { title, creator, startDate, endDate, options } = localBaseInfo;
+        const { title, creator, startDate, endDate, options, createdAt } =
+          localBaseInfo;
 
         const formattedStartDate = formatDate(startDate);
         const formattedEndDate = formatDate(endDate);
