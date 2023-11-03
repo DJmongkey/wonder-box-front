@@ -8,6 +8,8 @@ import Input from '../components/shared/Input';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
 import { calculateDateDiffer, formatDate } from '../utils/date';
+import { redirectErrorPage } from '../errors/handleError';
+import ERRORS from '../errors/errorMessage';
 import styles from './BaseInfoForm.module.scss';
 
 export default function BaseInfoForm() {
@@ -96,12 +98,7 @@ export default function BaseInfoForm() {
         }, 1000);
       }
     } catch (error) {
-      navigate('/notfound', {
-        state: {
-          errorMessage: error.message,
-          errorStatus: error.status,
-        },
-      });
+      redirectErrorPage(navigate, error);
     }
   }
 
@@ -128,18 +125,17 @@ export default function BaseInfoForm() {
         });
         setIsLoaded(true);
       } catch (error) {
-        navigate('/notfound', {
-          state: {
-            errorMessage: error.message,
-            errorStatus: error.status,
-          },
-        });
+        redirectErrorPage(navigate, error);
       }
     }
 
-    function getLocalBaseInfo() {
+    function getLocalBaseInfo(calendarId) {
       const idList = JSON.parse(localStorage.getItem('idList'));
       const localCalendarId = idList[idList.length - 1].toString();
+
+      if (localCalendarId !== calendarId) {
+        redirectErrorPage(navigate, undefined, ERRORS.AUTH.UNAUTHORIZED, 401);
+      }
       const localBaseInfo = JSON.parse(localStorage.getItem(localCalendarId));
 
       if (localBaseInfo) {
@@ -159,7 +155,7 @@ export default function BaseInfoForm() {
       if (user) {
         getBaseInfo();
       } else {
-        getLocalBaseInfo();
+        getLocalBaseInfo(calendarId);
       }
       setIsLoaded(true);
     }

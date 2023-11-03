@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ERRORS from '../errors/errorMessage';
+import { redirectErrorPage } from '../errors/handleError';
 
 export default function useFetchData() {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,12 +20,7 @@ export default function useFetchData() {
     setIsLoading(true);
 
     if (!accessToken) {
-      navigate('/notfound', {
-        state: {
-          errorMessage: ERRORS.AUTH.NOT_FOUND_TOKEN,
-          errorStatus: 401,
-        },
-      });
+      redirectErrorPage(navigate, undefined, ERRORS.AUTH.NOT_FOUND_TOKEN, 401);
     }
 
     try {
