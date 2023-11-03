@@ -206,13 +206,17 @@ export default function BaseInfoForm() {
               value={endDate}
               onChange={handleInputChange}
               className={styles.input__date}
-              error={formErrors.startDate || formErrors.endDate}
               subText="까지"
             />
             <div className={styles.total}>
               총 <span>{calculateDateDiffer(startDate, endDate)}일</span>
             </div>
           </div>
+          {(formErrors.startDate || formErrors.endDate) && (
+            <div className={styles.error}>
+              {formErrors.startDate || formErrors.endDate}
+            </div>
+          )}
           <Input />
           <div className={styles.options}>
             <Input
@@ -241,9 +245,11 @@ export default function BaseInfoForm() {
               onChange={handleInputChange}
               label="날짜, 시간 상관없이 마음대로 열 수 있다."
               checkedOption={options === 'anytime'}
-              error={formErrors.options}
             />
           </div>
+          {formErrors.options && (
+            <div className={styles.error}>{formErrors.options}</div>
+          )}
         </section>
         {error && <div className={styles.error}>{error}</div>}
         <Button customMove={styles.moveBtn} type="submit">

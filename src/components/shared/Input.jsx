@@ -27,7 +27,6 @@ export default function Input({
               onChange={onChange}
               required={isRequired}
             />
-            {error && <div className={styles.error}>{error}</div>}
           </div>
         );
       case 'date':
@@ -43,24 +42,25 @@ export default function Input({
               required={isRequired}
             />
             <p>{subText}</p>
-            {error && <div className={styles.error}>{error}</div>}
           </div>
         );
       case 'radio':
         return (
-          <div className={`${className} ${styles.radioInput}`}>
-            <input
-              type="radio"
-              id={id}
-              name={name}
-              value={value}
-              onChange={onChange}
-              required={isRequired}
-              checked={checkedOption}
-            />
-            {label && <label htmlFor={id}>{label}</label>}
+          <>
+            <div className={`${className} ${styles.radioInput}`}>
+              <input
+                type="radio"
+                id={id}
+                name={name}
+                value={value}
+                onChange={onChange}
+                required={isRequired}
+                checked={checkedOption}
+              />
+              {label && <label htmlFor={id}>{label}</label>}
+            </div>
             {error && <div className={styles.error}>{error}</div>}
-          </div>
+          </>
         );
       default:
         return null;
