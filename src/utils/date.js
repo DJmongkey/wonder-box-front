@@ -11,7 +11,7 @@ export function calculateDateDiffer(startDate, endDate) {
   const timeDiffer = parsedEndDate - parsedStartDate;
   const dayDiffer = timeDiffer / MILLISECONDS_PER_DAY;
 
-  return dayDiffer;
+  return dayDiffer + 1;
 }
 
 export function isDateValid(startDate, endDate) {
