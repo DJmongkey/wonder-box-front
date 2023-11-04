@@ -14,6 +14,8 @@ export default function useFormInput(initialValues) {
       [name]: value,
     }));
 
+    const error = validateInput(name, value, { ...formData, [name]: value });
+
     if (name === 'startDate' || name === 'endDate') {
       setFormErrors((prevFormErrors) => ({
         ...prevFormErrors,
@@ -21,8 +23,6 @@ export default function useFormInput(initialValues) {
         endDate: '',
       }));
     }
-
-    const error = validateInput(name, value, { ...formData, [name]: value });
 
     setFormErrors((prevFormErrors) => ({
       ...prevFormErrors,
