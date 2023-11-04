@@ -37,7 +37,6 @@ export default function Header() {
             My WonderBox
           </Button>
         )}
-        {}
       </div>
     </div>
   );

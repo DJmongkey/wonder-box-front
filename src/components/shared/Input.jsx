@@ -12,7 +12,7 @@ export default function Input({
   subText,
   checkedOption,
 }) {
-  function checkInputType() {
+  function renderInputByType() {
     switch (type) {
       case 'text':
         return (
@@ -62,5 +62,5 @@ export default function Input({
         return null;
     }
   }
-  return checkInputType();
+  return renderInputByType();
 }

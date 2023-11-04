@@ -16,7 +16,8 @@ export default function BaseInfoForm() {
   const { user } = useAuthContext();
   const { calendarId } = useParams();
 
-  const { fetchData, isLoading, error, navigate } = useFetchData();
+  const { fetchData, isLoading, setIsLoading, error, navigate } =
+    useFetchData();
 
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -35,8 +36,6 @@ export default function BaseInfoForm() {
   });
 
   const { title, creator, startDate, endDate, options } = formData;
-
-  const accessToken = localStorage.getItem('accessToken');
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -57,7 +56,6 @@ export default function BaseInfoForm() {
           : `/calendars`;
         const fetchHeaders = {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
         };
 
         const data = await fetchData(
@@ -65,7 +63,6 @@ export default function BaseInfoForm() {
           fetchMethod,
           fetchHeaders,
           JSON.stringify(payload),
-          accessToken,
         );
 
         const postCalendarId = await data.calendarId;
@@ -86,11 +83,13 @@ export default function BaseInfoForm() {
 
           localStorage.setItem('id', localCalendarId);
         }
+        setIsLoading(true);
 
         const localData = JSON.stringify(payload);
 
         setTimeout(() => {
           localStorage.setItem(localCalendarId, localData);
+          setIsLoading(false);
           navigate(`/custom/daily-boxes/${localCalendarId}`);
         }, 1000);
       }
@@ -103,13 +102,7 @@ export default function BaseInfoForm() {
     async function getBaseInfo() {
       try {
         const url = `/calendars/${calendarId}/base-info`;
-        const data = await fetchData(
-          url,
-          'GET',
-          { Authorization: `Bearer ${accessToken}` },
-          null,
-          accessToken,
-        );
+        const data = await fetchData(url, 'GET', {}, null);
 
         const { title, creator, startDate, endDate, options } = data.calendar;
 
