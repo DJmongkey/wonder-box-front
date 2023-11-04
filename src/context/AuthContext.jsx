@@ -7,18 +7,50 @@ export function AuthContextProvider({ children }) {
     localStorage.getItem('accessToken') ? true : false,
   );
 
-  const login = async () => {
+  async function login(accessToken) {
+    localStorage.setItem('accessToken', accessToken);
     setUser(true);
-  };
+  }
 
-  const logout = async () => {
-    setUser(false);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-  };
+  async function logout() {
+    try {
+      await fetch(`${import.meta.env.VITE_BASE_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      localStorage.removeItem('accessToken');
+      setUser(false);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function refreshAccessToken() {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('accessToken', data.accessToken);
+        setUser(true);
+        return true;
+      } else {
+        setUser(false);
+        return false;
+      }
+    } catch (error) {
+      setUser(false);
+      return false;
+    }
+  }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, refreshAccessToken }}>
       {children}
     </AuthContext.Provider>
   );

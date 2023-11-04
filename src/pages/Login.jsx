@@ -7,8 +7,6 @@ import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
 import styles from './Login.module.scss';
 
-const BASE_URL = 'http://localhost:3030/auth/login';
-
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +23,7 @@ export default function Login() {
 
     try {
       setIsLoading(true);
-      const res = await fetch(BASE_URL, {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,9 +38,7 @@ export default function Login() {
       }
       setIsLoading(false);
 
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      login();
+      login(data.accessToken);
       navigate('/');
     } catch (error) {
       setIsLoading(false);

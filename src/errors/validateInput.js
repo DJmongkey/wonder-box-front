@@ -2,7 +2,7 @@ import { isDateValid } from '../utils/date';
 import ERRORS from './errorMessage';
 
 export function validateInput(name, value, formData) {
-  let newFormData = { ...formData, [name]: value };
+  const newFormData = { ...formData, [name]: value };
 
   if (name === 'startDate' || name === 'endDate') {
     if (!newFormData.startDate || !newFormData.endDate) {

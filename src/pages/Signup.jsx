@@ -6,8 +6,8 @@ import { useAuthContext } from '../context/AuthContext';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
 import styles from './Signup.module.scss';
+import ERRORS from '../errors/errorMessage';
 
-const BASE_URL = 'http://localhost:3030/auth/signup';
 const SPECIAL_CHARACTER = `!@#$%^&*()-_=+₩~\\{\\}\\[\\]\\|\\:\\;\\"\\'\\<\\>\\,.\\?\\/`;
 
 const validationRules = {
@@ -101,7 +101,7 @@ export default function Signup() {
     try {
       setIsLoading(true);
 
-      const res = await fetch(BASE_URL, {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -116,16 +116,11 @@ export default function Signup() {
       }
       setIsLoading(false);
 
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      login();
+      login(data.accessToken);
       navigate('/custom/base-info');
     } catch (error) {
       setIsLoading(false);
-      setError(
-        error.message ||
-          '회원가입 처리 중 오류가 발생하였습니다. 다시 시도해 주세요.',
-      );
+      setError(error.message || ERRORS.PROCESS_ERR);
     }
   }
 

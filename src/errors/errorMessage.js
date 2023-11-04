@@ -16,6 +16,7 @@ const ERRORS = {
     NEED_REFRESH_TOKEN: 'Refresh Token이 필요합니다.',
     INVALID_REFRESH_TOKEN: 'Refresh Token이 유효하지 않습니다.',
     INVALID_ACCESS_TOKEN: 'Access Token이 유효하지 않습니다.',
+    INVALID_TOKEN: '로그인 정보가 유효하지 않습니다.\n다시 로그인 해주세요',
   },
   CALENDAR: {
     INVALID: {
