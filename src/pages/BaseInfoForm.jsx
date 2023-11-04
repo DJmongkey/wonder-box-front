@@ -47,9 +47,7 @@ export default function BaseInfoForm() {
       return;
     }
 
-    const createdAt = new Date();
-
-    const payload = { title, creator, createdAt, startDate, endDate, options };
+    const payload = { title, creator, startDate, endDate, options };
 
     try {
       if (user) {
@@ -80,14 +78,13 @@ export default function BaseInfoForm() {
         payload.calendarId = localCalendarId;
 
         if (!calendarId) {
-          if (!localStorage.getItem('idList')) {
-            localStorage.setItem('idList', JSON.stringify([]));
+          const existingId = localStorage.getItem('id');
+
+          if (existingId) {
+            localStorage.removeItem(existingId);
           }
 
-          const idList = JSON.parse(localStorage.getItem('idList'));
-
-          idList.push(localCalendarId);
-          localStorage.setItem('idList', JSON.stringify(idList));
+          localStorage.setItem('id', localCalendarId);
         }
 
         const localData = JSON.stringify(payload);
@@ -130,8 +127,7 @@ export default function BaseInfoForm() {
     }
 
     function getLocalBaseInfo(calendarId) {
-      const idList = JSON.parse(localStorage.getItem('idList'));
-      const localCalendarId = idList[idList.length - 1].toString();
+      const localCalendarId = localStorage.getItem('id');
 
       if (localCalendarId !== calendarId) {
         redirectErrorPage(navigate, undefined, ERRORS.AUTH.UNAUTHORIZED, 401);
