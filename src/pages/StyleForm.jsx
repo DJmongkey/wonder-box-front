@@ -42,6 +42,67 @@ export default function StyleForm() {
     bgColor,
   } = formData;
 
+  function handleFileChange() {
+    const file = imRef.current.files[0];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      setImage(reader.result);
+    };
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const boxStyle = {
+      font,
+      color,
+      bgColor,
+    };
+
+    const newStyle = {
+      titleFont,
+      titleColor,
+      backgroundColor,
+      borderColor,
+      image,
+      box: boxStyle,
+    };
+
+    try {
+      if (user) {
+        const fetchMethod = existingStyleData ? 'PUT' : 'POST';
+        const fetchUrl = `/calendars/${calendarId}/style`;
+        const uploadData = new FormData();
+
+        uploadData.append('titleFont', newStyle.titleFont);
+        uploadData.append('titleColor', newStyle.titleColor);
+        uploadData.append('backgroundColor', newStyle.backgroundColor);
+        uploadData.append('borderColor', newStyle.borderColor);
+        uploadData.append('image', imRef.current.files[0]);
+        uploadData.append('box[font]', boxStyle.font);
+        uploadData.append('box[color]', boxStyle.color);
+        uploadData.append('box[bgColor]', boxStyle.bgColor);
+
+        await fetchData(fetchUrl, fetchMethod, {}, uploadData);
+
+        navigate(`/custom/preview/${calendarId}`);
+      }
+      if (!user && calendarId) {
+        const existingValue = JSON.parse(localStorage.getItem(calendarId));
+
+        existingValue.style = newStyle;
+
+        localStorage.setItem(calendarId, JSON.stringify(existingValue));
+
+        navigate('/signup');
+      }
+    } catch (error) {
+      redirectErrorPage(navigate, error);
+    }
+  }
+
   function handleClick() {
     navigate(-1);
   }
