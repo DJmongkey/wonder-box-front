@@ -1,0 +1,133 @@
+@import '../style.scss';
+
+.sub_title {
+  font-size: $size-1;
+  margin: auto;
+  margin-top: 35px;
+  margin-bottom: 10px;
+  width: 80%;
+}
+.preview_container {
+  border: 1px solid black;
+  width: 80%;
+  height: 200px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: auto;
+  background-size: 100% 200px;
+
+  .title_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    width: 250px;
+    height: 100px;
+    font-size: $size-2;
+  }
+
+  .date_box {
+    display: flex;
+    gap: 50px;
+
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 150px;
+      height: 100px;
+    }
+  }
+}
+
+.custom_container {
+  width: 80%;
+  height: 150px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  text-align: center;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+
+    label {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: $size-1;
+    }
+  }
+  .custom_box {
+    display: flex;
+    flex-direction: row;
+
+    input {
+      border: 1px solid black;
+      height: 30px;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .input {
+      position: relative;
+      top: 34px;
+    }
+  }
+}
+
+.file_box {
+  width: 80%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 20px;
+
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    height: 100px;
+    width: 200px;
+    border: 1px solid black;
+    background-size: 200px 100px;
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+
+  .image_url {
+    border: 1px solid black;
+    margin-top: 10px;
+    width: 200px;
+  }
+}
+
+.button_container {
+  width: 20%;
+  display: flex;
+  margin: auto;
+
+  button {
+    margin-top: 50px;
+
+    .moveBtn {
+      font-size: $size-0;
+      width: auto;
+      padding: 5px 10px;
+      border: 1px solid $softRed;
+      background-color: $softRed;
+
+      &:hover,
+      &:focus {
+        color: $softRed;
+        background-color: $white;
+      }
+    }
+  }
+}
