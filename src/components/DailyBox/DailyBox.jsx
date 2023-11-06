@@ -1,226 +1,401 @@
-import { useNavigate, useParams } from 'react-router-dom';
-
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  IoDocumentTextOutline,
+  IoImageOutline,
+  IoPlayCircleOutline,
+  IoMicOutline,
+  IoClose,
+  IoTrashBin,
+} from 'react-icons/io5';
+
 import Modal from '../shared/Modal';
 import Button from '../shared/Button';
-import { plusDay } from '../../utils/date';
+import Input from '../shared/Input';
+import Loading from '../shared/Loading';
+
 import { useAuthContext } from '../../context/AuthContext';
 import { useFormContext } from '../../context/FormContext';
+import useFetchData from '../../hooks/useFetchData';
+import useFormInput from '../../hooks/useFormInput';
+import { redirectErrorPage } from '../../errors/handleError';
+import { formatDateMMDD } from '../../utils/date';
 import styles from './DailyBox.module.scss';
 
-const BASE_INFO_URL = 'http://localhost:3030/calendars';
-const PREVIEW_IMG =
-  'https://img1.daumcdn.net/thumb/R1280x0.fpng/?fname=http://t1.daumcdn.net/brunch/service/user/6n45/image/vPp4Yy5ZpPK75WFv7uJKbcLBTM4.png';
+export default function DailyBox({ dailyBoxId, date, content }) {
+  const initialValues = {
+    text: '',
+    imageFile: null,
+    image: '',
+    videoFile: null,
+    video: '',
+    audioFile: null,
+    audio: '',
+  };
 
-export default function DailyBox({
-  existingData,
-  startDate,
-  index,
-  localStartDate,
-}) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
-  const [videoFile, setVideoFile] = useState('');
-  const [imageFile, setImageFile] = useState(null);
-  const [audioFile, setAudioFile] = useState(null);
-  const [message, setMessage] = useState('내용을 입력해주세요');
-  const [error, setError] = useState('');
+  const {
+    formData,
+    formErrors,
+    handleInputChange,
+    validateForm,
+    updateFormData,
+    inputTypes,
+    previewImage,
+    previewVideo,
+    previewAudio,
+    setPreviewImage,
+    setPreviewVideo,
+    setPreviewAudio,
+    handleRemoveFile,
+  } = useFormInput(initialValues);
 
-  const accessToken = localStorage.getItem('accessToken');
+  const { fetchData, isLoading, setIsLoading, error, navigate } =
+    useFetchData();
 
   const { calendarId } = useParams();
-  const navigate = useNavigate();
-
   const { user } = useAuthContext();
   const { setIsDailyBoxesValid } = useFormContext();
 
-  const userDays = startDate && plusDay(startDate, index);
-  const localDays = localStartDate && plusDay(localStartDate, index);
+  const [isBoxOpen, setIsBoxOpen] = useState(false);
+  const [originalContent, setOriginalContent] = useState(content);
 
-  const dailyBoxId = existingData && existingData._id;
+  const displayedMedia = previewImage || previewVideo || previewAudio;
 
-  useEffect(() => {
-    if (existingData) {
-      setImageUrl(existingData.content.image || '');
-      setMessage(existingData.content.text || '');
-    }
-  }, [existingData]);
-
-  function openModal() {
-    setIsModalOpen(true);
-  }
-
-  function handleInputChange(event, setStateFunction) {
-    const { value } = event.target;
-    setStateFunction(value);
-  }
-
-  function handleFileChange(event, setFile) {
-    const file = event.target.files[0];
-    setFile(file);
-  }
+  const hasImage = previewImage || formData.image;
+  const hasVideo = previewVideo || formData.video;
+  const hasAudio = previewAudio || formData.audio;
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const newContent = {
-      image: imageUrl || imageFile || '',
-      video: videoFile || '',
-      text: message || '',
-      audio: audioFile || '',
-    };
+    const isValid = validateForm();
 
-    setIsModalOpen(false);
-
-    if (!user) {
-      if (calendarId) {
-        const existingValue = JSON.parse(localStorage.getItem(calendarId));
-        const dailyBoxes = existingValue.dailyBoxes || [];
-
-        const newDailyBox = {
-          dailyBoxId: Date.now().toString(),
-          date: new Date(),
-          content: newContent,
-          isOpen: false,
-        };
-
-        dailyBoxes[index] = newDailyBox;
-        existingValue.dailyBoxes = dailyBoxes;
-
-        localStorage.setItem(calendarId, JSON.stringify(existingValue));
-      }
+    if (!isValid) {
+      return;
     }
 
-    if (user) {
-      if (!accessToken) {
-        navigate('/notfound');
+    try {
+      if (!user) {
+        const localStorageId = JSON.parse(localStorage.getItem('id'));
+        const localStorageCalendar = JSON.parse(
+          localStorage.getItem(localStorageId),
+        );
+
+        const localStorageDailyBox = localStorageCalendar.dailyBoxes.find(
+          (box) => box.id === dailyBoxId,
+        );
+
+        setIsLoading(true);
+
+        if (localStorageDailyBox) {
+          localStorageDailyBox.content = {
+            ...localStorageDailyBox.content,
+            image: formData.image,
+            text: formData.text,
+          };
+
+          setTimeout(() => {
+            localStorage.setItem(
+              localStorageId,
+              JSON.stringify(localStorageCalendar),
+            );
+            setIsLoading(false);
+          }, 1000);
+        }
+        setIsBoxOpen(false);
       }
 
-      try {
-        const formData = new FormData();
+      if (user) {
+        const formDataToSubmit = new FormData();
 
-        formData.append('date', userDays);
-        formData.append(
-          'content',
-          new Blob([JSON.stringify(newContent)], { type: 'application/json' }),
-        );
-        formData.append('isOpen', 'false');
-        formData.append('image', imageFile);
-        formData.append('audio', audioFile);
-        formData.append('video', videoFile);
+        formDataToSubmit.append('dailyBoxId', dailyBoxId);
+        formDataToSubmit.append('content[text]', formData.text);
 
-        const res = await fetch(`${BASE_INFO_URL}/${calendarId}/daily-boxes`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: formData,
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          navigate('/notfound', {
-            state: {
-              errorMessage: data.message,
-              errorStatus: data.status,
-            },
-          });
+        if (formData.imageFile) {
+          formDataToSubmit.append('image', formData.imageFile);
+        } else {
+          formDataToSubmit.append('content[image]', formData.image || '');
         }
 
-        const { text, image, video, audio } = data.content;
+        if (formData.videoFile) {
+          formDataToSubmit.append('video', formData.videoFile);
+        } else {
+          formDataToSubmit.append('content[video]', formData.video || '');
+        }
 
-        setMessage(text);
-        setImageUrl(image);
-        setVideoFile(video);
-        setAudioFile(audio);
-        setImageFile(image);
+        if (formData.audioFile) {
+          formDataToSubmit.append('audio', formData.audioFile);
+        } else {
+          formDataToSubmit.append('content[audio]', formData.audio || '');
+        }
+
+        const isPost = !Object.keys(content);
+
+        const fetchUrl = isPost
+          ? `/calendars/${calendarId}/daily-boxes`
+          : `/calendars/${calendarId}/daily-boxes/${dailyBoxId}`;
+
+        const fetchMethod = isPost ? 'POST' : 'PUT';
+
+        await fetchData(fetchUrl, fetchMethod, {}, formDataToSubmit);
+
         setIsDailyBoxesValid(true);
-      } catch (error) {
-        setError(
-          error.message ||
-            '입력 내용 저장 중 오류가 발생했습니다. 다시 시도해 주세요.',
-        );
       }
+    } catch (error) {
+      redirectErrorPage(navigate, error);
     }
+
+    setIsBoxOpen(false);
+  }
+
+  useEffect(() => {
+    if (content.image) {
+      setPreviewImage(content.image);
+    } else {
+      setPreviewImage('');
+    }
+    if (content.video) {
+      setPreviewVideo(content.video);
+    } else {
+      setPreviewVideo('');
+    }
+    if (content.audio) {
+      setPreviewAudio(content.audio);
+    } else {
+      setPreviewAudio('');
+    }
+
+    updateFormData({
+      text: content.text || '',
+      image: content.image || '',
+      video: content.video || '',
+      audio: content.audio || '',
+    });
+  }, [content]);
+
+  useEffect(() => {
+    setOriginalContent(content);
+  }, [content]);
+
+  function handleClose() {
+    updateFormData({
+      text: originalContent.text || '',
+      image: originalContent.image || '',
+      video: originalContent.video || '',
+      audio: originalContent.audio || '',
+    });
+
+    setPreviewImage(originalContent.image);
+    setPreviewVideo(originalContent.video);
+    setPreviewAudio(originalContent.audio);
+
+    setIsBoxOpen(false);
   }
 
   return (
-    <div className={styles.dailyBox_container}>
-      <div className={styles.day} onClick={openModal}>
-        {!user && localStartDate && localDays}
-        {user && userDays}
+    <div
+      className={styles.dailyBox__container}
+      onClick={() => setIsBoxOpen(true)}
+    >
+      <header className={styles.dailyBox__header}>
+        <p>{formatDateMMDD(date)}</p>
+        <div className={styles.displayedMedia}>
+          {formData.text && <IoDocumentTextOutline className={styles.icon} />}
+          {(formData.image || previewImage) && (
+            <IoImageOutline className={styles.icon} />
+          )}
+          {(formData.video || previewVideo) && (
+            <IoPlayCircleOutline className={styles.icon} />
+          )}
+          {(formData.audio || previewAudio) && (
+            <IoMicOutline className={styles.icon} />
+          )}
+        </div>
+      </header>
+      <div className={styles.dailyBox__contents}>
+        {hasImage ? (
+          <img src={previewImage} alt="이미지 미리보기" />
+        ) : hasVideo ? (
+          <video width="320" height="240" controls>
+            <source
+              src={previewVideo}
+              type="video/mp4, 'video/x-matroska', 'video/quicktime', 'video/webm'"
+            />
+          </video>
+        ) : hasAudio ? (
+          <audio controls>
+            <source src={previewAudio} type="audio/mpeg"></source>
+          </audio>
+        ) : (
+          <div className={styles.text__preview}>{formData.text}</div>
+        )}
+        {displayedMedia && formData.text && (
+          <div className={styles.text__preview__hover}>{formData.text}</div>
+        )}
       </div>
-      <div onClick={openModal}>
-        {imageUrl && <img src={imageUrl} alt="image" />}
-        <div>{imageUrl ? null : message}</div>
-      </div>
-      {isModalOpen ? (
-        <Modal isOpen={isModalOpen}>
-          <form className={styles.modal_form} onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="image">이미지</label>
-              <img src={imageUrl || PREVIEW_IMG} alt="image" />
+      {isLoading && <Loading asOverlay />}
+      {isBoxOpen && (
+        <Modal isOpen={isBoxOpen} className={styles.modal__contents__form}>
+          <form onSubmit={handleSubmit}>
+            <header>
+              <p>{formatDateMMDD(date)}</p>
+              <span
+                className={styles.icon__close}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClose();
+                }}
+              >
+                <IoClose />
+              </span>
+            </header>
+            <section>
               {user ? (
-                <>
-                  <input
-                    type="text"
-                    id="image"
-                    name="image"
-                    value={imageUrl}
-                    onChange={(event) => handleInputChange(event, setImageUrl)}
-                  />
-                  <input
-                    type="file"
-                    id="image"
-                    name="image"
-                    onChange={(event) => handleFileChange(event, setImageFile)}
-                    className={styles.disabledInput}
-                  />
-                </>
+                <p className={styles.notice}>
+                  <strong>파일 또는 URL</strong> 한가지만 업로드 가능 합니다.
+                </p>
               ) : (
-                <input
+                <p className={styles.notice}>
+                  <strong>텍스트와 이미지 URL</strong>만 업로드 가능 합니다.
+                </p>
+              )}
+              <div className={styles.input__block}>
+                <Input
                   type="text"
                   id="image"
                   name="image"
-                  value={imageUrl}
-                  onChange={(event) => handleInputChange(event, setImageUrl)}
+                  value={inputTypes.image === 'text' ? formData.image : ''}
+                  label="이미지"
+                  onChange={handleInputChange}
+                  className={styles.input__url}
+                  isRequired={false}
+                  isDisabled={inputTypes.image === 'file'}
+                  placeholder="URL을 입력해주세요"
                 />
-              )}
-            </div>
-            <div>
-              <label htmlFor="message">메시지</label>
-              <textarea
-                onChange={() => handleInputChange(event, setMessage)}
-                value={message}
+                <Input
+                  type="file"
+                  id="imageFile"
+                  name="imageFile"
+                  accept=".jpeg, .jpg, .png, .gif"
+                  onChange={handleInputChange}
+                  className={styles.input__file}
+                  isRequired={false}
+                  isDisabled={(!user || inputTypes.image === 'text') && true}
+                />
+                {formErrors.image && (
+                  <div className={styles.error}>{formErrors.image}</div>
+                )}
+                {previewImage && (
+                  <div className={styles.preview__image}>
+                    <img
+                      src={previewImage}
+                      alt={`${formatDateMMDD(date)} 이미지`}
+                    />
+                    <IoTrashBin
+                      size="14"
+                      className={styles.icon__delete}
+                      onClick={() => handleRemoveFile('image')}
+                    />
+                  </div>
+                )}
+              </div>
+              <Input
+                type="textarea"
+                id="text"
+                name="text"
+                value={formData.text}
+                label="메시지"
+                onChange={handleInputChange}
+                className={`${styles.input__block} ${styles.textarea__block}`}
               />
-            </div>
-            <div>
-              <label htmlFor="video">동영상</label>
-              <input
-                type="file"
-                id="video"
-                name="video"
-                onChange={(event) => handleFileChange(event, setVideoFile)}
-                disabled={!user}
-                className={styles.disabledInput}
-              />
-            </div>
-            <div>
-              <label htmlFor="video">동영상</label>
-              <input
-                type="file"
-                id="audio"
-                name="audio"
-                onChange={(event) => handleFileChange(event, setAudioFile)}
-                disabled={!user}
-                className={styles.disabledInput}
-              />
-            </div>
-            <Button type="submit">저장</Button>
+              <div className={styles.input__block}>
+                <Input
+                  type="text"
+                  id="video"
+                  name="video"
+                  label="동영상"
+                  value={inputTypes.video === 'text' ? formData.video : ''}
+                  onChange={handleInputChange}
+                  className={styles.input__url}
+                  isRequired={false}
+                  isDisabled={!user || (inputTypes.video === 'file' && true)}
+                  placeholder="URL을 입력해주세요"
+                />
+                <Input
+                  type="file"
+                  id="videoFile"
+                  name="videoFile"
+                  accept=".mp4, .mkv, .mov, .webm"
+                  onChange={handleInputChange}
+                  className={styles.input__file}
+                  isRequired={false}
+                  isDisabled={(!user || inputTypes.video === 'text') && true}
+                />
+                {formErrors.video && (
+                  <div className={styles.error}>{formErrors.video}</div>
+                )}
+                {previewVideo && (
+                  <div className={styles.preview__video}>
+                    <video width="320" height="240" controls>
+                      <source
+                        src={previewVideo}
+                        type="video/mp4, 'video/x-matroska', 'video/quicktime', 'video/webm'"
+                      />
+                      해당 브라우저에서 비디오를 재생 할 수 없습니다.
+                    </video>
+                    <IoTrashBin
+                      size="14"
+                      className={styles.icon__delete}
+                      onClick={() => handleRemoveFile('video')}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className={styles.input__block}>
+                <Input
+                  type="text"
+                  id="audio"
+                  name="audio"
+                  label="오디오"
+                  value={inputTypes.audio === 'text' ? formData.audio : ''}
+                  onChange={handleInputChange}
+                  className={styles.input__url}
+                  isRequired={false}
+                  isDisabled={(!user || inputTypes.audio === 'file') && true}
+                  placeholder="URL을 입력해주세요"
+                />
+                <Input
+                  type="file"
+                  id="audioFile"
+                  name="audioFile"
+                  accept=".mp3, .mpeg, .mav"
+                  onChange={handleInputChange}
+                  className={styles.input__file}
+                  isRequired={false}
+                  isDisabled={(!user || inputTypes.audio === 'text') && true}
+                />
+                {formErrors.audio && (
+                  <div className={styles.error}>{formErrors.audio}</div>
+                )}
+                {previewAudio && (
+                  <div className={styles.preview__audio}>
+                    <audio controls>
+                      <source src={previewAudio} type="audio/mpeg" />
+                      해당 브라우저에서 오디오 파일을 재생 할 수 없습니다.
+                    </audio>
+                    <IoTrashBin
+                      className={styles.icon__delete}
+                      onClick={() => handleRemoveFile('audio')}
+                    />
+                  </div>
+                )}
+              </div>
+              {error && <div className={styles.error}>{error}</div>}
+              <Button type="submit">저장</Button>
+            </section>
           </form>
         </Modal>
-      ) : null}
+      )}
     </div>
   );
 }
