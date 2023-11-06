@@ -116,13 +116,10 @@ export default function useFormInput(initialValues) {
 
     if (type === 'image') {
       setPreviewImage('');
-      console.log('이미지 ...inputTypes', { ...inputTypes });
     } else if (type === 'video') {
       setPreviewVideo('');
-      console.log('비디오 ...inputTypes', { ...inputTypes });
     } else if (type === 'audio') {
       setPreviewAudio('');
-      console.log('오디오 ...inputTypes', { ...inputTypes });
     }
 
     const fileInput = document.getElementById(`${type}File`);
