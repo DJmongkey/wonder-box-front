@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import ERRORS from '../errors/errorMessage';
 
 const AuthContext = createContext();
 
@@ -14,10 +15,16 @@ export function AuthContextProvider({ children }) {
 
   async function logout() {
     try {
-      await fetch(`${import.meta.env.VITE_BASE_URL}/auth/logout`, {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
 
       localStorage.removeItem('accessToken');
       setUser(false);
