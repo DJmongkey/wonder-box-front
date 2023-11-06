@@ -58,6 +58,18 @@ export default function Input({
             {label && <label htmlFor={id}>{label}</label>}
           </div>
         );
+      case 'color':
+        return (
+          <div className={className}>
+            <input
+              type="color"
+              id={id}
+              name={name}
+              value={value}
+              onChange={onChange}
+            />
+          </div>
+        );
       default:
         return null;
     }
