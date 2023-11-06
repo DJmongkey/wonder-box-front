@@ -1,21 +1,29 @@
 @import '../style.scss';
 
-.dailyBoxes_container {
+.container {
+  width: 100%;
+  height: calc(100% - 70px - 50px);
   display: flex;
-  flex-wrap: wrap;
-  gap: 80px;
-  text-align: center;
-  justify-content: flex-start;
-  align-items: center;
-  margin-left: 160px;
-  margin-top: 80px;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 50px 0;
 }
 
-button {
+.dailyBoxes__container {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  text-align: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.button__block {
+  display: flex;
+  margin: 0 auto;
+  gap: 50px;
   margin-top: 50px;
 
   .moveBtn {
@@ -25,11 +33,55 @@ button {
     padding: 5px 10px;
     border: 1px solid $softRed;
     background-color: $softRed;
+    border-radius: 6px;
+    color: $white;
+    font-weight: 500;
 
     &:hover,
     &:focus {
       color: $softRed;
       background-color: $white;
+      cursor: pointer;
     }
+  }
+
+  .modal__button__block {
+    @include set-center($direction: row);
+    margin-top: 25px;
+    gap: 20px;
+    cursor: auto;
+    &:hover,
+    &:focus {
+      font-size: inherit;
+    }
+    button {
+      margin: 0;
+    }
+  }
+}
+
+@include laptop {
+  .dailyBoxes__container {
+    gap: 30px;
+    max-width: 700px;
+  }
+}
+
+@include tablet {
+  .dailyBoxes__container {
+    justify-content: center;
+    align-items: flex-start;
+    flex-basis: 0;
+    max-width: 430px;
+    gap: 30px;
+  }
+}
+
+@include mobile {
+  .dailyBoxes__container {
+    display: flex;
+    flex-direction: column;
+    max-width: 460px;
+    gap: 40px;
   }
 }

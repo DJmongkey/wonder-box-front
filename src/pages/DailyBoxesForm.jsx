@@ -1,202 +1,145 @@
-import { useNavigate, useParams } from 'react-router-dom';
-
 import { useEffect, useState } from 'react';
-import DailyBox from '../components/DailyBox/DailyBox';
-import { useAuthContext } from '../context/AuthContext';
-import Button from '../components/shared/Button';
-import { calculateDateDiffer, formatDate } from '../utils/date';
-import styles from './DailyBoxesForm.module.scss';
-import Modal from '../components/shared/Modal';
+import { Link, useParams } from 'react-router-dom';
 
-const BASE_INFO_URL = 'http://localhost:3030/calendars';
+import Modal from '../components/shared/Modal';
+import Button from '../components/shared/Button';
+import DailyBox from '../components/DailyBox/DailyBox';
+
+import useFetchData from '../hooks/useFetchData';
+import useFormInput from '../hooks/useFormInput';
+import { useAuthContext } from '../context/AuthContext';
+import { useFormContext } from '../context/FormContext';
+import ERRORS from '../errors/errorMessage';
+import styles from './DailyBoxesForm.module.scss';
 
 export default function DailyBoxesForm() {
-  const [localStartDate, setLocalStartDate] = useState('');
-  const [localEndDate, setLocalEndDate] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [error, setError] = useState('');
-  const [dailyBoxes, setDailyBoxes] = useState([]);
-  const [localDailyBoxes, setDailyLocalDailyBoxes] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { calendarId } = useParams();
+  const { user } = useAuthContext();
+  const { setIsDailyBoxesValid } = useFormContext();
+
+  const { fetchData, navigate } = useFetchData();
+
+  const { formData, validateForm, updateFormData } = useFormInput({
+    startDate: '',
+    endDate: '',
+    dailyBoxes: [],
+  });
+
   const [isOpen, setIsOpen] = useState(false);
 
-  const totalDays =
-    calculateDateDiffer(startDate || localStartDate, endDate || localEndDate) +
-    1;
+  function hasContent(box) {
+    const { content } = box;
 
-  const { calendarId } = useParams();
-  const navigate = useNavigate();
-  const { user } = useAuthContext();
-
-  const accessToken = localStorage.getItem('accessToken') || '';
+    return (
+      content &&
+      (content.text || content.image || content.video || content.audio)
+    );
+  }
 
   function openModal() {
-    if (
-      dailyBoxes.every((box) => !box) ||
-      localDailyBoxes.every((box) => !box)
-    ) {
-      setIsModalOpen(true);
-      setIsOpen(!isOpen);
+    if (formData.dailyBoxes.every((box) => !hasContent(box))) {
+      setIsOpen((prevIsOpen) => !prevIsOpen);
+    } else {
+      if (validateForm()) {
+        setIsDailyBoxesValid(true);
+        navigate(`/custom/style/${calendarId}`);
+      }
     }
   }
 
   useEffect(() => {
-    if (!calendarId) {
-      navigate('/notfound');
+    async function getAllBoxes() {
+      try {
+        const url = `/calendars/${calendarId}/daily-boxes`;
+        const data = await fetchData(
+          url,
+          'GET',
+          { 'Content-Type': 'application/json' },
+          null,
+        );
+        const { dailyBoxes } = data;
+
+        updateFormData({
+          startDate: dailyBoxes[0].date,
+          endDate: dailyBoxes[dailyBoxes.length - 1].date,
+          dailyBoxes,
+        });
+      } catch (error) {
+        redirectErrorPage(navigate, error);
+      }
     }
 
-    if (!user) {
-      const id = JSON.parse(localStorage.getItem(calendarId));
+    function getAllLocalBoxes(calendarId) {
+      const localCalendarId = localStorage.getItem('id');
 
-      if (id) {
-        setLocalStartDate(id.startDate);
-        setLocalEndDate(id.endDate);
+      if (localCalendarId !== calendarId) {
+        redirectErrorPage(navigate, undefined, ERRORS.AUTH.UNAUTHORIZED, 401);
       }
 
-      const dailyBoxData = JSON.parse(localStorage.getItem('dailyBoxes')) || [];
-      setDailyLocalDailyBoxes(dailyBoxData);
-    }
-  }, [calendarId]);
+      const localCalendar = JSON.parse(localStorage.getItem(localCalendarId));
 
-  useEffect(() => {
+      if (localCalendar) {
+        const { startDate, endDate, dailyBoxes } = localCalendar;
+
+        updateFormData({
+          startDate,
+          endDate,
+          dailyBoxes,
+        });
+      }
+    }
+
     if (user) {
-      if (!accessToken) {
-        navigate('/notfound');
-      }
-      async function getBaseInfo() {
-        try {
-          if (!accessToken) {
-            navigate('/notfound');
-          }
-
-          const res = await fetch(`${BASE_INFO_URL}/${calendarId}/base-info`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-
-          const data = await res.json();
-
-          if (!res.ok) {
-            navigate('/notfound', {
-              state: {
-                errorMessage: data.message,
-                errorStatus: data.status,
-              },
-            });
-          }
-
-          const { startDate, endDate } = data.calendar;
-
-          const formattedStartDate = formatDate(startDate);
-          const formattedEndDate = formatDate(endDate);
-
-          setStartDate(formattedStartDate);
-          setEndDate(formattedEndDate);
-          setCreatedAt(createdAt);
-        } catch (error) {
-          setError(
-            error.message ||
-              '입력 내용 저장 중 오류가 발생했습니다. 다시 시도해 주세요.',
-          );
-        }
-
-        async function getAllBoxes() {
-          try {
-            if (!accessToken) {
-              navigate('/notfound');
-            }
-
-            const res = await fetch(
-              `${BASE_INFO_URL}/${calendarId}/daily-boxes`,
-              {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${accessToken}`,
-                },
-              },
-            );
-
-            const data = await res.json();
-
-            const { dailyBoxes } = data;
-
-            if (!res.ok) {
-              navigate('/notfound', {
-                state: {
-                  errorMessage: data.message,
-                  errorStatus: data.status,
-                },
-              });
-            }
-
-            setDailyBoxes(dailyBoxes);
-          } catch (error) {
-            setError(
-              error.message ||
-                '입력 내용 저장 중 오류가 발생했습니다. 다시 시도해 주세요.',
-            );
-          }
-        }
-        getAllBoxes();
-      }
-      getBaseInfo();
+      getAllBoxes();
+    } else {
+      getAllLocalBoxes(calendarId);
     }
-  }, [accessToken, calendarId, user]);
-
-  function handlePreviousClick() {
-    navigate(`/custom/base-info/${calendarId}`);
-  }
-
-  function handleNextClick() {
-    navigate(`/custom/style/${calendarId}`);
-  }
-  function generateUniqueKey(index) {
-    const uuid = crypto.randomUUID();
-    return `${uuid}-${index}`;
-  }
+  }, [calendarId, user]);
 
   return (
-    <>
-      <div className={styles.dailyBoxes_container}>
-        {Array.from({ length: totalDays }).map((_, index) => (
+    <div className={styles.container}>
+      <div className={styles.dailyBoxes__container}>
+        {formData.dailyBoxes.map((box) => (
           <DailyBox
-            index={index}
-            key={generateUniqueKey(index)}
-            localStartDate={localStartDate}
-            startDate={startDate}
-            existingData={
-              user ? dailyBoxes[index] : localDailyBoxes[index] || null
-            }
+            key={box._id || box.id}
+            dailyBoxId={box._id || box.id}
+            date={box.date}
+            content={box.content}
           />
         ))}
       </div>
-      <div className={styles.button_container}>
-        <div>
-          <Button onClick={handlePreviousClick} customMove={styles.moveBtn}>
-            이전
-          </Button>
+      <div className={styles.button__block}>
+        <Link to={`/custom/base-info/${calendarId}`}>
+          <Button customMove={styles.moveBtn}>이전</Button>
+        </Link>
+        <div className={styles.moveBtn} onClick={openModal}>
+          다음
         </div>
-        <div>
-          <Button customMove={styles.moveBtn} onClick={openModal}>
-            다음
-            {isOpen ? (
-              <Modal isOpen={isOpen}>
-                <p>
-                  아무것도 입력하지 않은 날짜에는 임의의 사진이 보여집니다.
-                  그래도 저장하시겠습니까?
-                </p>
-                <button onClick={handleNextClick}>예</button>
-                <button onClick={() => setIsOpen(false)}>아니요</button>
-              </Modal>
-            ) : null}
-          </Button>
-        </div>
+        {isOpen && (
+          <Modal isOpen={isOpen}>
+            <p>
+              아무것도 입력하지 않은 날짜에는 임의의 사진이 보여집니다. 그래도
+              저장하시겠습니까?
+            </p>
+            <div className={styles.modal__button__block}>
+              <Link to={`/custom/style/${calendarId}`}>
+                <Button
+                  customMove={styles.moveBtn}
+                  onClick={() => setIsDailyBoxesValid(true)}
+                >
+                  예
+                </Button>
+              </Link>
+              <Button
+                customMove={styles.moveBtn}
+                onClick={() => setIsOpen(false)}
+              >
+                아니요
+              </Button>
+            </div>
+          </Modal>
+        )}
       </div>
-    </>
+    </div>
   );
 }

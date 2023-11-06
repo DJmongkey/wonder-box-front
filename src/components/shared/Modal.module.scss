@@ -8,7 +8,7 @@
   bottom: 0;
   background-color: $overlay;
   color: $black;
-  z-index: 9999;
+  z-index: 999;
   @include set-center;
 }
 
@@ -19,5 +19,4 @@
   max-width: 80%;
   width: 400px;
   cursor: auto;
-  z-index: 10000;
 }
