@@ -10,6 +10,7 @@ import useFetchData from '../hooks/useFetchData';
 import { redirectErrorPage } from '../errors/handleError';
 import ERRORS from '../errors/errorMessage';
 import styles from './StyleForm.module.scss';
+import StylePreview from '../components/style/StylePreview';
 
 export default function StyleForm() {
   const [image, setImage] = useState('');
@@ -198,35 +199,7 @@ export default function StyleForm() {
     <div>
       {isLoading && <Loading asOverlay />}
       <form onSubmit={handleSubmit}>
-        <div className={styles.sub__title}>Preview</div>
-        <div
-          className={styles.preview__container}
-          style={{
-            backgroundImage: image ? `url(${image})` : 'none',
-          }}
-        >
-          <div
-            style={{
-              color: titleColor,
-              borderColor,
-              backgroundColor,
-              fontFamily: titleFont,
-            }}
-            className={styles.preview__title}
-          >
-            Title
-          </div>
-          <div className={styles.preview__date}>
-            {[1, 2, 3].map((number) => (
-              <div
-                key={number}
-                style={{ backgroundColor: bgColor, color, fontFamily: font }}
-              >
-                {number}
-              </div>
-            ))}
-          </div>
-        </div>
+        <StylePreview formData={formData} image={image} />
         <StyleEditor
           formData={formData}
           handleInputChange={handleInputChange}
