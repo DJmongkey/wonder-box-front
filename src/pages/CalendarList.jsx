@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import CalendarDetail from '../components/calendarList/CalendarDetail';
-import Loading from '../components/shared/Loading';
 import Notification from '../components/shared/Notification';
 import useFetchData from '../hooks/useFetchData';
 import useNotification from '../hooks/useNotification';
@@ -10,7 +9,7 @@ import ERRORS from '../errors/errorMessage';
 import styles from './CalendarList.module.scss';
 
 export default function CalendarList() {
-  const { fetchData, isLoading, error } = useFetchData();
+  const { fetchData, error } = useFetchData();
   const [calendars, setCalendars] = useState([]);
   const { notification, showNotification, hideNotification } =
     useNotification();
@@ -54,18 +53,16 @@ export default function CalendarList() {
 
   return (
     <>
-      {isLoading && <Loading asOverlay />}
       {notification.isShown && (
         <Notification
           type={notification.type}
           message={notification.message}
-          time={3000}
           onHide={hideNotification}
         >
           <p>{notification.message}</p>
         </Notification>
       )}
-      {!isLoading && calendars.length === 0 ? (
+      {calendars.length === 0 ? (
         <div className={styles.no_calendar}>
           <div className={styles.error__no_calendar}>
             {ERRORS.CALENDAR.EMPTY_LIST}

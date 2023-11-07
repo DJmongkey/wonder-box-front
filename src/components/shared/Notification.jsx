@@ -2,16 +2,18 @@ import { useEffect } from 'react';
 
 import styles from './Notification.module.scss';
 
-export default function Notification({ type, message, time, onHide }) {
+export default function Notification({ type, message, time = 4000, onHide }) {
+  const displayTime = time < 4000 ? 4000 : time;
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (onHide) {
         onHide();
       }
-    }, time + 1000);
+    }, displayTime);
 
     return () => clearTimeout(timer);
-  }, [time, onHide]);
+  }, [displayTime, onHide]);
 
   function messageStyle() {
     switch (type) {
