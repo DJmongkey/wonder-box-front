@@ -1,0 +1,59 @@
+@import '../../style.scss';
+.calendar {
+  font-size: calc($size-0 + 0.0625rem);
+  padding: 10px 0;
+  border-bottom: 1px solid $green;
+  @include set-center($direction: row, $justify: space-around);
+
+  .list__column {
+    @include set-center($direction: row);
+    padding: 0 10px;
+    overflow-x: scroll;
+    white-space: nowrap;
+    border-right: 1px solid $lightGray2;
+    color: $black;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  .title {
+    width: 35%;
+    font-weight: 500;
+  }
+  .creator {
+    width: 20%;
+  }
+  .startDate,
+  .endDate {
+    width: 12%;
+  }
+  .createdAt {
+    width: 13%;
+  }
+
+  .tools {
+    width: 15%;
+    @include set-center($direction: row);
+
+    button {
+      font-size: $size-1;
+      .icon {
+        margin: 0 8px;
+        &:hover,
+        &:focus {
+          color: $black;
+        }
+      }
+    }
+  }
+}
+
+.error {
+  font-size: $size-0;
+  color: $red;
+}
