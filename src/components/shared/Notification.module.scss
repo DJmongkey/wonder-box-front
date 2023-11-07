@@ -1,0 +1,46 @@
+@import '../../style.scss';
+
+.notification {
+  position: fixed;
+  top: 90px;
+  right: 2%;
+  width: auto;
+  height: auto;
+  padding: 8px 10px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border: 1px solid $darkGray;
+  background-color: $skyblue;
+  color: $darkGray;
+  font-weight: 500;
+  font-size: $size-0;
+  animation: slideInOut 4s ease-in-out forwards;
+  opacity: 1;
+  z-index: 1000;
+  @include set-center;
+}
+
+.success {
+  border: 1px solid $green;
+  background-color: #dde6cf;
+  color: $green;
+}
+
+.error {
+  border: 1px solid #f4bfbf;
+  background-color: #ffe6e6;
+  color: $red;
+}
+
+@keyframes slideInOut {
+  0%,
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  30%,
+  70% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
