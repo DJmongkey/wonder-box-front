@@ -26,3 +26,15 @@
     margin-right: 10px;
   }
 }
+
+.textareaInput {
+  label {
+    font-weight: 500;
+  }
+  textarea {
+    resize: none;
+    border-radius: 6px;
+    border-color: $skyblue;
+    width: auto;
+  }
+}

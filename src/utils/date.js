@@ -36,3 +36,10 @@ export function plusDay(startDate, index) {
 export function formattedDate(date) {
   return new Date(date).toLocaleDateString();
 }
+
+export function formatDateMMDD(date) {
+  const month = new Date(date).getMonth() + 1;
+  const day = new Date(date).getDate();
+
+  return `${month}월 ${day}일`;
+}

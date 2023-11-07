@@ -11,6 +11,9 @@ export default function Input({
   className,
   subText,
   checkedOption,
+  accept,
+  isDisabled = false,
+  placeholder,
 }) {
   function renderInputByType() {
     switch (type) {
@@ -25,7 +28,16 @@ export default function Input({
               value={value}
               onChange={onChange}
               required={isRequired}
+              disabled={isDisabled}
+              placeholder={placeholder}
             />
+          </div>
+        );
+      case 'textarea':
+        return (
+          <div className={`${className} ${styles.textareaInput}`}>
+            {label && <label htmlFor={id}>{label}</label>}
+            <textarea id={id} name={name} value={value} onChange={onChange} />
           </div>
         );
       case 'date':
@@ -58,18 +70,33 @@ export default function Input({
             {label && <label htmlFor={id}>{label}</label>}
           </div>
         );
-      case 'color':
+      case 'file':
         return (
-          <div className={className}>
+          <div className={`${className} ${styles.fileInput}`}>
+            {label && <label htmlFor={id}>{label}</label>}
             <input
-              type="color"
+              type="file"
               id={id}
               name={name}
-              value={value}
+              accept={accept}
               onChange={onChange}
+              required={isRequired}
+              disabled={isDisabled}
             />
           </div>
         );
+      case 'color':
+      return (
+        <div className={className}>
+          <input
+            type="color"
+            id={id}
+            name={name}
+            value={value}
+            onChange={onChange}
+          />
+        </div>
+      );
       default:
         return null;
     }

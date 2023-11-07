@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useAuthContext } from '../context/AuthContext';
-import useFetchData from '../hooks/useFetchData';
-import useFormInput from '../hooks/useFormInput';
 import Input from '../components/shared/Input';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
-import { calculateDateDiffer, formatDate } from '../utils/date';
-import { redirectErrorPage } from '../errors/handleError';
+
+import { useAuthContext } from '../context/AuthContext';
+import useFetchData from '../hooks/useFetchData';
+import useFormInput from '../hooks/useFormInput';
 import ERRORS from '../errors/errorMessage';
+import { redirectErrorPage } from '../errors/handleError';
+import { calculateDateDiffer, formatDate } from '../utils/date';
 import styles from './BaseInfoForm.module.scss';
 
 export default function BaseInfoForm() {
@@ -49,6 +50,48 @@ export default function BaseInfoForm() {
     const payload = { title, creator, startDate, endDate, options };
 
     try {
+      if (!user) {
+        const localCalendarId = calendarId || Date.now();
+        payload.calendarId = localCalendarId;
+
+        const dailyBoxes = [];
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        while (start <= end) {
+          const id = start.toISOString().slice(0, 10).replace(/-/g, '');
+          const date = start.toISOString().slice(0, 10);
+
+          dailyBoxes.push({
+            id,
+            date,
+            content: {},
+            isOpen: true,
+          });
+
+          start.setDate(start.getDate() + 1);
+        }
+
+        payload.dailyBoxes = dailyBoxes;
+
+        if (!calendarId) {
+          const existingId = localStorage.getItem('id');
+
+          if (existingId) {
+            localStorage.removeItem(existingId);
+          }
+
+          localStorage.setItem('id', localCalendarId);
+        }
+        setIsLoading(true);
+
+        setTimeout(() => {
+          localStorage.setItem(localCalendarId, JSON.stringify(payload));
+          setIsLoading(false);
+          navigate(`/custom/daily-boxes/${localCalendarId}`);
+        }, 1000);
+      }
+
       if (user) {
         const fetchMethod = calendarId ? 'PUT' : 'POST';
         const fetchUrl = calendarId
@@ -68,30 +111,6 @@ export default function BaseInfoForm() {
         const postCalendarId = await data.calendarId;
 
         navigate(`/custom/daily-boxes/${calendarId || postCalendarId}`);
-      }
-
-      if (!user) {
-        const localCalendarId = calendarId || Date.now();
-        payload.calendarId = localCalendarId;
-
-        if (!calendarId) {
-          const existingId = localStorage.getItem('id');
-
-          if (existingId) {
-            localStorage.removeItem(existingId);
-          }
-
-          localStorage.setItem('id', localCalendarId);
-        }
-        setIsLoading(true);
-
-        const localData = JSON.stringify(payload);
-
-        setTimeout(() => {
-          localStorage.setItem(localCalendarId, localData);
-          setIsLoading(false);
-          navigate(`/custom/daily-boxes/${localCalendarId}`);
-        }, 1000);
       }
     } catch (error) {
       redirectErrorPage(navigate, error);
