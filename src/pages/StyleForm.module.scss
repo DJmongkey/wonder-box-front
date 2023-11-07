@@ -1,0 +1,133 @@
+@import '../style.scss';
+
+.sub__title {
+  font-size: $size-1;
+  margin: auto;
+  margin-top: 35px;
+  margin-bottom: 10px;
+  width: 80%;
+}
+.preview__container {
+  border: 1px solid black;
+  width: 80%;
+  height: 200px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: auto;
+  background-size: 100% 200px;
+
+  .preview__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    width: 250px;
+    height: 100px;
+    font-size: $size-2;
+  }
+
+  .preview__date {
+    display: flex;
+    gap: 50px;
+
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 150px;
+      height: 100px;
+    }
+  }
+}
+
+.custom__container {
+  width: 80%;
+  height: 150px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  text-align: center;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+
+    label {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: $size-1;
+    }
+  }
+  .custom__box {
+    display: flex;
+    flex-direction: row;
+
+    input {
+      border: 1px solid black;
+      height: 30px;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .custom__box__color {
+      position: relative;
+      top: 34px;
+    }
+  }
+}
+
+.file__box {
+  width: 80%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 20px;
+
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    height: 100px;
+    width: 200px;
+    border: 1px solid black;
+    background-size: 200px 100px;
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+
+  .file__box__url {
+    border: 1px solid black;
+    margin-top: 10px;
+    width: 200px;
+  }
+}
+
+.button__container {
+  width: 20%;
+  display: flex;
+  margin: auto;
+
+  button {
+    margin-top: 50px;
+
+    .moveBtn {
+      font-size: $size-0;
+      width: auto;
+      padding: 5px 10px;
+      border: 1px solid $softRed;
+      background-color: $softRed;
+
+      &:hover,
+      &:focus {
+        color: $softRed;
+        background-color: $white;
+      }
+    }
+  }
+}
