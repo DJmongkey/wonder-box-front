@@ -4,16 +4,18 @@ import { useEffect, useRef, useState } from 'react';
 import useFormInput from '../hooks/useFormInput';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
+import StylePreview from '../components/style/StylePreview';
 import StyleEditor from '../components/style/StyleEditor';
 import { useAuthContext } from '../context/AuthContext';
 import useFetchData from '../hooks/useFetchData';
 import { redirectErrorPage } from '../errors/handleError';
 import ERRORS from '../errors/errorMessage';
 import styles from './StyleForm.module.scss';
-import StylePreview from '../components/style/StylePreview';
+import Modal from '../components/shared/Modal';
 
 export default function StyleForm() {
   const [image, setImage] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
   const [existingStyleData, setExistingStyleData] = useState(false);
 
   const { user } = useAuthContext();
@@ -31,6 +33,7 @@ export default function StyleForm() {
     font: 'Open Sans',
     color: '#f4efef',
     bgColor: '#9fbc0c',
+    shareUrl: '',
   });
 
   const {
@@ -41,6 +44,7 @@ export default function StyleForm() {
     font,
     color,
     bgColor,
+    shareUrl,
   } = formData;
 
   async function handleSubmit(event) {
@@ -76,19 +80,21 @@ export default function StyleForm() {
         uploadData.append('box[color]', boxStyle.color);
         uploadData.append('box[bgColor]', boxStyle.bgColor);
 
-        await fetchData(fetchUrl, fetchMethod, {}, uploadData);
+        const data = await fetchData(fetchUrl, fetchMethod, {}, uploadData);
 
-        navigate(`/custom/preview/${calendarId}`);
+        updateFormData({
+          shareUrl: data.shareUrl,
+        });
       }
+
       if (!user && calendarId) {
         const existingValue = JSON.parse(localStorage.getItem(calendarId));
 
         existingValue.style = newStyle;
 
         localStorage.setItem(calendarId, JSON.stringify(existingValue));
-
-        navigate('/signup');
       }
+      setIsOpen(true);
     } catch (error) {
       redirectErrorPage(navigate, error);
     }
@@ -100,6 +106,7 @@ export default function StyleForm() {
 
   useEffect(() => {
     setIsLoading(true);
+
     async function getStyle() {
       try {
         const token = localStorage.getItem('accessToken');
@@ -217,6 +224,33 @@ export default function StyleForm() {
           </Button>
         </div>
       </form>
+      {isOpen && (
+        <Modal isOpen={isOpen} className={styles.modal__share}>
+          {user ? (
+            <div>
+              <div className={styles.modal__share__title}>공유 링크</div>
+              <div className={styles.modal__share__link}>{shareUrl}</div>
+              <Button to="/" customMove={styles.moveBtn}>
+                메인 페이지로 이동
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <span>
+                로그인을 하셔야 편집된 WonderBox 공유 링크를 받을 수 있습니다.
+              </span>
+              <div className={styles.guide_tex}>
+                <strong>지금까지의 정보는 저장</strong>이 되어 로그인/회원가입
+                후 다시 편집하지 않아도 현재 정보로 공유 링크를 받으실 수
+                있습니다.
+              </div>
+              <Button to="/login" customMove={styles.moveBtn}>
+                로그인
+              </Button>
+            </div>
+          )}
+        </Modal>
+      )}
     </div>
   );
 }
