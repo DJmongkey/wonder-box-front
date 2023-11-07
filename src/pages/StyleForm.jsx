@@ -2,9 +2,9 @@ import { useParams } from 'react-router-dom';
 
 import { useEffect, useRef, useState } from 'react';
 import useFormInput from '../hooks/useFormInput';
-import Input from '../components/shared/Input';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
+import StyleEditor from '../components/style/StyleEditor';
 import { useAuthContext } from '../context/AuthContext';
 import useFetchData from '../hooks/useFetchData';
 import { redirectErrorPage } from '../errors/handleError';
@@ -41,16 +41,6 @@ export default function StyleForm() {
     color,
     bgColor,
   } = formData;
-
-  function handleFileChange() {
-    const file = imRef.current.files[0];
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      setImage(reader.result);
-    };
-  }
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -227,158 +217,24 @@ export default function StyleForm() {
             Title
           </div>
           <div className={styles.preview__date}>
-            <div style={{ backgroundColor: bgColor, color, fontFamily: font }}>
-              1
-            </div>
-            <div style={{ backgroundColor: bgColor, color, fontFamily: font }}>
-              2
-            </div>
-            <div style={{ backgroundColor: bgColor, color, fontFamily: font }}>
-              3
-            </div>
+            {[1, 2, 3].map((number) => (
+              <div
+                key={number}
+                style={{ backgroundColor: bgColor, color, fontFamily: font }}
+              >
+                {number}
+              </div>
+            ))}
           </div>
         </div>
-        <div className={styles.sub__title}>WonderBox 캘린더 이름</div>
-        <div className={styles.custom__container}>
-          <div className={styles.custom__box}>
-            <Input
-              id="titleFont"
-              name="titleFont"
-              value={titleFont}
-              label="글씨체"
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className={styles.custom__box}>
-            <Input
-              type="text"
-              name="titleColor"
-              value={titleColor}
-              label="글씨 색상"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="color"
-              name="titleColor"
-              value={titleColor}
-              onChange={handleInputChange}
-              className={styles.custom__box__color}
-            />
-          </div>
-          <div className={styles.custom__box}>
-            <Input
-              type="text"
-              name="backgroundColor"
-              value={backgroundColor}
-              label="배경색"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="color"
-              name="backgroundColor"
-              value={backgroundColor}
-              onChange={handleInputChange}
-              className={styles.custom__box__color}
-            />
-          </div>
-          <div className={styles.custom__box}>
-            <Input
-              type="text"
-              name="borderColor"
-              value={borderColor}
-              label="선색"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="color"
-              name="borderColor"
-              value={borderColor}
-              onChange={handleInputChange}
-              className={styles.custom__box__color}
-            />
-          </div>
-        </div>
-        <div className={styles.sub__title}>날짜</div>
-        <div className={styles.custom__container}>
-          <div>
-            <div className={styles.custom__box}>
-              <Input
-                type="text"
-                id="font"
-                name="font"
-                value={font}
-                label="글씨체"
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-          <div className={styles.custom__box}>
-            <Input
-              type="text"
-              id="color"
-              name="color"
-              value={color}
-              label="글씨 색상"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="color"
-              id="color"
-              name="color"
-              value={color}
-              onChange={handleInputChange}
-              className={styles.custom__box__color}
-            />
-          </div>
-          <div className={styles.custom__box}>
-            <Input
-              type="text"
-              name="bgColor"
-              value={bgColor}
-              label="배경색"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="color"
-              name="bgColor"
-              value={bgColor}
-              onChange={handleInputChange}
-              className={styles.custom__box__color}
-            />
-          </div>
-        </div>
-        <div>
-          <div className={styles.file__box}>
-            <div>전체 배경 사진 업로드 (필수)</div>
-            <label
-              htmlFor="file"
-              style={{
-                backgroundImage: image ? `url(${image})` : 'none',
-              }}
-            >
-              클릭 시 사진 업로드
-            </label>
-            {user ? (
-              <input
-                id="file"
-                type="file"
-                name="image"
-                accept=".jpg, .jpeg, .png, .gif"
-                onChange={handleFileChange}
-                ref={imRef}
-              />
-            ) : (
-              <Input
-                id="image"
-                type="text"
-                name="image"
-                value={image}
-                onChange={(event) => setImage(event.target.value)}
-                className={styles.file__box__url}
-              />
-            )}
-          </div>
-        </div>
+        <StyleEditor
+          formData={formData}
+          handleInputChange={handleInputChange}
+          user={user}
+          image={image}
+          imRef={imRef}
+          setImage={setImage}
+        />
         <div className={styles.button__container}>
           <Button onClick={handleClick} customMove={styles.moveBtn}>
             이전

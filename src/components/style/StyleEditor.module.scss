@@ -1,0 +1,76 @@
+@import '../../style.scss';
+
+.sub__title {
+  font-size: $size-1;
+  margin: auto;
+  margin-top: 35px;
+  margin-bottom: 10px;
+  width: 80%;
+}
+
+.custom__container {
+  width: 80%;
+  height: 150px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  text-align: center;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+
+    label {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: $size-1;
+    }
+  }
+  .custom__box {
+    display: flex;
+    flex-direction: row;
+
+    input {
+      border: 1px solid black;
+      height: 30px;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .custom__box__color {
+      position: relative;
+      top: 34px;
+    }
+  }
+}
+
+.file__box {
+  width: 80%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 20px;
+
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    height: 100px;
+    width: 200px;
+    border: 1px solid black;
+    background-size: 200px 100px;
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+
+  .file__box__url {
+    border: 1px solid black;
+    margin-top: 10px;
+    width: 200px;
+  }
+}
