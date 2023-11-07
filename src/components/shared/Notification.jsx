@@ -25,6 +25,7 @@ export default function Notification({ type, message, time = 4000, onHide }) {
         return '';
     }
   }
+
   return (
     <div className={`${messageStyle()} ${styles.notification}`}>{message}</div>
   );
