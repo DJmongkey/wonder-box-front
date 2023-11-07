@@ -1,13 +1,13 @@
 @import '../style.scss';
 
-.sub_title {
+.sub__title {
   font-size: $size-1;
   margin: auto;
   margin-top: 35px;
   margin-bottom: 10px;
   width: 80%;
 }
-.preview_container {
+.preview__container {
   border: 1px solid black;
   width: 80%;
   height: 200px;
@@ -17,7 +17,7 @@
   margin: auto;
   background-size: 100% 200px;
 
-  .title_box {
+  .preview__title {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,7 +27,7 @@
     font-size: $size-2;
   }
 
-  .date_box {
+  .preview__date {
     display: flex;
     gap: 50px;
 
@@ -41,7 +41,7 @@
   }
 }
 
-.custom_container {
+.custom__container {
   width: 80%;
   height: 150px;
   border: 1px solid black;
@@ -61,7 +61,7 @@
       font-size: $size-1;
     }
   }
-  .custom_box {
+  .custom__box {
     display: flex;
     flex-direction: row;
 
@@ -71,14 +71,14 @@
       margin-top: 10px;
       text-align: center;
     }
-    .input {
+    .custom__box__color {
       position: relative;
       top: 34px;
     }
   }
 }
 
-.file_box {
+.file__box {
   width: 80%;
   height: 200px;
   display: flex;
@@ -101,14 +101,14 @@
     display: none;
   }
 
-  .image_url {
+  .file__box__url {
     border: 1px solid black;
     margin-top: 10px;
     width: 200px;
   }
 }
 
-.button_container {
+.button__container {
   width: 20%;
   display: flex;
   margin: auto;

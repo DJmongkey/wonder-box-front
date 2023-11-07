@@ -208,9 +208,9 @@ export default function StyleForm() {
     <div>
       {isLoading && <Loading asOverlay />}
       <form onSubmit={handleSubmit}>
-        <div className={styles.sub_title}>Preview</div>
+        <div className={styles.sub__title}>Preview</div>
         <div
-          className={styles.preview_container}
+          className={styles.preview__container}
           style={{
             backgroundImage: image ? `url(${image})` : 'none',
           }}
@@ -222,11 +222,11 @@ export default function StyleForm() {
               backgroundColor,
               fontFamily: titleFont,
             }}
-            className={styles.title_box}
+            className={styles.preview__title}
           >
             Title
           </div>
-          <div className={styles.date_box}>
+          <div className={styles.preview__date}>
             <div style={{ backgroundColor: bgColor, color, fontFamily: font }}>
               1
             </div>
@@ -238,9 +238,9 @@ export default function StyleForm() {
             </div>
           </div>
         </div>
-        <div className={styles.sub_title}>WonderBox 캘린더 이름</div>
-        <div className={styles.custom_container}>
-          <div className={styles.custom_box}>
+        <div className={styles.sub__title}>WonderBox 캘린더 이름</div>
+        <div className={styles.custom__container}>
+          <div className={styles.custom__box}>
             <Input
               id="titleFont"
               name="titleFont"
@@ -249,7 +249,7 @@ export default function StyleForm() {
               onChange={handleInputChange}
             />
           </div>
-          <div className={styles.custom_box}>
+          <div className={styles.custom__box}>
             <Input
               type="text"
               name="titleColor"
@@ -262,10 +262,10 @@ export default function StyleForm() {
               name="titleColor"
               value={titleColor}
               onChange={handleInputChange}
-              className={styles.input}
+              className={styles.custom__box__color}
             />
           </div>
-          <div className={styles.custom_box}>
+          <div className={styles.custom__box}>
             <Input
               type="text"
               name="backgroundColor"
@@ -278,10 +278,10 @@ export default function StyleForm() {
               name="backgroundColor"
               value={backgroundColor}
               onChange={handleInputChange}
-              className={styles.input}
+              className={styles.custom__box__color}
             />
           </div>
-          <div className={styles.custom_box}>
+          <div className={styles.custom__box}>
             <Input
               type="text"
               name="borderColor"
@@ -294,14 +294,14 @@ export default function StyleForm() {
               name="borderColor"
               value={borderColor}
               onChange={handleInputChange}
-              className={styles.input}
+              className={styles.custom__box__color}
             />
           </div>
         </div>
-        <div className={styles.sub_title}>날짜</div>
-        <div className={styles.custom_container}>
+        <div className={styles.sub__title}>날짜</div>
+        <div className={styles.custom__container}>
           <div>
-            <div className={styles.custom_box}>
+            <div className={styles.custom__box}>
               <Input
                 type="text"
                 id="font"
@@ -312,7 +312,7 @@ export default function StyleForm() {
               />
             </div>
           </div>
-          <div className={styles.custom_box}>
+          <div className={styles.custom__box}>
             <Input
               type="text"
               id="color"
@@ -327,10 +327,10 @@ export default function StyleForm() {
               name="color"
               value={color}
               onChange={handleInputChange}
-              className={styles.input}
+              className={styles.custom__box__color}
             />
           </div>
-          <div className={styles.custom_box}>
+          <div className={styles.custom__box}>
             <Input
               type="text"
               name="bgColor"
@@ -343,12 +343,12 @@ export default function StyleForm() {
               name="bgColor"
               value={bgColor}
               onChange={handleInputChange}
-              className={styles.input}
+              className={styles.custom__box__color}
             />
           </div>
         </div>
         <div>
-          <div className={styles.file_box}>
+          <div className={styles.file__box}>
             <div>전체 배경 사진 업로드 (필수)</div>
             <label
               htmlFor="file"
@@ -374,12 +374,12 @@ export default function StyleForm() {
                 name="image"
                 value={image}
                 onChange={(event) => setImage(event.target.value)}
-                className={styles.image_url}
+                className={styles.file__box__url}
               />
             )}
           </div>
         </div>
-        <div className={styles.button_container}>
+        <div className={styles.button__container}>
           <Button onClick={handleClick} customMove={styles.moveBtn}>
             이전
           </Button>
