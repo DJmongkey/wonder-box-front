@@ -6,12 +6,12 @@ import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
 import StylePreview from '../components/style/StylePreview';
 import StyleEditor from '../components/style/StyleEditor';
+import Modal from '../components/shared/Modal';
 import { useAuthContext } from '../context/AuthContext';
 import useFetchData from '../hooks/useFetchData';
 import { redirectErrorPage } from '../errors/handleError';
 import ERRORS from '../errors/errorMessage';
 import styles from './StyleForm.module.scss';
-import Modal from '../components/shared/Modal';
 
 export default function StyleForm() {
   const [image, setImage] = useState('');
