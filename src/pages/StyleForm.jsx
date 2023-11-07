@@ -363,7 +363,7 @@ export default function StyleForm() {
                 id="file"
                 type="file"
                 name="image"
-                accept="image/*"
+                accept=".jpg, .jpeg, .png, .gif"
                 onChange={handleFileChange}
                 ref={imRef}
               />
