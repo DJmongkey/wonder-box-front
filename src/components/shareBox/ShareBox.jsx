@@ -1,6 +1,6 @@
 import { IoClose } from 'react-icons/io5';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from '../shared/Modal';
 import Loading from '../shared/Loading';
 import useFormInput from '../../hooks/useFormInput';
@@ -42,9 +42,6 @@ export default function ShareBox({ content, index, date, box, options }) {
   const [dayCount, setDayCount] = useState(0);
   const { notification, showNotification, hideNotification } =
     useNotification();
-
-  const selectBox = useRef(null);
-  const prevBox = selectBox;
 
   const displayedMedia = previewImage || previewVideo || previewAudio;
 
@@ -93,8 +90,7 @@ export default function ShareBox({ content, index, date, box, options }) {
         }
         break;
       case 'sequence':
-        if (selectBox.current === null || index === selectBox.current) {
-          selectBox.current = index;
+        if (index === dayCount) {
           setIsOpen(true);
           setIsBoxOpen(!isBoxOpen);
         } else {
