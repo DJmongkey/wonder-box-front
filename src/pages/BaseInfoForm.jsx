@@ -10,7 +10,7 @@ import useFetchData from '../hooks/useFetchData';
 import useFormInput from '../hooks/useFormInput';
 import ERRORS from '../errors/errorMessage';
 import { redirectErrorPage } from '../errors/handleError';
-import { calculateDateDiffer, formatDate } from '../utils/date';
+import { calculateDateDiffer, formatDateKrTime } from '../utils/date';
 import styles from './BaseInfoForm.module.scss';
 
 export default function BaseInfoForm() {
@@ -59,8 +59,8 @@ export default function BaseInfoForm() {
         const end = new Date(endDate);
 
         while (start <= end) {
-          const id = start.toISOString().slice(0, 10).replace(/-/g, '');
-          const date = start.toISOString().slice(0, 10);
+          const id = formatDateKrTime(start).replace(/-/g, '');
+          const date = formatDateKrTime(start);
 
           dailyBoxes.push({
             id,
@@ -128,8 +128,8 @@ export default function BaseInfoForm() {
         updateFormData({
           title,
           creator,
-          startDate: formatDate(startDate),
-          endDate: formatDate(endDate),
+          startDate: formatDateKrTime(startDate),
+          endDate: formatDateKrTime(endDate),
           options: options[0],
         });
         setIsLoaded(true);
@@ -152,8 +152,8 @@ export default function BaseInfoForm() {
         updateFormData({
           title,
           creator,
-          startDate: formatDate(startDate),
-          endDate: formatDate(endDate),
+          startDate: formatDateKrTime(startDate),
+          endDate: formatDateKrTime(endDate),
           options,
         });
       }

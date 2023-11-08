@@ -22,17 +22,17 @@ import { redirectErrorPage } from '../../errors/handleError';
 import { formatDateMMDD } from '../../utils/date';
 import styles from './DailyBox.module.scss';
 
-export default function DailyBox({ dailyBoxId, date, content }) {
-  const initialValues = {
-    text: '',
-    imageFile: null,
-    image: '',
-    videoFile: null,
-    video: '',
-    audioFile: null,
-    audio: '',
-  };
+const initialValues = {
+  text: '',
+  imageFile: null,
+  image: '',
+  videoFile: null,
+  video: '',
+  audioFile: null,
+  audio: '',
+};
 
+export default function DailyBox({ dailyBoxId, date, content }) {
   const {
     formData,
     formErrors,
@@ -217,10 +217,10 @@ export default function DailyBox({ dailyBoxId, date, content }) {
           <img src={previewImage} alt="이미지 미리보기" />
         ) : hasVideo ? (
           <video width="320" height="240" controls>
-            <source
-              src={previewVideo}
-              type="video/mp4, 'video/x-matroska', 'video/quicktime', 'video/webm'"
-            />
+            <source src={previewVideo} type="video/mp4" />
+            <source src={previewVideo} type="video/x-matroska" />
+            <source src={previewVideo} type="video/quicktime" />
+            <source src={previewVideo} type="video/webm" />
           </video>
         ) : hasAudio ? (
           <audio controls>
@@ -336,11 +336,11 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                 )}
                 {previewVideo && (
                   <div className={styles.preview__video}>
-                    <video width="320" height="240" controls>
-                      <source
-                        src={previewVideo}
-                        type="video/mp4, 'video/x-matroska', 'video/quicktime', 'video/webm'"
-                      />
+                    <video width="430" height="240" controls>
+                      <source src={previewVideo} type="video/mp4" />
+                      <source src={previewVideo} type="video/x-matroska" />
+                      <source src={previewVideo} type="video/quicktime" />
+                      <source src={previewVideo} type="video/webm" />
                       해당 브라우저에서 비디오를 재생 할 수 없습니다.
                     </video>
                     <IoTrashBin
@@ -381,6 +381,9 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   <div className={styles.preview__audio}>
                     <audio controls>
                       <source src={previewAudio} type="audio/mpeg" />
+                      <source src={previewAudio} type="audio/mp4" />
+                      <source src={previewAudio} type="audio/wav" />
+                      <source src={previewAudio} type="audio/oog" />
                       해당 브라우저에서 오디오 파일을 재생 할 수 없습니다.
                     </audio>
                     <IoTrashBin

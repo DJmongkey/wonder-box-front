@@ -20,26 +20,20 @@ export function isDateValid(startDate, endDate) {
   return dayDiffer >= MIN_DURATION;
 }
 
-export function formatDate(date) {
-  return date.slice(0, 10);
-}
-
-export function plusDay(startDate, index) {
-  const newDate = new Date(startDate);
-  newDate.setDate(newDate.getDate() + index);
-
-  const formattedDate = formatDate(newDate.toISOString());
-
-  return formattedDate;
-}
-
-export function formattedDate(date) {
-  return new Date(date).toLocaleDateString();
-}
-
 export function formatDateMMDD(date) {
   const month = new Date(date).getMonth() + 1;
   const day = new Date(date).getDate();
 
   return `${month}월 ${day}일`;
+}
+
+export function formatDateKrTime(date) {
+  const localDate = new Date(date).toLocaleString('ko-KR', {
+    timeZone: 'Asia/Seoul',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+  return localDate.split('. ').join('-').slice(0, -1);
 }

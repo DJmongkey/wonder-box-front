@@ -1,64 +1,116 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import CalendarDetail from '../components/calendarList/CalendarDetail';
+import Notification from '../components/shared/Notification';
+import useFetchData from '../hooks/useFetchData';
+import useNotification from '../hooks/useNotification';
+import ERRORS from '../errors/errorMessage';
+import styles from './CalendarList.module.scss';
 
 export default function CalendarList() {
+  const { fetchData, error } = useFetchData();
   const [calendars, setCalendars] = useState([]);
-
-  const navigate = useNavigate();
-
-  const accessToken = localStorage.getItem('accessToken');
+  const { notification, showNotification, hideNotification } =
+    useNotification();
 
   useEffect(() => {
     async function getCalendarList() {
       try {
-        const res = await fetch(`${import.meta.env.VITE_BASE_URL}/calendars`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        const data = await res.json();
+        const data = await fetchData(
+          '/calendars',
+          'GET',
+          { 'Content-Type': 'application/json' },
+          null,
+        );
 
         setCalendars(data.calendars);
       } catch (error) {
-        console.error('캘린더 정보를 불러오는 중 에러가 발생했습니다.');
+        showNotification('error', ERRORS.CALENDAR.FAILED_GET);
+        console.error(error);
       }
     }
 
     getCalendarList();
-  }, [accessToken]);
+  }, []);
 
-  function handleClickCalendar() {
-    navigate(`/calendars/${calendars.calendarId}/share`);
-    console.log('click');
+  async function handleDelete(deletedCalendarId) {
+    try {
+      await fetchData(`/calendars/${deletedCalendarId}`, 'DELETE', {}, null);
+
+      setCalendars(
+        calendars.filter(
+          (calendar) => calendar.calendarId !== deletedCalendarId,
+        ),
+      );
+
+      showNotification('success', ERRORS.CALENDAR.DELETE_SUCCESS);
+    } catch (error) {
+      showNotification('error', ERRORS.CALENDAR.FAILED_DELETE);
+      console.error(error);
+    }
   }
 
   return (
-    <div>
-      <h1>My WonderBox</h1>
-      <ul>
-        {calendars.map((calendar) => {
-          const {
-            calendarId: _id,
-            title,
-            creator,
-            createdAt,
-            startDate,
-            endDate,
-          } = calendar;
-
-          return (
-            <li key={_id}>
-              <h3>{title}</h3>
-              <p>{creator}</p>
-              <p>{startDate}</p>
-              <p>{endDate}</p>
-              <p>{createdAt}</p>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+    <>
+      {notification.isShown && (
+        <Notification
+          type={notification.type}
+          message={notification.message}
+          onHide={hideNotification}
+        >
+          <p>{notification.message}</p>
+        </Notification>
+      )}
+      {calendars.length === 0 ? (
+        <div className={styles.no_calendar}>
+          <div className={styles.error__no_calendar}>
+            {ERRORS.CALENDAR.EMPTY_LIST}
+          </div>
+          <Link to="/custom/base-info" className={styles.link}>
+            만들러가기
+          </Link>
+        </div>
+      ) : (
+        <div className={styles.container}>
+          <div className={styles.calendarList__container}>
+            <h1>My WonderBox 캘린더 리스트</h1>
+            <div className={styles.divider}></div>
+            <ul className={styles.calendars}>
+              <li className={styles.calendars__header}>
+                <p className={`${styles.list__column} ${styles.title}`}>
+                  캘린더 이름
+                </p>
+                <p className={`${styles.list__column} ${styles.creator}`}>
+                  보내는 사람 이름
+                </p>
+                <p className={`${styles.list__column} ${styles.startDate}`}>
+                  시작일
+                </p>
+                <p className={`${styles.list__column} ${styles.endDate}`}>
+                  종료일
+                </p>
+                <p className={`${styles.list__column} ${styles.createdAt}`}>
+                  생성일
+                </p>
+                <div className={`${styles.list__column} ${styles.tools}`}>
+                  <p>수정</p>
+                  <p>삭제</p>
+                  <p>공유</p>
+                </div>
+              </li>
+              {calendars.map((calendar) => (
+                <CalendarDetail
+                  key={calendar.calendarId}
+                  calendar={calendar}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </ul>
+            {error && <div className={styles.error}>{error}</div>}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

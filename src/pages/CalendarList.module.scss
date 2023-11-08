@@ -1,0 +1,105 @@
+@import '../style.scss';
+
+.container {
+  width: 100%;
+  height: calc(100vh - 70px - 50px);
+
+  .calendarList__container {
+    max-width: 1000px;
+    margin: 20px auto;
+
+    @include set-center;
+
+    h1 {
+      font-size: $size-3;
+      font-family: $enSubFont, $krFont;
+      font-weight: 700;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+
+    .divider {
+      width: 100%;
+      max-width: 1000px;
+      border-bottom: 2px solid $red;
+    }
+
+    .calendars {
+      width: 100%;
+      max-width: 1000px;
+
+      .calendars__header {
+        width: 100%;
+        margin-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 6px double $red;
+        font-size: calc($size-1 - 0.1875rem);
+        font-weight: 500;
+        display: flex;
+
+        .list__column {
+          flex: 0 0 1;
+          overflow-x: scroll;
+          white-space: nowrap;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+
+        .title {
+          width: 35%;
+        }
+        .creator {
+          width: 20%;
+        }
+        .startDate,
+        .endDate {
+          width: 12%;
+        }
+        .createdAt {
+          width: 13%;
+        }
+        .tools {
+          width: 15%;
+          @include set-center($direction: row);
+
+          p {
+            margin: 0 5px;
+          }
+        }
+      }
+    }
+
+    .error {
+      font-size: $size-0;
+      color: $red;
+    }
+  }
+}
+
+.no_calendar {
+  padding-top: 20vh;
+  @include set-center($justify: flex-start);
+
+  .error__no_calendar {
+    justify-content: flex-start;
+    font-size: $size-1;
+    font-weight: 500;
+    color: $red;
+  }
+
+  .link {
+    background-color: $softGreen-light;
+    border-radius: 6px;
+    color: $white;
+    font-weight: 500;
+    padding: 8px 15px;
+    margin-top: 100px;
+
+    &:hover,
+    &:focus {
+      background-color: $darkRed;
+    }
+  }
+}
