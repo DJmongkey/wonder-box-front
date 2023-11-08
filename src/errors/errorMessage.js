@@ -39,7 +39,14 @@ const ERRORS = {
     NOT_FOUND: '캘린더 정보를 찾을 수 없습니다.',
     CONTENTS_NOT_FOUND: '입력한 컨텐츠 정보를 찾을 수 없습니다.',
     INVALID_FILE_TYPE: '유효한 파일 타입이 아닙니다.',
+    INVALID_URL_PATH: '유효한 URL 경로가 아닙니다.',
     FAILED_UPLOAD: '파일 업로드에 실패했습니다.',
+    STYLE: {
+      NEED_COLOR: '색상을 지정해주세요',
+      NEED_FONT: '글씨체를 지정해주세요',
+      INVALID_FONT: '유효한 글씨체 아닙니다.',
+      INVALID_COLOR_CODE: '유효한 HEX 색상 코드가 아닙니다.',
+    },
   },
 };
 
