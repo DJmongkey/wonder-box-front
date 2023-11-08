@@ -80,7 +80,6 @@
 
 .file__box {
   width: 80%;
-  height: 200px;
   display: flex;
   flex-direction: column;
   margin: auto;
@@ -97,14 +96,25 @@
     background-size: 200px 100px;
   }
 
-  input[type='file'] {
-    display: none;
-  }
-
   .file__box__url {
     border: 1px solid black;
     margin-top: 10px;
     width: 200px;
+  }
+
+  .preview__image {
+    margin-top: 10px;
+    display: flex;
+
+    .icon__delete {
+      margin: 0 5px;
+      cursor: pointer;
+    }
+
+    img {
+      max-width: 450px;
+      max-height: 300px;
+    }
   }
 }
 
