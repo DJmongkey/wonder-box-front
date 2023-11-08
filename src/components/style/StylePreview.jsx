@@ -6,7 +6,6 @@ export default function StylePreview({ formData, previewImage }) {
     titleFont,
     borderColor,
     backgroundColor,
-    image,
     color,
     bgColor,
     font,
