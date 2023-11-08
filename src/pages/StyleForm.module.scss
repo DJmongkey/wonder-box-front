@@ -141,3 +141,34 @@
     }
   }
 }
+
+.modal__share {
+  width: 500px;
+
+  .modal__share__title {
+    font-size: $size-2;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+
+  .modal__share__link {
+    font-size: $size-0;
+    margin-bottom: 40px;
+  }
+
+  span {
+    font-size: 15px;
+    color: red;
+    font-weight: bold;
+  }
+
+  div {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    margin-top: 5px;
+    strong {
+      color: $lightGreen;
+    }
+  }
+}
