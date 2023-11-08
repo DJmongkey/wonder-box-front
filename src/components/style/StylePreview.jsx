@@ -10,6 +10,7 @@ export default function StylePreview({ formData, image }) {
     bgColor,
     font,
   } = formData;
+
   return (
     <>
       <div className={styles.sub__title}>Preview</div>
