@@ -2,9 +2,11 @@ import { useParams } from 'react-router-dom';
 
 import { useEffect, useRef, useState } from 'react';
 import useFormInput from '../hooks/useFormInput';
-import Input from '../components/shared/Input';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
+import StylePreview from '../components/style/StylePreview';
+import StyleEditor from '../components/style/StyleEditor';
+import Modal from '../components/shared/Modal';
 import { useAuthContext } from '../context/AuthContext';
 import useFetchData from '../hooks/useFetchData';
 import { redirectErrorPage } from '../errors/handleError';
@@ -13,6 +15,7 @@ import styles from './StyleForm.module.scss';
 
 export default function StyleForm() {
   const [image, setImage] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
   const [existingStyleData, setExistingStyleData] = useState(false);
 
   const { user } = useAuthContext();
@@ -30,6 +33,7 @@ export default function StyleForm() {
     font: 'Open Sans',
     color: '#f4efef',
     bgColor: '#9fbc0c',
+    shareUrl: '',
   });
 
   const {
@@ -40,17 +44,8 @@ export default function StyleForm() {
     font,
     color,
     bgColor,
+    shareUrl,
   } = formData;
-
-  function handleFileChange() {
-    const file = imRef.current.files[0];
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      setImage(reader.result);
-    };
-  }
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -85,19 +80,21 @@ export default function StyleForm() {
         uploadData.append('box[color]', boxStyle.color);
         uploadData.append('box[bgColor]', boxStyle.bgColor);
 
-        await fetchData(fetchUrl, fetchMethod, {}, uploadData);
+        const data = await fetchData(fetchUrl, fetchMethod, {}, uploadData);
 
-        navigate(`/custom/preview/${calendarId}`);
+        updateFormData({
+          shareUrl: data.shareUrl,
+        });
       }
+
       if (!user && calendarId) {
         const existingValue = JSON.parse(localStorage.getItem(calendarId));
 
         existingValue.style = newStyle;
 
         localStorage.setItem(calendarId, JSON.stringify(existingValue));
-
-        navigate('/signup');
       }
+      setIsOpen(true);
     } catch (error) {
       redirectErrorPage(navigate, error);
     }
@@ -109,6 +106,7 @@ export default function StyleForm() {
 
   useEffect(() => {
     setIsLoading(true);
+
     async function getStyle() {
       try {
         const token = localStorage.getItem('accessToken');
@@ -208,177 +206,15 @@ export default function StyleForm() {
     <div>
       {isLoading && <Loading asOverlay />}
       <form onSubmit={handleSubmit}>
-        <div className={styles.sub__title}>Preview</div>
-        <div
-          className={styles.preview__container}
-          style={{
-            backgroundImage: image ? `url(${image})` : 'none',
-          }}
-        >
-          <div
-            style={{
-              color: titleColor,
-              borderColor,
-              backgroundColor,
-              fontFamily: titleFont,
-            }}
-            className={styles.preview__title}
-          >
-            Title
-          </div>
-          <div className={styles.preview__date}>
-            <div style={{ backgroundColor: bgColor, color, fontFamily: font }}>
-              1
-            </div>
-            <div style={{ backgroundColor: bgColor, color, fontFamily: font }}>
-              2
-            </div>
-            <div style={{ backgroundColor: bgColor, color, fontFamily: font }}>
-              3
-            </div>
-          </div>
-        </div>
-        <div className={styles.sub__title}>WonderBox 캘린더 이름</div>
-        <div className={styles.custom__container}>
-          <div className={styles.custom__box}>
-            <Input
-              id="titleFont"
-              name="titleFont"
-              value={titleFont}
-              label="글씨체"
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className={styles.custom__box}>
-            <Input
-              type="text"
-              name="titleColor"
-              value={titleColor}
-              label="글씨 색상"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="color"
-              name="titleColor"
-              value={titleColor}
-              onChange={handleInputChange}
-              className={styles.custom__box__color}
-            />
-          </div>
-          <div className={styles.custom__box}>
-            <Input
-              type="text"
-              name="backgroundColor"
-              value={backgroundColor}
-              label="배경색"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="color"
-              name="backgroundColor"
-              value={backgroundColor}
-              onChange={handleInputChange}
-              className={styles.custom__box__color}
-            />
-          </div>
-          <div className={styles.custom__box}>
-            <Input
-              type="text"
-              name="borderColor"
-              value={borderColor}
-              label="선색"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="color"
-              name="borderColor"
-              value={borderColor}
-              onChange={handleInputChange}
-              className={styles.custom__box__color}
-            />
-          </div>
-        </div>
-        <div className={styles.sub__title}>날짜</div>
-        <div className={styles.custom__container}>
-          <div>
-            <div className={styles.custom__box}>
-              <Input
-                type="text"
-                id="font"
-                name="font"
-                value={font}
-                label="글씨체"
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-          <div className={styles.custom__box}>
-            <Input
-              type="text"
-              id="color"
-              name="color"
-              value={color}
-              label="글씨 색상"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="color"
-              id="color"
-              name="color"
-              value={color}
-              onChange={handleInputChange}
-              className={styles.custom__box__color}
-            />
-          </div>
-          <div className={styles.custom__box}>
-            <Input
-              type="text"
-              name="bgColor"
-              value={bgColor}
-              label="배경색"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="color"
-              name="bgColor"
-              value={bgColor}
-              onChange={handleInputChange}
-              className={styles.custom__box__color}
-            />
-          </div>
-        </div>
-        <div>
-          <div className={styles.file__box}>
-            <div>전체 배경 사진 업로드 (필수)</div>
-            <label
-              htmlFor="file"
-              style={{
-                backgroundImage: image ? `url(${image})` : 'none',
-              }}
-            >
-              클릭 시 사진 업로드
-            </label>
-            {user ? (
-              <input
-                id="file"
-                type="file"
-                name="image"
-                accept=".jpg, .jpeg, .png, .gif"
-                onChange={handleFileChange}
-                ref={imRef}
-              />
-            ) : (
-              <Input
-                id="image"
-                type="text"
-                name="image"
-                value={image}
-                onChange={(event) => setImage(event.target.value)}
-                className={styles.file__box__url}
-              />
-            )}
-          </div>
-        </div>
+        <StylePreview formData={formData} image={image} />
+        <StyleEditor
+          formData={formData}
+          handleInputChange={handleInputChange}
+          user={user}
+          image={image}
+          imRef={imRef}
+          setImage={setImage}
+        />
         <div className={styles.button__container}>
           <Button onClick={handleClick} customMove={styles.moveBtn}>
             이전
@@ -388,6 +224,33 @@ export default function StyleForm() {
           </Button>
         </div>
       </form>
+      {isOpen && (
+        <Modal isOpen={isOpen} className={styles.modal__share}>
+          {user ? (
+            <div>
+              <div className={styles.modal__share__title}>공유 링크</div>
+              <div className={styles.modal__share__link}>{shareUrl}</div>
+              <Button to="/" customMove={styles.moveBtn}>
+                메인 페이지로 이동
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <span>
+                로그인을 하셔야 편집된 WonderBox 공유 링크를 받을 수 있습니다.
+              </span>
+              <div className={styles.guide_tex}>
+                <strong>지금까지의 정보는 저장</strong>이 되어 로그인/회원가입
+                후 다시 편집하지 않아도 현재 정보로 공유 링크를 받으실 수
+                있습니다.
+              </div>
+              <Button to="/login" customMove={styles.moveBtn}>
+                로그인
+              </Button>
+            </div>
+          )}
+        </Modal>
+      )}
     </div>
   );
 }

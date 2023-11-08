@@ -1,0 +1,43 @@
+@import '../../style.scss';
+
+.sub__title {
+  font-size: $size-1;
+  margin: auto;
+  margin-top: 35px;
+  margin-bottom: 10px;
+  width: 80%;
+}
+
+.preview__container {
+  border: 1px solid black;
+  width: 80%;
+  height: 200px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: auto;
+  background-size: 100% 200px;
+
+  .preview__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    width: 250px;
+    height: 100px;
+    font-size: $size-2;
+  }
+
+  .preview__date {
+    display: flex;
+    gap: 50px;
+
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 150px;
+      height: 100px;
+    }
+  }
+}
