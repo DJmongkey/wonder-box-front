@@ -1,3 +1,5 @@
+import { IoTrashBin } from 'react-icons/io5';
+
 import Input from '../shared/Input';
 import styles from './StyleEditor.module.scss';
 
@@ -5,9 +7,9 @@ export default function StyleEditor({
   formData,
   handleInputChange,
   user,
-  image,
-  setImage,
-  imRef,
+  previewImage,
+  inputTypes,
+  handleRemoveFile,
 }) {
   const {
     titleFont,
@@ -19,15 +21,6 @@ export default function StyleEditor({
     bgColor,
   } = formData;
 
-  function handleFileChange() {
-    const file = imRef.current.files[0];
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      setImage(reader.result);
-    };
-  }
   return (
     <>
       <div className={styles.sub__title}>WonderBox 캘린더 이름</div>
@@ -44,6 +37,7 @@ export default function StyleEditor({
         <div className={styles.custom__box}>
           <Input
             type="text"
+            id="titleColor"
             name="titleColor"
             value={titleColor}
             label="글씨 색상"
@@ -60,6 +54,7 @@ export default function StyleEditor({
         <div className={styles.custom__box}>
           <Input
             type="text"
+            id="backgroundColor"
             name="backgroundColor"
             value={backgroundColor}
             label="배경색"
@@ -76,6 +71,7 @@ export default function StyleEditor({
         <div className={styles.custom__box}>
           <Input
             type="text"
+            id="borderColor"
             name="borderColor"
             value={borderColor}
             label="선색"
@@ -115,7 +111,6 @@ export default function StyleEditor({
           />
           <Input
             type="color"
-            id="color"
             name="color"
             value={color}
             onChange={handleInputChange}
@@ -125,6 +120,7 @@ export default function StyleEditor({
         <div className={styles.custom__box}>
           <Input
             type="text"
+            id="bgColor"
             name="bgColor"
             value={bgColor}
             label="배경색"
@@ -142,32 +138,34 @@ export default function StyleEditor({
       <div>
         <div className={styles.file__box}>
           <div>전체 배경 사진 업로드 (필수)</div>
-          <label
-            htmlFor="file"
-            style={{
-              backgroundImage: image ? `url(${image})` : 'none',
-            }}
-          >
-            클릭 시 사진 업로드
-          </label>
-          {user ? (
-            <input
-              id="file"
-              type="file"
-              name="image"
-              accept=".jpg, .jpeg, .png, .gif"
-              onChange={handleFileChange}
-              ref={imRef}
-            />
-          ) : (
-            <Input
-              id="image"
-              type="text"
-              name="image"
-              value={image}
-              onChange={(event) => setImage(event.target.value)}
-              className={styles.file__box__url}
-            />
+          <Input
+            type="file"
+            id="imageFile"
+            name="imageFile"
+            accept=".jpg, .jpeg, .png, .gif"
+            onChange={handleInputChange}
+            isDisabled={(!user || inputTypes.image === 'text') && true}
+            className={styles.file__box__upload}
+          />
+          <Input
+            type="text"
+            id="image"
+            name="image"
+            value={inputTypes.image === 'text' ? formData.image : ''}
+            onChange={handleInputChange}
+            placeholder="URL을 입력해주세요"
+            isDisabled={inputTypes.image === 'file'}
+            className={styles.file__box__url}
+          />
+          {previewImage && (
+            <div className={styles.preview__image}>
+              <img src={previewImage} alt="배경 사진" />
+              <IoTrashBin
+                size="14"
+                className={styles.icon__delete}
+                onClick={() => handleRemoveFile('image')}
+              />
+            </div>
           )}
         </div>
       </div>
