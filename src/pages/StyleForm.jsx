@@ -1,46 +1,59 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { IoTrashBin } from 'react-icons/io5';
 
-import { useEffect, useRef, useState } from 'react';
-import useFormInput from '../hooks/useFormInput';
+import Input from '../components/shared/Input';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
 import StylePreview from '../components/style/StylePreview';
 import StyleEditor from '../components/style/StyleEditor';
 import Modal from '../components/shared/Modal';
 import { useAuthContext } from '../context/AuthContext';
+import { useFormContext } from '../context/FormContext';
+import useFormInput from '../hooks/useFormInput';
 import useFetchData from '../hooks/useFetchData';
-import { redirectErrorPage } from '../errors/handleError';
 import ERRORS from '../errors/errorMessage';
+import { redirectErrorPage } from '../errors/handleError';
 import styles from './StyleForm.module.scss';
 
+const defaultStyle = {
+  titleFont: 'Open Sans',
+  titleColor: '#f3eded',
+  borderColor: '#9fbc0c',
+  backgroundColor: '#9fbc0c',
+  image: '',
+  imageFile: null,
+  font: 'Open Sans',
+  color: '#f4efef',
+  bgColor: '#9fbc0c',
+};
+
 export default function StyleForm() {
-  const [image, setImage] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
   const [existingStyleData, setExistingStyleData] = useState(false);
 
   const { user } = useAuthContext();
   const { calendarId } = useParams();
-
-  const imRef = useRef();
-
   const { fetchData, isLoading, setIsLoading, navigate } = useFetchData();
+  const { setIsStyleValid } = useFormContext();
 
-  const { formData, handleInputChange, updateFormData } = useFormInput({
-    titleFont: 'Open Sans',
-    titleColor: '#f3eded',
-    borderColor: '#9fbc0c',
-    backgroundColor: '#9fbc0c',
-    font: 'Open Sans',
-    color: '#f4efef',
-    bgColor: '#9fbc0c',
-    shareUrl: '',
-  });
+  const {
+    formData,
+    handleInputChange,
+    validateForm,
+    updateFormData,
+    inputTypes,
+    previewImage,
+    setPreviewImage,
+    handleRemoveFile,
+  } = useFormInput(defaultStyle);
 
   const {
     titleFont,
     titleColor,
-    backgroundColor,
     borderColor,
+    backgroundColor,
+    image,
+    imageFile,
     font,
     color,
     bgColor,
@@ -50,19 +63,23 @@ export default function StyleForm() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const boxStyle = {
-      font,
-      color,
-      bgColor,
-    };
+    const isValid = validateForm();
+
+    if (!isValid) {
+      return;
+    }
 
     const newStyle = {
       titleFont,
       titleColor,
       backgroundColor,
       borderColor,
-      image,
-      box: boxStyle,
+      image: imageFile || image,
+      box: {
+        font,
+        color,
+        bgColor,
+      },
     };
 
     try {
@@ -71,91 +88,77 @@ export default function StyleForm() {
         const fetchUrl = `/calendars/${calendarId}/style`;
         const uploadData = new FormData();
 
-        uploadData.append('titleFont', newStyle.titleFont);
-        uploadData.append('titleColor', newStyle.titleColor);
-        uploadData.append('backgroundColor', newStyle.backgroundColor);
-        uploadData.append('borderColor', newStyle.borderColor);
-        uploadData.append('image', imRef.current.files[0]);
-        uploadData.append('box[font]', boxStyle.font);
-        uploadData.append('box[color]', boxStyle.color);
-        uploadData.append('box[bgColor]', boxStyle.bgColor);
+        uploadData.append('titleFont', titleFont);
+        uploadData.append('titleColor', titleColor);
+        uploadData.append('backgroundColor', backgroundColor);
+        uploadData.append('borderColor', borderColor);
+        uploadData.append('image', imageFile || image);
+        uploadData.append('box[font]', font);
+        uploadData.append('box[color]', color);
+        uploadData.append('box[bgColor]', bgColor);
 
-        const data = await fetchData(fetchUrl, fetchMethod, {}, uploadData);
+        await fetchData(fetchUrl, fetchMethod, {}, uploadData);
 
-        updateFormData({
-          shareUrl: data.shareUrl,
-        });
+        setIsStyleValid(true);
+        navigate(`/custom/preview/${calendarId}`);
       }
 
-      if (!user && calendarId) {
-        const existingValue = JSON.parse(localStorage.getItem(calendarId));
+      if (!user) {
+        const localCalendarId = JSON.parse(localStorage.getItem('id'));
+        const localCalendar = JSON.parse(localStorage.getItem(localCalendarId));
 
-        existingValue.style = newStyle;
+        setIsLoading(true);
 
-        localStorage.setItem(calendarId, JSON.stringify(existingValue));
+        localCalendar.style = newStyle;
+
+        setTimeout(() => {
+          localStorage.setItem(localCalendarId, JSON.stringify(localCalendar));
+
+          setIsLoading(false);
+          setIsStyleValid(true);
+
+          navigate('/signup');
+        }, 1000);
       }
-      setIsOpen(true);
     } catch (error) {
       redirectErrorPage(navigate, error);
     }
   }
 
-  function handleClick() {
-    navigate(-1);
-  }
-
   useEffect(() => {
-    setIsLoading(true);
-
     async function getStyle() {
       try {
-        const token = localStorage.getItem('accessToken');
-        const res = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/calendars/${calendarId}/style`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          },
+        const data = await fetchData(
+          `/calendars/${calendarId}/style`,
+          'GET',
+          { 'Content-Type': 'application/json' },
+          null,
         );
 
-        const data = await res.json();
-
-        if (!data.style) {
-          const defaultStyle = {
-            titleFont: 'Open Sans',
-            titleColor: '#f3eded',
-            borderColor: '#9fbc0c',
-            backgroundColor: '#9fbc0c',
-            font: 'Open Sans',
-            color: '#f4efef',
-            bgColor: '#9fbc0c',
-          };
+        if (Object.keys(data.style).length === 0) {
           updateFormData(defaultStyle);
-          setImage('');
         } else {
-          const styleArray = Array.isArray(data.style)
-            ? data.style
-            : [data.style];
-          const styleData = styleArray[0];
-          const { titleFont, titleColor, backgroundColor, borderColor, image } =
-            styleData;
+          const {
+            titleFont,
+            titleColor,
+            borderColor,
+            backgroundColor,
+            image,
+            box,
+          } = data.style;
 
-          const boxDataArray = styleArray.map((item) => item.box);
-          const { font, color, bgColor } = boxDataArray[0];
+          setPreviewImage(image);
 
           updateFormData({
             titleFont,
             titleColor,
-            backgroundColor,
             borderColor,
-            font,
-            color,
-            bgColor,
+            backgroundColor,
+            image,
+            font: box.font,
+            color: box.color,
+            bgColor: box.bgColor,
           });
-          setImage(image);
 
           setExistingStyleData(true);
         }
@@ -171,52 +174,222 @@ export default function StyleForm() {
         redirectErrorPage(navigate, undefined, ERRORS.AUTH.UNAUTHORIZED, 401);
       }
 
-      const localStyle = JSON.parse(localStorage.getItem(localCalendarId));
+      const localCalendar = JSON.parse(localStorage.getItem(localCalendarId));
 
-      if (localStyle && localStyle.style) {
-        const { titleFont, titleColor, backgroundColor, borderColor, image } =
-          localStyle.style;
+      if (localCalendar && localCalendar.style) {
+        const { titleFont, titleColor, borderColor, backgroundColor, image } =
+          localCalendar.style;
 
-        const { font, color, bgColor } = localStyle.style.box;
+        const { font, color, bgColor } = localCalendar.style.box;
+
+        if (image) {
+          setPreviewImage(image);
+        } else {
+          setPreviewImage('');
+        }
 
         updateFormData({
           titleFont,
           titleColor,
-          backgroundColor,
           borderColor,
-          bgColor,
-          color,
+          backgroundColor,
+          image,
           font,
+          color,
+          bgColor,
         });
-
-        setImage(image);
       }
     }
 
-    if (calendarId && user) {
+    if (user) {
       getStyle();
-      setIsLoading(false);
     } else {
       getLocalStyle(calendarId);
     }
-    setIsLoading(false);
   }, [calendarId, user]);
 
   return (
     <div>
       {isLoading && <Loading asOverlay />}
       <form onSubmit={handleSubmit}>
-        <StylePreview formData={formData} image={image} />
-        <StyleEditor
-          formData={formData}
-          handleInputChange={handleInputChange}
-          user={user}
-          image={image}
-          imRef={imRef}
-          setImage={setImage}
-        />
+        <div className={styles.sub__title}>Preview</div>
+        <div
+          className={styles.preview__container}
+          style={{
+            backgroundImage: previewImage ? `url(${previewImage})` : 'none',
+          }}
+        >
+          <div
+            style={{
+              color: titleColor,
+              borderColor,
+              backgroundColor,
+              fontFamily: titleFont,
+            }}
+            className={styles.preview__title}
+          >
+            Title
+          </div>
+          <div className={styles.preview__date}>
+            <div style={{ backgroundColor: bgColor, color, fontFamily: font }}>
+              1
+            </div>
+            <div style={{ backgroundColor: bgColor, color, fontFamily: font }}>
+              2
+            </div>
+            <div style={{ backgroundColor: bgColor, color, fontFamily: font }}>
+              3
+            </div>
+          </div>
+        </div>
+        <div className={styles.sub__title}>WonderBox 캘린더 이름</div>
+        <div className={styles.custom__container}>
+          <div className={styles.custom__box}>
+            <Input
+              id="titleFont"
+              name="titleFont"
+              value={titleFont}
+              label="글씨체"
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className={styles.custom__box}>
+            <Input
+              type="text"
+              id="titleColor"
+              name="titleColor"
+              value={titleColor}
+              label="글씨 색상"
+              onChange={handleInputChange}
+            />
+            <Input
+              type="color"
+              name="titleColor"
+              value={titleColor}
+              onChange={handleInputChange}
+              className={styles.custom__box__color}
+            />
+          </div>
+          <div className={styles.custom__box}>
+            <Input
+              type="text"
+              id="backgroundColor"
+              name="backgroundColor"
+              value={backgroundColor}
+              label="배경색"
+              onChange={handleInputChange}
+            />
+            <Input
+              type="color"
+              name="backgroundColor"
+              value={backgroundColor}
+              onChange={handleInputChange}
+              className={styles.custom__box__color}
+            />
+          </div>
+          <div className={styles.custom__box}>
+            <Input
+              type="text"
+              id="borderColor"
+              name="borderColor"
+              value={borderColor}
+              label="선색"
+              onChange={handleInputChange}
+            />
+            <Input
+              type="color"
+              name="borderColor"
+              value={borderColor}
+              onChange={handleInputChange}
+              className={styles.custom__box__color}
+            />
+          </div>
+        </div>
+        <div className={styles.sub__title}>날짜</div>
+        <div className={styles.custom__container}>
+          <div>
+            <div className={styles.custom__box}>
+              <Input
+                type="text"
+                id="font"
+                name="font"
+                value={font}
+                label="글씨체"
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+          <div className={styles.custom__box}>
+            <Input
+              type="text"
+              id="color"
+              name="color"
+              value={color}
+              label="글씨 색상"
+              onChange={handleInputChange}
+            />
+            <Input
+              type="color"
+              name="color"
+              value={color}
+              onChange={handleInputChange}
+              className={styles.custom__box__color}
+            />
+          </div>
+          <div className={styles.custom__box}>
+            <Input
+              type="text"
+              id="bgColor"
+              name="bgColor"
+              value={bgColor}
+              label="배경색"
+              onChange={handleInputChange}
+            />
+            <Input
+              type="color"
+              name="bgColor"
+              value={bgColor}
+              onChange={handleInputChange}
+              className={styles.custom__box__color}
+            />
+          </div>
+        </div>
+        <div>
+          <div className={styles.file__box}>
+            <div>전체 배경 사진 업로드 (필수)</div>
+            <Input
+              type="file"
+              id="imageFile"
+              name="imageFile"
+              accept=".jpg, .jpeg, .png, .gif"
+              onChange={handleInputChange}
+              isDisabled={(!user || inputTypes.image === 'text') && true}
+              className={styles.file__box__upload}
+            />
+            <Input
+              type="text"
+              id="image"
+              name="image"
+              value={inputTypes.image === 'text' ? formData.image : ''}
+              onChange={handleInputChange}
+              placeholder="URL을 입력해주세요"
+              isDisabled={inputTypes.image === 'file'}
+              className={styles.file__box__url}
+            />
+            {previewImage && (
+              <div className={styles.preview__image}>
+                <img src={previewImage} alt="배경 사진" />
+                <IoTrashBin
+                  size="14"
+                  className={styles.icon__delete}
+                  onClick={() => handleRemoveFile('image')}
+                />
+              </div>
+            )}
+          </div>
+        </div>
         <div className={styles.button__container}>
-          <Button onClick={handleClick} customMove={styles.moveBtn}>
+          <Button onClick={() => navigate(-1)} customMove={styles.moveBtn}>
             이전
           </Button>
           <Button type="submit" customMove={styles.moveBtn}>
