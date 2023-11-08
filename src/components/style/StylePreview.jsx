@@ -1,11 +1,12 @@
 import styles from './StylePreview.module.scss';
 
-export default function StylePreview({ formData, image }) {
+export default function StylePreview({ formData, previewImage }) {
   const {
     titleColor,
     titleFont,
     borderColor,
     backgroundColor,
+    image,
     color,
     bgColor,
     font,
@@ -17,7 +18,7 @@ export default function StylePreview({ formData, image }) {
       <div
         className={styles.preview__container}
         style={{
-          backgroundImage: image ? `url(${image})` : 'none',
+          backgroundImage: previewImage ? `url(${previewImage})` : 'none',
         }}
       >
         <div
