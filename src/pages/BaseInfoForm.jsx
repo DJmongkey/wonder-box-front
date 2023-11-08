@@ -185,7 +185,6 @@ export default function BaseInfoForm() {
           {formErrors.title && (
             <div className={styles.error}>{formErrors.title}</div>
           )}
-
           <Input
             id="creator"
             name="creator"

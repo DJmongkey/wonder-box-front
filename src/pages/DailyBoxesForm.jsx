@@ -11,13 +11,14 @@ import { useAuthContext } from '../context/AuthContext';
 import { useFormContext } from '../context/FormContext';
 import ERRORS from '../errors/errorMessage';
 import styles from './DailyBoxesForm.module.scss';
+import Loading from '../components/shared/Loading';
 
 export default function DailyBoxesForm() {
   const { calendarId } = useParams();
   const { user } = useAuthContext();
   const { setIsDailyBoxesValid } = useFormContext();
 
-  const { fetchData, navigate } = useFetchData();
+  const { fetchData, navigate, isLoading, setIsLoading } = useFetchData();
 
   const { formData, validateForm, updateFormData } = useFormInput({
     startDate: '',
@@ -57,6 +58,7 @@ export default function DailyBoxesForm() {
           { 'Content-Type': 'application/json' },
           null,
         );
+        setIsLoading(true);
         const { dailyBoxes } = data;
 
         updateFormData({
@@ -64,6 +66,7 @@ export default function DailyBoxesForm() {
           endDate: dailyBoxes[dailyBoxes.length - 1].date,
           dailyBoxes,
         });
+        setIsLoading(false);
       } catch (error) {
         redirectErrorPage(navigate, error);
       }
@@ -93,11 +96,13 @@ export default function DailyBoxesForm() {
       getAllBoxes();
     } else {
       getAllLocalBoxes(calendarId);
+      setIsLoading(false);
     }
-  }, [calendarId, user]);
+  }, [calendarId]);
 
   return (
     <div className={styles.container}>
+      {isLoading && <Loading asOverlay />}
       <div className={styles.dailyBoxes__container}>
         {formData.dailyBoxes.map((box) => (
           <DailyBox
@@ -115,31 +120,29 @@ export default function DailyBoxesForm() {
         <div className={styles.moveBtn} onClick={openModal}>
           다음
         </div>
-        {isOpen && (
-          <Modal isOpen={isOpen}>
-            <p>
-              아무것도 입력하지 않은 날짜에는 임의의 사진이 보여집니다. 그래도
-              저장하시겠습니까?
-            </p>
-            <div className={styles.modal__button__block}>
-              <Link to={`/custom/style/${calendarId}`}>
-                <Button
-                  customMove={styles.moveBtn}
-                  onClick={() => setIsDailyBoxesValid(true)}
-                >
-                  예
-                </Button>
-              </Link>
+      </div>
+      {isOpen && (
+        <Modal isOpen={isOpen} className={styles.modal__notice}>
+          <p>아무것도 입력하지 않은 날짜에는 임의의 사진이 보여집니다.</p>
+          <p>그래도 저장하시겠습니까?</p>
+          <div className={styles.button__block}>
+            <Link to={`/custom/style/${calendarId}`}>
               <Button
                 customMove={styles.moveBtn}
-                onClick={() => setIsOpen(false)}
+                onClick={() => setIsDailyBoxesValid(true)}
               >
-                아니요
+                예
               </Button>
-            </div>
-          </Modal>
-        )}
-      </div>
+            </Link>
+            <Button
+              customMove={styles.moveBtn}
+              onClick={() => setIsOpen(false)}
+            >
+              아니요
+            </Button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }
