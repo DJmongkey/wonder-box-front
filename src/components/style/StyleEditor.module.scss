@@ -1,76 +1,182 @@
 @import '../../style.scss';
 
-.sub__title {
-  font-size: $size-1;
-  margin: auto;
-  margin-top: 35px;
-  margin-bottom: 10px;
-  width: 80%;
-}
+.editor__container {
+  max-width: 1000px;
+  width: 85%;
+  @include set-center;
 
-.custom__container {
-  width: 80%;
-  height: 150px;
-  border: 1px solid black;
-  display: flex;
-  justify-content: space-between;
-  margin: auto;
-  text-align: center;
-
-  div {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-
-    label {
-      margin-top: 20px;
-      margin-bottom: 20px;
-      font-size: $size-1;
-    }
+  .sub__title,
+  .sub__title__bg {
+    font-family: $enSubFont, $krFont;
+    font-size: $size-2;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    width: 85%;
   }
+
+  .custom__container {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid $skyblue;
+  }
+
   .custom__box {
     display: flex;
-    flex-direction: row;
+    position: relative;
+    width: 190px;
 
-    input {
-      border: 1px solid black;
-      height: 30px;
-      margin-top: 10px;
-      text-align: center;
+    .input__wrapper__font {
+      @include set-center;
+
+      label {
+        display: block;
+        margin: 10px 0;
+        width: 150px;
+      }
+
+      input {
+        border: 1px solid $skyblue;
+        border-radius: 10px;
+        width: 190px;
+        height: 40px;
+        text-align: center;
+        letter-spacing: 0.0625rem;
+      }
     }
-    .custom__box__color {
-      position: relative;
-      top: 34px;
+
+    .input__wrapper {
+      @include set-center;
+
+      label {
+        display: block;
+        margin: 10px 0;
+        padding-left: 40px;
+        width: 150px;
+        font-family: $enFont;
+        font-weight: 500;
+      }
+
+      input {
+        border: 1px solid $skyblue;
+        border-radius: 10px 0 0 10px;
+        width: 140px;
+        height: 40px;
+        text-align: center;
+        color: $black;
+        font-family: $enFont;
+        letter-spacing: 0.0938rem;
+      }
+    }
+
+    .color__picker {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border: 1px solid $skyblue;
+      border-radius: 0 10px 10px 0;
+      width: 50px;
+      height: 40px;
+      background-color: $white;
+      padding: 2px;
+      margin: auto 0;
+
+      &::-webkit-color-swatch {
+        position: absolute;
+        border-radius: 6px;
+        border: none;
+        height: 25px;
+        width: 30px;
+        margin-left: 5px;
+        box-shadow: 0px 2px 4px rgba(36, 36, 36, 0.275);
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
   }
-}
 
-.file__box {
-  width: 80%;
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  margin: auto;
-  margin-top: 20px;
-
-  label {
+  .custom__date__container {
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    height: 100px;
-    width: 200px;
-    border: 1px solid black;
-    background-size: 200px 100px;
+    justify-content: space-around;
+    gap: 15px;
+    font-weight: 500;
+    margin: 0 auto;
+    padding-bottom: 30px;
+    border-bottom: 1px solid $skyblue;
+
+    .sub__title {
+      width: 190px;
+    }
   }
 
-  input[type='file'] {
-    display: none;
-  }
+  .file__container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 
-  .file__box__url {
-    border: 1px solid black;
-    margin-top: 10px;
-    width: 200px;
+    .file__input {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      margin-right: 20px;
+
+      .sub__title__bg {
+        margin-left: 95px;
+      }
+
+      .file__box__url {
+        input {
+          border: 1px solid $skyblue;
+          border-radius: 4px;
+          width: 400px;
+          height: 30px;
+          text-align: center;
+          font-size: $size-0;
+          margin-top: 20px;
+          padding: 6px;
+        }
+      }
+
+      .file__box__upload {
+        input {
+          border-bottom: 1px solid $skyblue;
+          width: 200px;
+          text-align: center;
+          letter-spacing: 0.0625rem;
+          margin: 20px 0;
+          padding: 10px;
+        }
+      }
+    }
+
+    .preview__image {
+      width: 50%;
+      display: flex;
+      justify-content: end;
+      margin-top: 35px;
+      margin-bottom: 50px;
+      margin-right: 10px;
+
+      img {
+        max-width: 350px;
+        max-height: 300px;
+        margin-left: 10px;
+      }
+
+      .icon__delete {
+        font-size: 18px;
+        cursor: pointer;
+      }
+    }
   }
 }

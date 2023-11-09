@@ -1,56 +1,106 @@
 @import '../style.scss';
 
-.button__container {
-  width: 20%;
+.container {
+  width: 100%;
+  height: calc(100vh - 70px - 50px);
   display: flex;
-  margin: auto;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 50px 0;
+  @include set-center;
 
-  button {
-    margin-top: 50px;
+  form {
+    max-width: 1000px;
+    width: 100%;
+    height: calc(100vh - 70px - 50px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @include set-center($justify: flex-start);
 
-    .moveBtn {
+    .error {
+      color: $red;
       font-size: $size-0;
-      width: auto;
-      padding: 5px 10px;
-      border: 1px solid $softRed;
-      background-color: $softRed;
-
-      &:hover,
-      &:focus {
-        color: $softRed;
-        background-color: $white;
-      }
     }
+  }
+
+  .button__container {
+    display: flex;
+    gap: 20px;
+  }
+}
+
+.moveBtn {
+  margin: 20px 0;
+  font-size: $size-0;
+  padding: 5px 10px;
+  border: 1px solid $softRed;
+  background-color: $softRed;
+  border-radius: 6px;
+  color: $white;
+  font-weight: 500;
+
+  &:hover,
+  &:focus {
+    color: $softRed;
+    background-color: $white;
+    font-size: $size-0;
+    font-weight: 500;
   }
 }
 
 .modal__share {
-  width: 500px;
+  position: relative;
+  width: 50%;
+  max-width: 600px;
+  height: auto;
+  @include set-center;
 
-  .modal__share__title {
-    font-size: $size-2;
-    margin-bottom: 20px;
-    font-weight: bold;
-  }
+  .icon__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 46px;
+    height: 46px;
+    padding: 15px;
+    font-size: 18px;
+    text-align: center;
+    color: $red;
 
-  .modal__share__link {
-    font-size: $size-0;
-    margin-bottom: 40px;
-  }
-
-  span {
-    font-size: 15px;
-    color: red;
-    font-weight: bold;
-  }
-
-  div {
-    font-size: 15px;
-    font-weight: bold;
-    margin-bottom: 25px;
-    margin-top: 5px;
-    strong {
-      color: $lightGreen;
+    &:hover,
+    &:focus {
+      cursor: pointer;
+      color: $green;
     }
+  }
+
+  .notice {
+    margin-top: 20px;
+    .modal__share__title {
+      font-size: $size-2;
+      font-weight: 700;
+    }
+
+    .modal__share__link {
+      font-size: $size-0;
+      margin: 20px 0;
+    }
+  }
+
+  .guide_text {
+    padding: 20px;
+    color: $green;
+    @include set-center;
+
+    p {
+      margin-top: 10px;
+    }
+    strong {
+      color: $red;
+    }
+  }
+
+  a {
+    margin-bottom: 10px;
   }
 }

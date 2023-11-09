@@ -21,10 +21,10 @@
 }
 
 .button__block {
-  display: flex;
   margin: 0 auto;
   gap: 50px;
   margin-top: 50px;
+  @include set-center($direction: row);
 
   .moveBtn {
     font-size: $size-0;
@@ -41,19 +41,22 @@
     &:focus {
       color: $softRed;
       background-color: $white;
+      font-size: $size-0;
       cursor: pointer;
     }
   }
+}
 
-  .modal__button__block {
-    @include set-center($direction: row);
+.modal__notice {
+  width: 50%;
+  max-width: 600px;
+  height: auto;
+  padding: 30px;
+  .button__block {
     margin-top: 25px;
     gap: 20px;
-    cursor: auto;
-    &:hover,
-    &:focus {
-      font-size: inherit;
-    }
+    @include set-center($direction: row);
+
     button {
       margin: 0;
     }

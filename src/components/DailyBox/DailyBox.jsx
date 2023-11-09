@@ -107,6 +107,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
 
       if (user) {
         const formDataToSubmit = new FormData();
+        setIsLoading(true);
 
         formDataToSubmit.append('dailyBoxId', dailyBoxId);
         formDataToSubmit.append('content[text]', formData.text);
@@ -139,6 +140,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
 
         await fetchData(fetchUrl, fetchMethod, {}, formDataToSubmit);
 
+        setIsLoading(false);
         setIsDailyBoxesValid(true);
       }
     } catch (error) {
@@ -256,7 +258,8 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                 </p>
               ) : (
                 <p className={styles.notice}>
-                  <strong>텍스트와 이미지 URL</strong>만 업로드 가능 합니다.
+                  비회원은 <strong>텍스트와 이미지 URL</strong>만 업로드 가능
+                  합니다.
                 </p>
               )}
               <div className={styles.input__block}>
@@ -282,15 +285,15 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   isRequired={false}
                   isDisabled={(!user || inputTypes.image === 'text') && true}
                 />
-                {formErrors.image && (
-                  <div className={styles.error}>{formErrors.image}</div>
-                )}
+                {formErrors.image ||
+                  (formErrors.imageFile && (
+                    <div className={styles.error}>
+                      {formErrors.image || formErrors.imageFile}
+                    </div>
+                  ))}
                 {previewImage && (
                   <div className={styles.preview__image}>
-                    <img
-                      src={previewImage}
-                      alt={`${formatDateMMDD(date)} 이미지`}
-                    />
+                    <img src={previewImage} alt={`이미지`} />
                     <IoTrashBin
                       size="14"
                       className={styles.icon__delete}
@@ -331,9 +334,12 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   isRequired={false}
                   isDisabled={(!user || inputTypes.video === 'text') && true}
                 />
-                {formErrors.video && (
-                  <div className={styles.error}>{formErrors.video}</div>
-                )}
+                {formErrors.video ||
+                  (formErrors.videoFile && (
+                    <div className={styles.error}>
+                      {formErrors.video || formErrors.videoFile}
+                    </div>
+                  ))}
                 {previewVideo && (
                   <div className={styles.preview__video}>
                     <video width="430" height="240" controls>
@@ -374,9 +380,12 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   isRequired={false}
                   isDisabled={(!user || inputTypes.audio === 'text') && true}
                 />
-                {formErrors.audio && (
-                  <div className={styles.error}>{formErrors.audio}</div>
-                )}
+                {formErrors.audio ||
+                  (formErrors.audioFile && (
+                    <div className={styles.error}>
+                      {formErrors.audio || formErrors.audioFile}
+                    </div>
+                  ))}
                 {previewAudio && (
                   <div className={styles.preview__audio}>
                     <audio controls>

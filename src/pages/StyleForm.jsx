@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
@@ -13,17 +13,18 @@ import useFetchData from '../hooks/useFetchData';
 import ERRORS from '../errors/errorMessage';
 import { redirectErrorPage } from '../errors/handleError';
 import styles from './StyleForm.module.scss';
+import { IoClose } from 'react-icons/io5';
 
 const defaultStyle = {
-  titleFont: 'Open Sans',
-  titleColor: '#f3eded',
-  borderColor: '#df8d11',
-  backgroundColor: '#e7ab1e',
+  titleFont: 'Playpen Sans',
+  titleColor: '#fffaff',
+  borderColor: '#f8f0ff',
+  backgroundColor: '#0d8c5b',
   image: '',
   imageFile: null,
-  font: 'Open Sans',
-  color: '#f4efef',
-  bgColor: '#e75d13',
+  font: 'Playpen Sans',
+  color: '#ffffff',
+  bgColor: '#b50d0d',
   sharedUrl: '',
 };
 
@@ -33,11 +34,13 @@ export default function StyleForm() {
 
   const { user } = useAuthContext();
   const { calendarId } = useParams();
-  const { fetchData, isLoading, setIsLoading, navigate } = useFetchData();
+  const { fetchData, isLoading, setIsLoading, navigate, error } =
+    useFetchData();
   const { setIsStyleValid } = useFormContext();
 
   const {
     formData,
+    formErrors,
     handleInputChange,
     validateForm,
     updateFormData,
@@ -208,23 +211,33 @@ export default function StyleForm() {
     }
   }, [calendarId, user]);
 
+  function handleClose() {
+    setIsStyleValid(true);
+    setIsOpen(false);
+  }
+
   return (
-    <div>
+    <div className={styles.container}>
       {isLoading && <Loading asOverlay />}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <StylePreview formData={formData} previewImage={previewImage} />
         <StyleEditor
           formData={formData}
+          formErrors={formErrors}
           handleInputChange={handleInputChange}
           user={user}
           previewImage={previewImage}
           inputTypes={inputTypes}
           handleRemoveFile={handleRemoveFile}
         />
+        {error && <div className={styles.error}>{error}</div>}
         <div className={styles.button__container}>
-          <Button onClick={() => navigate(-1)} customMove={styles.moveBtn}>
+          <Link
+            to={`/custom/daily-boxes/${calendarId}`}
+            className={styles.moveBtn}
+          >
             이전
-          </Button>
+          </Link>
           <Button type="submit" customMove={styles.moveBtn}>
             저장 후 공유 링크 받기
           </Button>
@@ -233,27 +246,50 @@ export default function StyleForm() {
       {isOpen && (
         <Modal isOpen={isOpen} className={styles.modal__share}>
           {user ? (
-            <div>
-              <div className={styles.modal__share__title}>공유 링크</div>
-              <div className={styles.modal__share__link}>{sharedUrl}</div>
-              <Button to="/" customMove={styles.moveBtn}>
-                메인 페이지로 이동
-              </Button>
-            </div>
-          ) : (
-            <div>
-              <span>
-                로그인을 하셔야 편집된 WonderBox 공유 링크를 받을 수 있습니다.
+            <>
+              <span
+                className={styles.icon__close}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClose();
+                }}
+              >
+                <IoClose />
               </span>
-              <div className={styles.guide_tex}>
-                <strong>지금까지의 정보는 저장</strong>이 되어 로그인/회원가입
-                후 다시 편집하지 않아도 현재 정보로 공유 링크를 받으실 수
-                있습니다.
+              <div className={styles.notice}>
+                <p className={styles.modal__share__title}>공유 링크</p>
+                <p className={styles.modal__share__link}>{sharedUrl}</p>
               </div>
-              <Button to="/login" customMove={styles.moveBtn}>
+              <Link to="/" className={styles.moveBtn}>
+                메인 페이지로 이동
+              </Link>
+            </>
+          ) : (
+            <>
+              <span
+                className={styles.icon__close}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClose();
+                }}
+              >
+                <IoClose />
+              </span>
+              <div className={styles.guide_text}>
+                <span>
+                  <strong>로그인</strong>을 하셔야 편집된 WonderBox 공유 링크를
+                  받을 수 있습니다.
+                </span>
+                <p>
+                  <strong>지금까지의 정보는 저장</strong>이 되어 로그인/회원가입
+                  후 다시 편집하지 않아도 현재 정보로 공유 링크를 받으실 수
+                  있습니다.
+                </p>
+              </div>
+              <Link to="/login" className={styles.moveBtn}>
                 로그인
-              </Button>
-            </div>
+              </Link>
+            </>
           )}
         </Modal>
       )}

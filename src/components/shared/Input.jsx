@@ -86,17 +86,16 @@ export default function Input({
           </div>
         );
       case 'color':
-      return (
-        <div className={className}>
+        return (
           <input
             type="color"
             id={id}
             name={name}
             value={value}
             onChange={onChange}
+            className={className}
           />
-        </div>
-      );
+        );
       default:
         return null;
     }

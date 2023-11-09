@@ -12,28 +12,38 @@ export default function StylePreview({ formData, previewImage }) {
   } = formData;
 
   return (
-    <>
+    <section className={styles.preview__container}>
       <div className={styles.sub__title}>Preview</div>
       <div
-        className={styles.preview__container}
+        className={styles.preview}
         style={{
           backgroundImage: previewImage ? `url(${previewImage})` : 'none',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
         }}
       >
         <div
           style={{
-            color: titleColor,
-            borderColor,
             backgroundColor,
-            fontFamily: titleFont,
           }}
           className={styles.preview__title}
         >
-          Title
+          <div
+            style={{
+              color: titleColor,
+              borderColor,
+              fontFamily: titleFont,
+            }}
+            className={styles.preview__title__inside}
+          >
+            Title
+          </div>
         </div>
         <div className={styles.preview__date}>
           {[1, 2, 3].map((number) => (
             <div
+              className={styles.preview__date__box}
               key={number}
               style={{ backgroundColor: bgColor, color, fontFamily: font }}
             >
@@ -42,6 +52,6 @@ export default function StylePreview({ formData, previewImage }) {
           ))}
         </div>
       </div>
-    </>
+    </section>
   );
 }

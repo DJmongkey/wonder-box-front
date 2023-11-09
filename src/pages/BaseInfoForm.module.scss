@@ -73,21 +73,20 @@
       color: $red;
     }
 
-    button {
+    .moveBtn {
       margin-top: 50px;
+      font-size: $size-0;
+      width: auto;
+      padding: 5px 10px;
+      border: 1px solid $softRed;
+      background-color: $softRed;
 
-      .moveBtn {
+      &:hover,
+      &:focus {
+        color: $softRed;
+        background-color: $white;
+        font-weight: 500;
         font-size: $size-0;
-        width: auto;
-        padding: 5px 10px;
-        border: 1px solid $softRed;
-        background-color: $softRed;
-
-        &:hover,
-        &:focus {
-          color: $softRed;
-          background-color: $white;
-        }
       }
     }
   }
