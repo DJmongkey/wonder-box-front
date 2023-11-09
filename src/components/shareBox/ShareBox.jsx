@@ -162,7 +162,6 @@ export default function ShareBox({ content, index, date, box, options }) {
             className={styles.shareBox__close}
             style={{ color, fontFamily: font }}
           >
-            {/* {index + 1} */}
             {formatDateMMDD(date)}
           </div>
         )}
