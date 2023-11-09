@@ -72,12 +72,7 @@ export default function SharedCalendar() {
           </Link>
         </header>
         <section className={styles.wonderBox__container}>
-          <div
-            className={styles.wonderBox__title}
-            style={{
-              backgroundColor,
-            }}
-          >
+          <div className={styles.wonderBox__title} style={{ backgroundColor }}>
             <div
               style={{
                 color: titleColor,

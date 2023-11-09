@@ -4,14 +4,15 @@ import { Link, useParams } from 'react-router-dom';
 import Modal from '../components/shared/Modal';
 import Button from '../components/shared/Button';
 import DailyBox from '../components/DailyBox/DailyBox';
+import Loading from '../components/shared/Loading';
 
 import useFetchData from '../hooks/useFetchData';
 import useFormInput from '../hooks/useFormInput';
 import { useAuthContext } from '../context/AuthContext';
+import { redirectErrorPage } from '../errors/handleError';
 import ERRORS from '../errors/errorMessage';
 import styles from './DailyBoxesForm.module.scss';
-import Loading from '../components/shared/Loading';
-import { redirectErrorPage } from '../errors/handleError';
+
 
 export default function DailyBoxesForm() {
   const { calendarId } = useParams();
