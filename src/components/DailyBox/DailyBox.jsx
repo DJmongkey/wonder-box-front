@@ -225,6 +225,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
           <audio controls>
             <source src={previewAudio} type="audio/mpeg" />
             <source src={previewAudio} type="audio/mp4" />
+            <source src={previewAudio} type="audio/mp3" />
             <source src={previewAudio} type="audio/wav" />
             <source src={previewAudio} type="audio/oog" />
           </audio>

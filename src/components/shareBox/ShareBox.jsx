@@ -148,6 +148,10 @@ export default function ShareBox({ content, index, date, box, options }) {
             ) : hasAudio ? (
               <audio controls>
                 <source src={previewAudio} type="audio/mpeg" />
+                <source src={previewAudio} type="audio/mp4" />
+                <source src={previewAudio} type="audio/mp3" />
+                <source src={previewAudio} type="audio/wav" />
+                <source src={previewAudio} type="audio/oog" />
               </audio>
             ) : (
               <div className={styles.shareBox__text__only}>{formData.text}</div>
