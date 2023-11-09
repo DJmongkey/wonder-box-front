@@ -17,6 +17,7 @@ export default function StyleEditor({
     titleColor,
     backgroundColor,
     borderColor,
+    image,
     font,
     color,
     bgColor,
@@ -25,6 +26,17 @@ export default function StyleEditor({
   return (
     <section className={styles.editor__container}>
       <div className={styles.sub__title}>WonderBox 캘린더 이름</div>
+      {(formErrors.titleFont ||
+        formErrors.titleColor ||
+        formErrors.backgroundColor ||
+        formErrors.borderColor) && (
+        <div className={styles.error}>
+          {formErrors.titleFont ||
+            formErrors.titleColor ||
+            formErrors.backgroundColor ||
+            formErrors.borderColor}
+        </div>
+      )}
       <div className={styles.custom__container}>
         <div className={styles.custom__box}>
           <Input
@@ -90,10 +102,12 @@ export default function StyleEditor({
             className={styles.color__picker}
           />
         </div>
-        {formErrors.borderColor && (
-          <div className={styles.error}>{formErrors.borderColor}</div>
-        )}
       </div>
+      {(formErrors.font || formErrors.color || formErrors.bgColor) && (
+        <div className={styles.error}>
+          {formErrors.font || formErrors.color || formErrors.bgColor}
+        </div>
+      )}
       <div className={styles.custom__date__container}>
         <div className={styles.sub__title}>날짜</div>
         <div className={styles.custom__box}>
@@ -125,9 +139,6 @@ export default function StyleEditor({
             className={styles.color__picker}
           />
         </div>
-        {formErrors.color && (
-          <div className={styles.error}>{formErrors.color}</div>
-        )}
         <div className={styles.custom__box}>
           <Input
             type="text"
@@ -146,9 +157,6 @@ export default function StyleEditor({
             className={styles.color__picker}
           />
         </div>
-        {formErrors.bgColor && (
-          <div className={styles.error}>{formErrors.bgColor}</div>
-        )}
       </div>
       <div className={styles.file__container}>
         <div className={styles.file__input}>
@@ -157,7 +165,7 @@ export default function StyleEditor({
             type="text"
             id="image"
             name="image"
-            value={inputTypes.image === 'text' ? formData.image : ''}
+            value={inputTypes.image === 'text' ? image : ''}
             onChange={handleInputChange}
             placeholder="이미지 URL"
             isDisabled={inputTypes.image === 'file'}
@@ -174,6 +182,11 @@ export default function StyleEditor({
             isRequired={false}
             className={styles.file__box__upload}
           />
+          {!user && (
+            <div className={styles.error}>
+              비회원은 URL 첨부만 이용 가능 합니다
+            </div>
+          )}
         </div>
         {previewImage && (
           <div className={styles.preview__image}>

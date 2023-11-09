@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { IoClose } from 'react-icons/io5';
 
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
@@ -13,7 +14,6 @@ import useFetchData from '../hooks/useFetchData';
 import ERRORS from '../errors/errorMessage';
 import { redirectErrorPage } from '../errors/handleError';
 import styles from './StyleForm.module.scss';
-import { IoClose } from 'react-icons/io5';
 
 const defaultStyle = {
   titleFont: 'Playpen Sans',
@@ -72,42 +72,49 @@ export default function StyleForm() {
       return;
     }
 
-    const newStyle = {
-      titleFont,
-      titleColor,
-      backgroundColor,
-      borderColor,
-      image: imageFile || image,
-      box: {
-        font,
-        color,
-        bgColor,
-      },
-    };
-
     try {
       if (user) {
         const fetchMethod = existingStyleData ? 'PUT' : 'POST';
         const fetchUrl = `/calendars/${calendarId}/style`;
         const uploadData = new FormData();
 
-        uploadData.append('titleFont', titleFont);
-        uploadData.append('titleColor', titleColor);
-        uploadData.append('backgroundColor', backgroundColor);
-        uploadData.append('borderColor', borderColor);
+        uploadData.append('titleFont', titleFont || defaultStyle.titleFont);
+        uploadData.append('titleColor', titleColor || defaultStyle.titleColor);
+        uploadData.append(
+          'backgroundColor',
+          backgroundColor || defaultStyle.backgroundColor,
+        );
+        uploadData.append(
+          'borderColor',
+          borderColor || defaultStyle.borderColor,
+        );
         uploadData.append('image', imageFile || image);
-        uploadData.append('box[font]', font);
-        uploadData.append('box[color]', color);
-        uploadData.append('box[bgColor]', bgColor);
+        uploadData.append('box[font]', font || defaultStyle.font);
+        uploadData.append('box[color]', color || defaultStyle.color);
+        uploadData.append('box[bgColor]', bgColor || defaultStyle.bgColor);
 
         const data = await fetchData(fetchUrl, fetchMethod, {}, uploadData);
 
-        updateFormData({ sharedUrl: data.shareUrl });
+        updateFormData({ sharedUrl: data.sharedUrl });
 
         setIsStyleValid(true);
+        setIsOpen(true);
       }
 
       if (!user) {
+        const newStyle = {
+          titleFont,
+          titleColor,
+          borderColor,
+          backgroundColor,
+          image: imageFile || image,
+          box: {
+            font,
+            color,
+            bgColor,
+          },
+        };
+
         const localCalendarId = JSON.parse(localStorage.getItem('id'));
         const localCalendar = JSON.parse(localStorage.getItem(localCalendarId));
 
@@ -120,9 +127,9 @@ export default function StyleForm() {
 
           setIsLoading(false);
           setIsStyleValid(true);
+          setIsOpen(true);
         }, 1000);
       }
-      setIsOpen(true);
     } catch (error) {
       redirectErrorPage(navigate, error);
     }
