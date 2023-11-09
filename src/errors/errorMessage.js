@@ -42,9 +42,9 @@ const ERRORS = {
     INVALID_URL_PATH: '유효한 URL 경로가 아닙니다.',
     FAILED_UPLOAD: '파일 업로드에 실패했습니다.',
     STYLE: {
-      NEED_COLOR: '색상을 지정해주세요',
+      NEED_COLOR: '모든 색상을 지정해주세요',
       NEED_FONT: '글씨체를 지정해주세요',
-      INVALID_FONT: '유효한 글씨체 아닙니다.',
+      INVALID_FONT: '유효한 글씨체가 아닙니다.',
       INVALID_COLOR_CODE: '유효한 HEX 색상 코드가 아닙니다.',
     },
     NOT_TODAY: '해당 날짜가 되어야 열 수 있습니다. ',

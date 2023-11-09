@@ -1,14 +1,14 @@
+import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
-import { useEffect, useState } from 'react';
 import Modal from '../shared/Modal';
 import Loading from '../shared/Loading';
+import Notification from '../shared/Notification';
 import useFormInput from '../../hooks/useFormInput';
 import useFetchData from '../../hooks/useFetchData';
 import useNotification from '../../hooks/useNotification';
-import Notification from '../shared/Notification';
 import ERRORS from '../../errors/errorMessage';
-import { formatDateKrTime } from '../../utils/date';
+import { formatDateKrTime, formatDateMMDD } from '../../utils/date';
 import styles from './ShareBox.module.scss';
 
 export default function ShareBox({ content, index, date, box, options }) {
@@ -136,7 +136,6 @@ export default function ShareBox({ content, index, date, box, options }) {
       >
         {isOpen ? (
           <div className={styles.shareBox__content}>
-            {' '}
             {hasImage ? (
               <img src={previewImage} alt="이미지 미리보기" />
             ) : hasVideo ? (
@@ -162,7 +161,7 @@ export default function ShareBox({ content, index, date, box, options }) {
             className={styles.shareBox__close}
             style={{ color, fontFamily: font }}
           >
-            {index + 1}
+            {formatDateMMDD(date)}
           </div>
         )}
         {isLoading && <Loading />}
