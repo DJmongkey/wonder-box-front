@@ -69,8 +69,6 @@ export function AuthContextProvider({ children }) {
       50 * 60 * 1000,
     );
 
-    console.log('refresh Token으로 accessToken 갱신');
-
     return () => clearInterval(interval);
   }, []);
 

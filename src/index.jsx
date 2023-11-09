@@ -12,7 +12,6 @@ import BaseInfoForm from './pages/BaseInfoForm';
 import CustomFormLayout from './components/shared/CustomFormLayout';
 import DailyBoxesForm from './pages/DailyBoxesForm';
 import StyleForm from './pages/StyleForm';
-import Preview from './pages/Preview';
 import SharedCalendar from './pages/SharedCalendar';
 import { AuthContextProvider } from './context/AuthContext';
 
@@ -35,7 +34,6 @@ const router = createBrowserRouter([
           { path: 'base-info/:calendarId', element: <BaseInfoForm /> },
           { path: 'daily-boxes/:calendarId', element: <DailyBoxesForm /> },
           { path: 'style/:calendarId', element: <StyleForm /> },
-          { path: 'preview/:calendarId', element: <Preview /> },
         ],
       },
     ],
