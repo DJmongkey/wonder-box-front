@@ -11,7 +11,6 @@ export default function Button({
   customClass,
   customLink,
   customMove,
-  isLinkDisabled,
 }) {
   const className = [
     styles.button,
@@ -27,7 +26,7 @@ export default function Button({
         <Link
           to={to}
           className={className}
-          onClick={isLinkDisabled ? (e) => e.preventDefault() : onClick}
+          onClick={!disabled ? onClick : (e) => e.preventDefault()}
         >
           {children}
         </Link>

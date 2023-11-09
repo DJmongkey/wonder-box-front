@@ -8,7 +8,6 @@ import StylePreview from '../components/style/StylePreview';
 import StyleEditor from '../components/style/StyleEditor';
 import Modal from '../components/shared/Modal';
 import { useAuthContext } from '../context/AuthContext';
-import { useFormContext } from '../context/FormContext';
 import useFormInput from '../hooks/useFormInput';
 import useFetchData from '../hooks/useFetchData';
 import ERRORS from '../errors/errorMessage';
@@ -36,7 +35,6 @@ export default function StyleForm() {
   const { calendarId } = useParams();
   const { fetchData, isLoading, setIsLoading, navigate, error } =
     useFetchData();
-  const { setIsStyleValid } = useFormContext();
 
   const {
     formData,
@@ -97,7 +95,6 @@ export default function StyleForm() {
 
         updateFormData({ sharedUrl: data.sharedUrl });
 
-        setIsStyleValid(true);
         setIsOpen(true);
       }
 
@@ -126,7 +123,6 @@ export default function StyleForm() {
           localStorage.setItem(localCalendarId, JSON.stringify(localCalendar));
 
           setIsLoading(false);
-          setIsStyleValid(true);
           setIsOpen(true);
         }, 1000);
       }
@@ -218,11 +214,6 @@ export default function StyleForm() {
     }
   }, [calendarId, user]);
 
-  function handleClose() {
-    setIsStyleValid(true);
-    setIsOpen(false);
-  }
-
   return (
     <div className={styles.container}>
       {isLoading && <Loading asOverlay />}
@@ -258,7 +249,7 @@ export default function StyleForm() {
                 className={styles.icon__close}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleClose();
+                  setIsOpen(false);
                 }}
               >
                 <IoClose />

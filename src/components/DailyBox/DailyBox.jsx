@@ -15,7 +15,6 @@ import Input from '../shared/Input';
 import Loading from '../shared/Loading';
 
 import { useAuthContext } from '../../context/AuthContext';
-import { useFormContext } from '../../context/FormContext';
 import useFetchData from '../../hooks/useFetchData';
 import useFormInput from '../../hooks/useFormInput';
 import { redirectErrorPage } from '../../errors/handleError';
@@ -54,7 +53,6 @@ export default function DailyBox({ dailyBoxId, date, content }) {
 
   const { calendarId } = useParams();
   const { user } = useAuthContext();
-  const { setIsDailyBoxesValid } = useFormContext();
 
   const [isBoxOpen, setIsBoxOpen] = useState(false);
   const [originalContent, setOriginalContent] = useState(content);
@@ -141,7 +139,6 @@ export default function DailyBox({ dailyBoxId, date, content }) {
         await fetchData(fetchUrl, fetchMethod, {}, formDataToSubmit);
 
         setIsLoading(false);
-        setIsDailyBoxesValid(true);
       }
     } catch (error) {
       redirectErrorPage(navigate, error);
@@ -377,7 +374,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   type="file"
                   id="audioFile"
                   name="audioFile"
-                  accept=".mp4, .mpeg, .wav, .oog"
+                  accept=".mp3, .mp4, .mpeg, .wav, .oog"
                   onChange={handleInputChange}
                   className={styles.input__file}
                   isRequired={false}
@@ -392,6 +389,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                 {previewAudio && (
                   <div className={styles.preview__audio}>
                     <audio controls>
+                      <source src={previewAudio} type="audio/mp3" />
                       <source src={previewAudio} type="audio/mpeg" />
                       <source src={previewAudio} type="audio/mp4" />
                       <source src={previewAudio} type="audio/wav" />
