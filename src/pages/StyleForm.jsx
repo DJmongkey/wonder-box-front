@@ -17,14 +17,14 @@ import styles from './StyleForm.module.scss';
 const defaultStyle = {
   titleFont: 'Open Sans',
   titleColor: '#f3eded',
-  borderColor: '#9fbc0c',
-  backgroundColor: '#9fbc0c',
+  borderColor: '#df8d11',
+  backgroundColor: '#e7ab1e',
   image: '',
   imageFile: null,
   font: 'Open Sans',
   color: '#f4efef',
-  bgColor: '#9fbc0c',
-  shareUrl: '',
+  bgColor: '#e75d13',
+  sharedUrl: '',
 };
 
 export default function StyleForm() {
@@ -57,7 +57,7 @@ export default function StyleForm() {
     font,
     color,
     bgColor,
-    shareUrl,
+    sharedUrl,
   } = formData;
 
   async function handleSubmit(event) {
@@ -99,7 +99,7 @@ export default function StyleForm() {
 
         const data = await fetchData(fetchUrl, fetchMethod, {}, uploadData);
 
-        updateFormData({ shareUrl: data.shareUrl });
+        updateFormData({ sharedUrl: data.shareUrl });
 
         setIsStyleValid(true);
       }
@@ -235,7 +235,7 @@ export default function StyleForm() {
           {user ? (
             <div>
               <div className={styles.modal__share__title}>공유 링크</div>
-              <div className={styles.modal__share__link}>{shareUrl}</div>
+              <div className={styles.modal__share__link}>{sharedUrl}</div>
               <Button to="/" customMove={styles.moveBtn}>
                 메인 페이지로 이동
               </Button>

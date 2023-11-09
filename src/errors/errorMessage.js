@@ -40,6 +40,8 @@ const ERRORS = {
     CONTENTS_NOT_FOUND: '입력한 컨텐츠 정보를 찾을 수 없습니다.',
     INVALID_FILE_TYPE: '유효한 파일 타입이 아닙니다.',
     FAILED_UPLOAD: '파일 업로드에 실패했습니다.',
+    NOT_TODAY: '해당 날짜가 되어야 열 수 있습니다. ',
+    MUST_SELECT_IN_ORDER: 'WonderBox를 순서대로 열어야 합니다.',
   },
 };
 
