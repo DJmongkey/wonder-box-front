@@ -8,7 +8,6 @@ import StylePreview from '../components/style/StylePreview';
 import StyleEditor from '../components/style/StyleEditor';
 import Modal from '../components/shared/Modal';
 import { useAuthContext } from '../context/AuthContext';
-import { useFormContext } from '../context/FormContext';
 import useFormInput from '../hooks/useFormInput';
 import useFetchData from '../hooks/useFetchData';
 import ERRORS from '../errors/errorMessage';
@@ -36,7 +35,6 @@ export default function StyleForm() {
   const { calendarId } = useParams();
   const { fetchData, isLoading, setIsLoading, navigate, error } =
     useFetchData();
-  const { setIsStyleValid } = useFormContext();
 
   const {
     formData,
@@ -72,44 +70,48 @@ export default function StyleForm() {
       return;
     }
 
-    const newStyle = {
-      titleFont,
-      titleColor,
-      backgroundColor,
-      borderColor,
-      image: imageFile || image,
-      box: {
-        font,
-        color,
-        bgColor,
-      },
-    };
-
     try {
       if (user) {
         const fetchMethod = existingStyleData ? 'PUT' : 'POST';
         const fetchUrl = `/calendars/${calendarId}/style`;
         const uploadData = new FormData();
 
-        uploadData.append('titleFont', titleFont);
-        uploadData.append('titleColor', titleColor);
-        uploadData.append('backgroundColor', backgroundColor);
-        uploadData.append('borderColor', borderColor);
+        uploadData.append('titleFont', titleFont || defaultStyle.titleFont);
+        uploadData.append('titleColor', titleColor || defaultStyle.titleColor);
+        uploadData.append(
+          'backgroundColor',
+          backgroundColor || defaultStyle.backgroundColor,
+        );
+        uploadData.append(
+          'borderColor',
+          borderColor || defaultStyle.borderColor,
+        );
         uploadData.append('image', imageFile || image);
-        uploadData.append('box[font]', font);
-        uploadData.append('box[color]', color);
-        uploadData.append('box[bgColor]', bgColor);
+        uploadData.append('box[font]', font || defaultStyle.font);
+        uploadData.append('box[color]', color || defaultStyle.color);
+        uploadData.append('box[bgColor]', bgColor || defaultStyle.bgColor);
 
         const data = await fetchData(fetchUrl, fetchMethod, {}, uploadData);
 
-        updateFormData({
-          sharedUrl: data.sharedUrl,
-        });
+        updateFormData({ sharedUrl: data.sharedUrl });
 
-        setIsStyleValid(true);
+        setIsOpen(true);
       }
 
       if (!user) {
+        const newStyle = {
+          titleFont,
+          titleColor,
+          borderColor,
+          backgroundColor,
+          image: imageFile || image,
+          box: {
+            font,
+            color,
+            bgColor,
+          },
+        };
+
         const localCalendarId = JSON.parse(localStorage.getItem('id'));
         const localCalendar = JSON.parse(localStorage.getItem(localCalendarId));
 
@@ -121,10 +123,9 @@ export default function StyleForm() {
           localStorage.setItem(localCalendarId, JSON.stringify(localCalendar));
 
           setIsLoading(false);
-          setIsStyleValid(true);
+          setIsOpen(true);
         }, 1000);
       }
-      setIsOpen(true);
     } catch (error) {
       redirectErrorPage(navigate, error);
     }
@@ -213,11 +214,6 @@ export default function StyleForm() {
     }
   }, [calendarId, user]);
 
-  function handleClose() {
-    setIsStyleValid(true);
-    setIsOpen(false);
-  }
-
   return (
     <div className={styles.container}>
       {isLoading && <Loading asOverlay />}
@@ -253,7 +249,7 @@ export default function StyleForm() {
                 className={styles.icon__close}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleClose();
+                  setIsOpen(false);
                 }}
               >
                 <IoClose />

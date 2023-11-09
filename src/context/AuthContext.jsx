@@ -1,5 +1,4 @@
-import { createContext, useContext, useState } from 'react';
-import ERRORS from '../errors/errorMessage';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
@@ -55,6 +54,25 @@ export function AuthContextProvider({ children }) {
       return false;
     }
   }
+
+  useEffect(() => {
+    const interval = setInterval(
+      () => {
+        if (localStorage.getItem('accessToken')) {
+          refreshAccessToken().then((isValid) => {
+            if (!isValid) {
+              logout();
+            }
+          });
+        }
+      },
+      50 * 60 * 1000,
+    );
+
+    console.log('refresh Token으로 accessToken 갱신');
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout, refreshAccessToken }}>

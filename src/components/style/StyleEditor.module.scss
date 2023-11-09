@@ -11,7 +11,7 @@
     font-size: $size-2;
     font-weight: 600;
     margin-top: 30px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     width: 85%;
   }
 
@@ -29,6 +29,7 @@
 
   .custom__box {
     display: flex;
+    flex-direction: column;
     position: relative;
     width: 190px;
 
@@ -123,6 +124,7 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin-bottom: 20px;
 
     .file__input {
       display: flex;
@@ -153,7 +155,7 @@
           width: 200px;
           text-align: center;
           letter-spacing: 0.0625rem;
-          margin: 20px 0;
+          margin-top: 20px;
           padding: 10px;
         }
       }
@@ -178,5 +180,11 @@
         cursor: pointer;
       }
     }
+  }
+
+  .error {
+    color: $red;
+    font-size: $size-0;
+    margin: 5px 0;
   }
 }

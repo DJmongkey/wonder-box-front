@@ -11,12 +11,12 @@ export default function CustomFormLayout() {
     <>
       <FormProvider>
         <Navbar />
-        {location.pathname === '/custom' || location.pathname === '/custom/' ? (
-          <BaseInfoForm />
-        ) : (
-          <Outlet />
-        )}
       </FormProvider>
+      {location.pathname === '/custom' || location.pathname === '/custom/' ? (
+        <BaseInfoForm />
+      ) : (
+        <Outlet />
+      )}
     </>
   );
 }

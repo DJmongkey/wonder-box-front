@@ -32,7 +32,7 @@ export default function StylePreview({ formData, previewImage }) {
           <div
             style={{
               color: titleColor,
-              borderColor,
+              border: `3px dotted ${borderColor}`,
               fontFamily: titleFont,
             }}
             className={styles.preview__title__inside}
