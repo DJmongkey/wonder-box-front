@@ -1,0 +1,80 @@
+@import '../style.scss';
+
+.container {
+  height: 100vh;
+  max-width: 500px;
+  margin: 0 auto;
+  @include set-center($justify: start);
+
+  h1 {
+    font-family: $enFont;
+    font-size: $size-4;
+    font-weight: 600;
+    margin-top: 12vh;
+    margin-bottom: 8vh;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .form__block {
+      @include set-center($direction: row);
+      font-size: $size-1;
+      margin: 20px 0;
+
+      label {
+        margin-right: 30px;
+        font-size: $size-2;
+      }
+
+      input {
+        margin-right: 30px;
+        padding: 15px;
+        border: 1px solid $skyblue;
+        border-radius: 5px;
+        width: 100%;
+      }
+    }
+
+    .error {
+      font-size: $size-0;
+      color: $red;
+    }
+
+    button {
+      margin-top: 50px;
+      font-weight: 500;
+      padding: 12px 0;
+      &:hover,
+      &:focus {
+        background-color: $softGreen-dark;
+      }
+    }
+  }
+
+  .divider {
+    width: 100%;
+    margin: 50px 0;
+    border-bottom: 1px solid $skyblue;
+  }
+
+  .link__block {
+    display: flex;
+    font-size: $size-0;
+    font-weight: 500;
+
+    p {
+      margin-right: 10px;
+    }
+
+    a {
+      color: $softRed;
+      &:hover,
+      &:focus {
+        color: $green;
+      }
+    }
+  }
+}

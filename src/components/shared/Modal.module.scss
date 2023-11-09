@@ -1,0 +1,22 @@
+@import '../../style.scss';
+
+.modal_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $overlay;
+  color: $black;
+  z-index: 999;
+  @include set-center;
+}
+
+.modal_content {
+  background-color: $lightGray1;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 80%;
+  width: 400px;
+  cursor: auto;
+}

@@ -1,0 +1,92 @@
+@import '../style.scss';
+
+.container {
+  width: 100%;
+  height: calc(100% - 70px - 50px);
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+
+.dailyBoxes__container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  text-align: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.button__block {
+  margin: 0 auto;
+  gap: 40px;
+  margin-top: 60px;
+  @include set-center($direction: row);
+
+  .moveBtn {
+    font-size: $size-0;
+    width: auto;
+    margin: auto;
+    padding: 5px 10px;
+    border: 1px solid $softRed;
+    background-color: $softRed;
+    border-radius: 6px;
+    color: $white;
+    font-weight: 500;
+
+    &:hover,
+    &:focus {
+      color: $softRed;
+      background-color: $white;
+      font-size: $size-0;
+      cursor: pointer;
+    }
+  }
+}
+
+.modal__notice {
+  width: 50%;
+  max-width: 600px;
+  height: auto;
+  padding: 30px;
+
+  .button__block {
+    margin-top: 25px;
+    gap: 40px;
+    @include set-center($direction: row);
+
+    a,
+    button {
+      margin: 0;
+    }
+  }
+}
+
+@include laptop {
+  .dailyBoxes__container {
+    gap: 30px;
+    max-width: 700px;
+  }
+}
+
+@include tablet {
+  .dailyBoxes__container {
+    justify-content: center;
+    align-items: flex-start;
+    flex-basis: 0;
+    max-width: 430px;
+    gap: 30px;
+  }
+}
+
+@include mobile {
+  .dailyBoxes__container {
+    display: flex;
+    flex-direction: column;
+    max-width: 460px;
+    gap: 40px;
+  }
+}

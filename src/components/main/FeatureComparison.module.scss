@@ -1,0 +1,60 @@
+@import '../../style.scss';
+
+table {
+  width: 80%;
+  border-collapse: collapse;
+  margin: 5rem auto;
+  border: 1px solid $lightGreen;
+
+  th,
+  td {
+    padding: 10px;
+    text-align: center;
+  }
+
+  tr {
+    td {
+      border-bottom: 1px solid $lightGray1;
+    }
+  }
+
+  th {
+    font-weight: bold;
+
+    span {
+      font-weight: bold;
+      color: $lightGreen;
+    }
+  }
+
+  th {
+    width: 50%;
+    border-bottom: 1px solid $lightGreen;
+  }
+
+  strong {
+    color: $red;
+  }
+
+  button {
+    background-color: $green;
+    color: #fff;
+    border: none;
+    margin-left: 20px;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      font-weight 0.2s;
+  }
+}
+
+.td_border_bottom {
+  border-bottom: 1px solid $lightGreen;
+}
+
+.td_border_right {
+  border-right: 1px solid $lightGray1;
+}

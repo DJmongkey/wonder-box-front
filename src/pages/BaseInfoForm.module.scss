@@ -1,0 +1,93 @@
+@import '../style.scss';
+
+.container {
+  width: 100%;
+  height: calc(100vh - 70px - 50px);
+
+  form {
+    max-width: 1000px;
+    height: 100%;
+    margin: 0 auto;
+    @include set-center;
+
+    .baseInfoForm {
+      width: 800px;
+
+      .input__block {
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        margin: 20px 0;
+
+        label {
+          margin-right: 10px;
+          width: 300px;
+          font-weight: 500;
+        }
+
+        input {
+          width: 100%;
+          border: 1px solid $softGreen-light;
+          border-radius: 4px;
+          padding: 10px;
+        }
+      }
+
+      .input__block__date {
+        width: 100%;
+        display: flex;
+        margin: 20px 0;
+
+        align-items: center;
+
+        label {
+          width: 223px;
+          font-weight: 500;
+        }
+
+        .input__date {
+          input {
+            width: 180px;
+          }
+          p {
+            margin-right: 10px;
+          }
+        }
+
+        .total {
+          margin-left: 10px;
+          font-weight: 500;
+        }
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        margin: 20px 0;
+      }
+    }
+
+    .error {
+      font-size: $size-0;
+      color: $red;
+    }
+
+    .moveBtn {
+      margin-top: 50px;
+      font-size: $size-0;
+      width: auto;
+      padding: 5px 10px;
+      border: 1px solid $softRed;
+      background-color: $softRed;
+
+      &:hover,
+      &:focus {
+        color: $softRed;
+        background-color: $white;
+        font-weight: 500;
+        font-size: $size-0;
+      }
+    }
+  }
+}

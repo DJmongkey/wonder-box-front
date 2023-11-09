@@ -1,0 +1,52 @@
+@import '../../style.scss';
+
+.header {
+  @include set-center($direction: row, $justify: space-between);
+  padding: 5px 40px;
+  border-bottom: 1px solid $softGreen-light;
+  height: 70px;
+
+  .logo {
+    font-family: $enSubFont;
+    font-size: $size-2;
+    font-weight: 900;
+  }
+
+  .buttons {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    .headerBtn {
+      width: auto;
+      padding: 8px 20px;
+      font-size: $size-1;
+      &:hover,
+      &:focus {
+        background-color: $softGreen-dark;
+      }
+    }
+  }
+}
+
+@include mobile {
+  .header {
+    padding: 0 10px;
+    height: 50px;
+
+    .logo {
+      font-size: $size-1;
+    }
+
+    .buttons {
+      gap: 8px;
+
+      .headerBtn {
+        width: auto;
+        padding: 5px 10px;
+        font-size: $size-0;
+        transition: all 0.2s ease-in-out;
+      }
+    }
+  }
+}

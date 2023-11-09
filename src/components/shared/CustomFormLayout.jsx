@@ -1,4 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom';
+
+import { FormProvider } from '../../context/FormContext';
 import Navbar from './Navbar';
 import BaseInfoForm from '../../pages/BaseInfoForm';
 
@@ -7,7 +9,9 @@ export default function CustomFormLayout() {
 
   return (
     <>
-      <Navbar />
+      <FormProvider>
+        <Navbar />
+      </FormProvider>
       {location.pathname === '/custom' || location.pathname === '/custom/' ? (
         <BaseInfoForm />
       ) : (

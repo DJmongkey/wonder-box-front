@@ -12,8 +12,8 @@ import BaseInfoForm from './pages/BaseInfoForm';
 import CustomFormLayout from './components/shared/CustomFormLayout';
 import DailyBoxesForm from './pages/DailyBoxesForm';
 import StyleForm from './pages/StyleForm';
-import Preview from './pages/Preview';
 import SharedCalendar from './pages/SharedCalendar';
+import { AuthContextProvider } from './context/AuthContext';
 
 import './index.scss';
 import './style.scss';
@@ -31,9 +31,9 @@ const router = createBrowserRouter([
         element: <CustomFormLayout />,
         children: [
           { path: 'base-info', element: <BaseInfoForm /> },
-          { path: 'daily-boxes', element: <DailyBoxesForm /> },
-          { path: 'style', element: <StyleForm /> },
-          { path: 'preview', element: <Preview /> },
+          { path: 'base-info/:calendarId', element: <BaseInfoForm /> },
+          { path: 'daily-boxes/:calendarId', element: <DailyBoxesForm /> },
+          { path: 'style/:calendarId', element: <StyleForm /> },
         ],
       },
     ],
@@ -45,6 +45,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthContextProvider>
+      <RouterProvider router={router} />
+    </AuthContextProvider>
   </React.StrictMode>,
 );

@@ -1,0 +1,284 @@
+@import '../../style.scss';
+
+.dailyBox__container {
+  width: 300px;
+  height: 250px;
+  border: 2px dashed $softRed;
+  border-radius: 10px;
+  flex-grow: 1;
+
+  &:hover,
+  &:focus {
+    cursor: pointer;
+  }
+
+  .dailyBox__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    margin: 3px;
+    padding: 0 10px;
+    background-color: $beige;
+    border-radius: 6px 6px 0 0;
+    font-size: $size-1;
+    font-weight: 500;
+
+    p {
+      margin-left: 5px;
+    }
+
+    .icon {
+      margin-left: 8px;
+      color: $gray;
+    }
+  }
+
+  .dailyBox__contents {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+
+    img,
+    video,
+    audio {
+      display: block;
+      width: 100%;
+      height: calc(100% - 40px - 6px);
+      object-fit: cover;
+      border-radius: 0 0 10px 10px;
+
+      &:hover,
+      &:focus {
+        opacity: 0.3;
+      }
+    }
+
+    audio {
+      height: 50%;
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .text__preview {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 40px - 6px);
+      color: $black;
+      padding: 10px;
+      font-weight: 500;
+      text-align: center;
+      transition: opacity 0.3s;
+    }
+    &:hover .text__preview {
+      background-color: rgba(183, 207, 193, 0.392);
+      opacity: 1;
+    }
+
+    .text__preview__hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      width: 100%;
+      height: calc(100% - 40px - 6px);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: $white;
+      transition: opacity 0.3s;
+      padding: 10px;
+      opacity: 0;
+      font-weight: 500;
+      text-align: center;
+      border-radius: 0 0 10px 10px;
+      @include set-center;
+    }
+
+    &:hover .text__preview__hover {
+      opacity: 1;
+    }
+  }
+}
+
+.modal__contents__form {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 80%;
+  max-width: 600px;
+  padding: 0;
+  padding-bottom: 20px;
+  border-radius: 6px;
+
+  form {
+    position: relative;
+    height: 80vh;
+    overflow: hidden;
+
+    header {
+      background-color: $skyblue;
+      border-radius: 6px 6px 0 0;
+      padding: 15px 20px;
+      @include set-center($direction: row, $justify: space-between);
+
+      p {
+        font-weight: 600;
+        font-size: $size-2;
+      }
+
+      .icon__close {
+        font-size: $size-3;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+
+        &:hover,
+        &:focus {
+          color: $red;
+        }
+      }
+    }
+
+    section {
+      position: absolute;
+      width: 100%;
+      height: calc(100% - 80px);
+      left: 0;
+      bottom: 0;
+      padding: 20px;
+      overflow-y: scroll;
+
+      .notice {
+        color: $red;
+        font-size: $size-0;
+        margin-top: 20px;
+      }
+
+      .input__block {
+        width: 100%;
+        text-align: center;
+
+        .input__url {
+          display: flex;
+          margin-top: 20px;
+
+          label {
+            width: 30%;
+            font-weight: 500;
+          }
+
+          input {
+            width: 100%;
+            background-color: $white;
+            padding: 10px;
+            border-radius: 6px;
+          }
+        }
+
+        .input__file {
+          margin-top: 5px;
+          margin-bottom: 10px;
+
+          input {
+            margin-left: 135px;
+            width: calc(100% - 135px);
+            padding-bottom: 5px;
+
+            &:disabled {
+              pointer-events: none;
+              cursor: default;
+            }
+
+            &::-webkit-file-upload-button {
+              cursor: pointer;
+
+              &:disabled {
+                pointer-events: none;
+                cursor: default;
+              }
+            }
+          }
+        }
+
+        .preview__image {
+          display: flex;
+          justify-content: center;
+          margin: 0 auto;
+
+          .icon__delete {
+            margin: 0 5px;
+            cursor: pointer;
+          }
+
+          img {
+            max-width: 450px;
+            max-height: 300px;
+          }
+        }
+      }
+      .textarea__block {
+        display: flex;
+        margin: 20px 0;
+
+        label {
+          width: 180px;
+        }
+
+        textarea {
+          width: 100%;
+          height: 150px;
+          padding: 20px;
+        }
+      }
+
+      .error,
+      .preview__video,
+      .preview__audio {
+        font-size: $size-0;
+        color: $red;
+      }
+
+      .preview__video,
+      .preview__audio {
+        display: flex;
+        justify-content: end;
+        color: $red;
+
+        .icon__delete {
+          margin-left: 8px;
+          margin-right: 12px;
+          color: $black;
+          cursor: pointer;
+        }
+      }
+
+      .preview__audio {
+        @include set-center($direction: row);
+      }
+      button {
+        background-color: $softRed;
+        color: $white;
+        width: auto;
+        margin: 10px 0;
+        padding: 5px 15px;
+        font-size: calc($size-0 + 0.125rem);
+        cursor: pointer;
+
+        &:hover,
+        &:focus {
+          font-size: calc($size-0 + 0.125rem);
+        }
+      }
+    }
+  }
+}
+
+@include tablet {
+  .dailyBox__container {
+    flex-grow: 0.5;
+  }
+}

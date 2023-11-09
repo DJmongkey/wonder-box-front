@@ -1,0 +1,40 @@
+@import '../../style.scss';
+
+.error {
+  font-size: $size-0;
+  color: $red;
+}
+
+.dateInput {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  input {
+    border: 1px solid $softGreen-light;
+    border-radius: 4px;
+    padding: 8px;
+    margin-right: 10px;
+  }
+}
+
+.radioInput {
+  width: 70%;
+  display: flex;
+  right: 0;
+  margin-bottom: 10px;
+  input {
+    margin-right: 10px;
+  }
+}
+
+.textareaInput {
+  label {
+    font-weight: 500;
+  }
+  textarea {
+    resize: none;
+    border-radius: 6px;
+    border-color: $skyblue;
+    width: auto;
+  }
+}
