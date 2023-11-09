@@ -75,7 +75,7 @@ export default function CalendarList() {
         <div className={styles.container}>
           <div className={styles.calendarList__container}>
             <h1>My WonderBox 캘린더 리스트</h1>
-            <div className={styles.divider}></div>
+            <div className={styles.divider} />
             <ul className={styles.calendars}>
               <li className={styles.calendars__header}>
                 <p className={`${styles.list__column} ${styles.title}`}>

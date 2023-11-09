@@ -17,6 +17,7 @@ export default function StyleEditor({
     titleColor,
     backgroundColor,
     borderColor,
+    image,
     font,
     color,
     bgColor,
