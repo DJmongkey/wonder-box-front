@@ -47,6 +47,8 @@ const ERRORS = {
       INVALID_FONT: '유효한 글씨체 아닙니다.',
       INVALID_COLOR_CODE: '유효한 HEX 색상 코드가 아닙니다.',
     },
+    NOT_TODAY: '해당 날짜가 되어야 열 수 있습니다. ',
+    MUST_SELECT_IN_ORDER: 'WonderBox를 순서대로 열어야 합니다.',
   },
 };
 

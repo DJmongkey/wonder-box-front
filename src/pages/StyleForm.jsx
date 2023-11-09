@@ -25,7 +25,7 @@ const defaultStyle = {
   font: 'Playpen Sans',
   color: '#ffffff',
   bgColor: '#b50d0d',
-  shareUrl: '',
+  sharedUrl: '',
 };
 
 export default function StyleForm() {
@@ -60,7 +60,7 @@ export default function StyleForm() {
     font,
     color,
     bgColor,
-    shareUrl,
+    sharedUrl,
   } = formData;
 
   async function handleSubmit(event) {
@@ -102,7 +102,7 @@ export default function StyleForm() {
 
         const data = await fetchData(fetchUrl, fetchMethod, {}, uploadData);
 
-        updateFormData({ shareUrl: data.shareUrl });
+        updateFormData({ sharedUrl: data.shareUrl });
 
         setIsStyleValid(true);
       }
@@ -258,7 +258,7 @@ export default function StyleForm() {
               </span>
               <div className={styles.notice}>
                 <p className={styles.modal__share__title}>공유 링크</p>
-                <p className={styles.modal__share__link}>{shareUrl}</p>
+                <p className={styles.modal__share__link}>{sharedUrl}</p>
               </div>
               <Link to="/" className={styles.moveBtn}>
                 메인 페이지로 이동
