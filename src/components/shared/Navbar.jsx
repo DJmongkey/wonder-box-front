@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import { FiChevronRight } from 'react-icons/fi';
 
 import { useFormContext } from '../../context/FormContext';
@@ -6,8 +7,14 @@ import Button from './Button';
 import styles from './Navbar.module.scss';
 
 export default function Navbar() {
-  const { isDailyBoxesValid, isStyleValid, isPreviewValid } = useFormContext();
-  const calendarId = useParams().calendarId;
+  const { visitedTabs, setVisitedTabs } = useFormContext();
+  const { calendarId } = useParams();
+  const location = useLocation();
+
+  useEffect(() => {
+    const path = location.pathname.split('/')[2].replace('-', '');
+    setVisitedTabs((prevTabs) => ({ ...prevTabs, [path]: true }));
+  }, [location, setVisitedTabs]);
 
   return (
     <nav>
@@ -23,8 +30,7 @@ export default function Navbar() {
       <Button
         to={`/custom/daily-boxes/${calendarId}`}
         customLink={styles.navBtn}
-        isLinkDisabled={!isDailyBoxesValid}
-        disabled={!isDailyBoxesValid}
+        disabled={!visitedTabs.dailyboxes}
       >
         컨텐츠
       </Button>
@@ -32,8 +38,7 @@ export default function Navbar() {
       <Button
         to={`/custom/style/${calendarId}`}
         customLink={styles.navBtn}
-        isLinkDisabled={!isStyleValid}
-        disabled={!isStyleValid}
+        disabled={!visitedTabs.style}
       >
         스타일
       </Button>
@@ -41,8 +46,7 @@ export default function Navbar() {
       <Button
         to={`/custom/preview/${calendarId}`}
         customLink={styles.navBtn}
-        isLinkDisabled={!isPreviewValid}
-        disabled={!isPreviewValid}
+        disabled={!visitedTabs.preview}
       >
         미리보기
       </Button>

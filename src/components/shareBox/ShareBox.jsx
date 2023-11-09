@@ -1,12 +1,12 @@
+import { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
-import { useEffect, useState } from 'react';
 import Modal from '../shared/Modal';
 import Loading from '../shared/Loading';
+import Notification from '../shared/Notification';
 import useFormInput from '../../hooks/useFormInput';
 import useFetchData from '../../hooks/useFetchData';
 import useNotification from '../../hooks/useNotification';
-import Notification from '../shared/Notification';
 import ERRORS from '../../errors/errorMessage';
 import { formatDateKrTime, formatDateMMDD } from '../../utils/date';
 import styles from './ShareBox.module.scss';
@@ -136,7 +136,6 @@ export default function ShareBox({ content, index, date, box, options }) {
       >
         {isOpen ? (
           <div className={styles.shareBox__content}>
-            {' '}
             {hasImage ? (
               <img src={previewImage} alt="이미지 미리보기" />
             ) : hasVideo ? (
@@ -149,6 +148,10 @@ export default function ShareBox({ content, index, date, box, options }) {
             ) : hasAudio ? (
               <audio controls>
                 <source src={previewAudio} type="audio/mpeg" />
+                <source src={previewAudio} type="audio/mp4" />
+                <source src={previewAudio} type="audio/mp3" />
+                <source src={previewAudio} type="audio/wav" />
+                <source src={previewAudio} type="audio/oog" />
               </audio>
             ) : (
               <div className={styles.shareBox__text__only}>{formData.text}</div>

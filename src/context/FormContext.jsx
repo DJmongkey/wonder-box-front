@@ -7,21 +7,15 @@ export function useFormContext() {
 }
 
 export function FormProvider({ children }) {
-  const [isDailyBoxesValid, setIsDailyBoxesValid] = useState(false);
-  const [isStyleValid, setIsStyleValid] = useState(false);
-  const [isPreviewValid, setIsPreviewValid] = useState(false);
+  const [visitedTabs, setVisitedTabs] = useState({
+    baseinfo: true,
+    dailyboxes: false,
+    style: false,
+    preview: false,
+  });
 
   return (
-    <FormContext.Provider
-      value={{
-        isDailyBoxesValid,
-        setIsDailyBoxesValid,
-        isStyleValid,
-        setIsStyleValid,
-        isPreviewValid,
-        setIsPreviewValid,
-      }}
-    >
+    <FormContext.Provider value={{ visitedTabs, setVisitedTabs }}>
       {children}
     </FormContext.Provider>
   );

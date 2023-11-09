@@ -13,8 +13,8 @@ export default function CalendarDetail({ calendar, onDelete }) {
     navigate(`/custom/base-info/${calendarId}`);
   }
 
-  function handleShareLink(calendarId) {
-    navigate(`/calendars/${calendarId}/share`);
+  function handleSharedLink(calendarId) {
+    window.open(`/calendars/${calendarId}/share`, '_blank');
   }
 
   return (
@@ -38,7 +38,7 @@ export default function CalendarDetail({ calendar, onDelete }) {
           <button onClick={() => onDelete(calendarId)}>
             <FcEmptyTrash className={styles.icon} />
           </button>
-          <button onClick={() => handleShareLink(calendarId)}>
+          <button onClick={() => handleSharedLink(calendarId)}>
             <FcLink className={styles.icon} />
           </button>
         </div>

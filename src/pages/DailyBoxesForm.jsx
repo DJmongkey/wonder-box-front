@@ -4,20 +4,19 @@ import { Link, useParams } from 'react-router-dom';
 import Modal from '../components/shared/Modal';
 import Button from '../components/shared/Button';
 import DailyBox from '../components/DailyBox/DailyBox';
+import Loading from '../components/shared/Loading';
 
 import useFetchData from '../hooks/useFetchData';
 import useFormInput from '../hooks/useFormInput';
 import { useAuthContext } from '../context/AuthContext';
-import { useFormContext } from '../context/FormContext';
 import { redirectErrorPage } from '../errors/handleError';
 import ERRORS from '../errors/errorMessage';
 import styles from './DailyBoxesForm.module.scss';
-import Loading from '../components/shared/Loading';
+
 
 export default function DailyBoxesForm() {
   const { calendarId } = useParams();
   const { user } = useAuthContext();
-  const { setIsDailyBoxesValid } = useFormContext();
 
   const { fetchData, navigate, isLoading, setIsLoading } = useFetchData();
 
@@ -42,7 +41,6 @@ export default function DailyBoxesForm() {
     if (formData.dailyBoxes.every((box) => !hasContent(box))) {
       setIsOpen((prevIsOpen) => !prevIsOpen);
     } else if (validateForm()) {
-      setIsDailyBoxesValid(true);
       navigate(`/custom/style/${calendarId}`);
     }
   }
@@ -57,7 +55,9 @@ export default function DailyBoxesForm() {
           { 'Content-Type': 'application/json' },
           null,
         );
+
         setIsLoading(true);
+
         const { dailyBoxes } = data;
 
         updateFormData({
@@ -125,13 +125,8 @@ export default function DailyBoxesForm() {
           <p>아무것도 입력하지 않은 날짜에는 임의의 사진이 보여집니다.</p>
           <p>그래도 저장하시겠습니까?</p>
           <div className={styles.button__block}>
-            <Link to={`/custom/style/${calendarId}`}>
-              <Button
-                customMove={styles.moveBtn}
-                onClick={() => setIsDailyBoxesValid(true)}
-              >
-                예
-              </Button>
+            <Link to={`/custom/style/${calendarId}`} className={styles.moveBtn}>
+              예
             </Link>
             <Button
               customMove={styles.moveBtn}
