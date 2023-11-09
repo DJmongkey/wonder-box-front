@@ -12,6 +12,7 @@ import { useFormContext } from '../context/FormContext';
 import ERRORS from '../errors/errorMessage';
 import styles from './DailyBoxesForm.module.scss';
 import Loading from '../components/shared/Loading';
+import { redirectErrorPage } from '../errors/handleError';
 
 export default function DailyBoxesForm() {
   const { calendarId } = useParams();
@@ -40,11 +41,9 @@ export default function DailyBoxesForm() {
   function openModal() {
     if (formData.dailyBoxes.every((box) => !hasContent(box))) {
       setIsOpen((prevIsOpen) => !prevIsOpen);
-    } else {
-      if (validateForm()) {
-        setIsDailyBoxesValid(true);
-        navigate(`/custom/style/${calendarId}`);
-      }
+    } else if (validateForm()) {
+      setIsDailyBoxesValid(true);
+      navigate(`/custom/style/${calendarId}`);
     }
   }
 
@@ -58,7 +57,9 @@ export default function DailyBoxesForm() {
           { 'Content-Type': 'application/json' },
           null,
         );
+
         setIsLoading(true);
+
         const { dailyBoxes } = data;
 
         updateFormData({

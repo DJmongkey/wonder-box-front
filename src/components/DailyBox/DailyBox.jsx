@@ -226,7 +226,10 @@ export default function DailyBox({ dailyBoxId, date, content }) {
           </video>
         ) : hasAudio ? (
           <audio controls>
-            <source src={previewAudio} type="audio/mpeg"></source>
+            <source src={previewAudio} type="audio/mpeg" />
+            <source src={previewAudio} type="audio/mp4" />
+            <source src={previewAudio} type="audio/wav" />
+            <source src={previewAudio} type="audio/oog" />
           </audio>
         ) : (
           <div className={styles.text__preview}>{formData.text}</div>
@@ -293,7 +296,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   ))}
                 {previewImage && (
                   <div className={styles.preview__image}>
-                    <img src={previewImage} alt={`이미지`} />
+                    <img src={previewImage} alt="이미지" />
                     <IoTrashBin
                       size="14"
                       className={styles.icon__delete}
@@ -374,7 +377,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   type="file"
                   id="audioFile"
                   name="audioFile"
-                  accept=".mp3, .mpeg, .mav"
+                  accept=".mp4, .mpeg, .wav, .oog"
                   onChange={handleInputChange}
                   className={styles.input__file}
                   isRequired={false}
