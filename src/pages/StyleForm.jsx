@@ -218,6 +218,10 @@ export default function StyleForm() {
     setIsOpen(false);
   }
 
+  function handleCopyClipBoard(text) {
+    navigator.clipboard.writeText(text);
+  }
+
   return (
     <div className={styles.container}>
       {isLoading && <Loading asOverlay />}
@@ -261,6 +265,12 @@ export default function StyleForm() {
               <div className={styles.notice}>
                 <p className={styles.modal__share__title}>공유 링크</p>
                 <p className={styles.modal__share__link}>{sharedUrl}</p>
+                <p
+                  className={styles.modal__share__link__copy}
+                  onClick={() => handleCopyClipBoard(sharedUrl)}
+                >
+                  복사하기
+                </p>
               </div>
               <Link to="/" className={styles.moveBtn}>
                 메인 페이지로 이동

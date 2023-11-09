@@ -85,6 +85,14 @@
       font-size: $size-0;
       margin: 20px 0;
     }
+    .modal__share__link__copy {
+      font-size: $size-0;
+      margin: 20px 0;
+      cursor: pointer;
+    }
+    .modal__share__link__copy:hover {
+      transform: scale(1.2);
+    }
   }
 
   .guide_text {
