@@ -21,6 +21,7 @@ export default function SharedCalendar() {
 
   const { title, options } = calendar;
   const { titleFont, titleColor, backgroundColor, borderColor, image } = style;
+  console.log(image);
 
   useEffect(() => {
     async function getShareLink() {
@@ -63,7 +64,7 @@ export default function SharedCalendar() {
             fontFamily: titleFont,
           }}
         >
-          {title}
+          <div className={styles.wonderBox__title__inside}>{title}</div>
         </div>
         {dailyBoxes.map((box, index) => (
           <ShareBox

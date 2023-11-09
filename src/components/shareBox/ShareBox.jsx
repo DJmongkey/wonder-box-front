@@ -8,7 +8,7 @@ import useFetchData from '../../hooks/useFetchData';
 import useNotification from '../../hooks/useNotification';
 import Notification from '../shared/Notification';
 import ERRORS from '../../errors/errorMessage';
-import { formatDateKrTime } from '../../utils/date';
+import { formatDateKrTime, formatDateMMDD } from '../../utils/date';
 import styles from './ShareBox.module.scss';
 
 export default function ShareBox({ content, index, date, box, options }) {
@@ -162,7 +162,8 @@ export default function ShareBox({ content, index, date, box, options }) {
             className={styles.shareBox__close}
             style={{ color, fontFamily: font }}
           >
-            {index + 1}
+            {/* {index + 1} */}
+            {formatDateMMDD(date)}
           </div>
         )}
         {isLoading && <Loading />}
