@@ -9,6 +9,7 @@ import useFetchData from '../hooks/useFetchData';
 import useFormInput from '../hooks/useFormInput';
 import { useAuthContext } from '../context/AuthContext';
 import { useFormContext } from '../context/FormContext';
+import { redirectErrorPage } from '../errors/handleError';
 import ERRORS from '../errors/errorMessage';
 import styles from './DailyBoxesForm.module.scss';
 import Loading from '../components/shared/Loading';
@@ -40,11 +41,9 @@ export default function DailyBoxesForm() {
   function openModal() {
     if (formData.dailyBoxes.every((box) => !hasContent(box))) {
       setIsOpen((prevIsOpen) => !prevIsOpen);
-    } else {
-      if (validateForm()) {
-        setIsDailyBoxesValid(true);
-        navigate(`/custom/style/${calendarId}`);
-      }
+    } else if (validateForm()) {
+      setIsDailyBoxesValid(true);
+      navigate(`/custom/style/${calendarId}`);
     }
   }
 
