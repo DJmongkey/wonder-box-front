@@ -42,14 +42,6 @@ export default function Navbar() {
       >
         스타일
       </Button>
-      <FiChevronRight />
-      <Button
-        to={`/custom/preview/${calendarId}`}
-        customLink={styles.navBtn}
-        disabled={!visitedTabs.preview}
-      >
-        미리보기
-      </Button>
     </nav>
   );
 }

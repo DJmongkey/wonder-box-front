@@ -1,12 +1,13 @@
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { IoClose } from 'react-icons/io5';
 
-import { useEffect, useState } from 'react';
+import Modal from '../components/shared/Modal';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
 import StylePreview from '../components/style/StylePreview';
 import StyleEditor from '../components/style/StyleEditor';
-import Modal from '../components/shared/Modal';
+
 import { useAuthContext } from '../context/AuthContext';
 import useFormInput from '../hooks/useFormInput';
 import useFetchData from '../hooks/useFetchData';
@@ -285,7 +286,7 @@ export default function StyleForm() {
                 className={styles.icon__close}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleClose();
+                  setIsOpen(false);
                 }}
               >
                 <IoClose />

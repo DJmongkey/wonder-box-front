@@ -11,7 +11,6 @@ export function FormProvider({ children }) {
     baseinfo: true,
     dailyboxes: false,
     style: false,
-    preview: false,
   });
 
   return (

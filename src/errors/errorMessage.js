@@ -41,6 +41,9 @@ const ERRORS = {
     INVALID_FILE_TYPE: '유효한 파일 타입이 아닙니다.',
     INVALID_URL_PATH: '유효한 URL 경로가 아닙니다.',
     FAILED_UPLOAD: '파일 업로드에 실패했습니다.',
+    LIMIT_MAX_SIZE_IMAGE: '이미지 파일은 10MB를 초과할 수 없습니다.',
+    LIMIT_MAX_SIZE_VIDEO: '비디오 파일은 50MB를 초과할 수 없습니다.',
+    LIMIT_MAX_SIZE_AUDIO: '오디오 파일은 10MB를 초과할 수 없습니다.',
     STYLE: {
       NEED_COLOR: '모든 색상을 지정해주세요',
       NEED_FONT: '글씨체를 지정해주세요',

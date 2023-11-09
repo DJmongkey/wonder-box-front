@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { validateInput } from '../errors/validateInput';
+import ERRORS from '../errors/errorMessage';
 
 export default function useFormInput(initialValues) {
   const [formData, setFormData] = useState(initialValues);
@@ -16,6 +17,27 @@ export default function useFormInput(initialValues) {
 
     if (type === 'file') {
       const fileValue = files.length > 0 ? files[0] : null;
+
+      const maxFileSize = {
+        imageFile: 10 * 1024 * 1024,
+        videoFile: 50 * 1024 * 1024,
+        audioFile: 10 * 1024 * 1024,
+      };
+
+      if (fileValue && fileValue.size > maxFileSize[name]) {
+        const limitFileSizeError = {
+          imageFile: ERRORS.CALENDAR.LIMIT_MAX_SIZE_IMAGE,
+          videoFile: ERRORS.CALENDAR.LIMIT_MAX_SIZE_VIDEO,
+          audioFile: ERRORS.CALENDAR.LIMIT_MAX_SIZE_AUDIO,
+        };
+
+        setFormErrors((prevFormErrors) => ({
+          ...prevFormErrors,
+          [name]: limitFileSizeError[name],
+        }));
+
+        return;
+      }
 
       const fileFieldName = name;
       const urlFieldName = name.replace('File', '');
