@@ -63,7 +63,7 @@ export default function SharedCalendar() {
             fontFamily: titleFont,
           }}
         >
-          {title}
+          <div className={styles.wonderBox__title__inside}>{title}</div>
         </div>
         {dailyBoxes.map((box, index) => (
           <ShareBox

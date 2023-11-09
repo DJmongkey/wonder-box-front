@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { IoClose } from 'react-icons/io5';
 
+import { useEffect, useState } from 'react';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
 import StylePreview from '../components/style/StylePreview';
@@ -13,7 +14,6 @@ import useFetchData from '../hooks/useFetchData';
 import ERRORS from '../errors/errorMessage';
 import { redirectErrorPage } from '../errors/handleError';
 import styles from './StyleForm.module.scss';
-import { IoClose } from 'react-icons/io5';
 
 const defaultStyle = {
   titleFont: 'Playpen Sans',
@@ -102,7 +102,9 @@ export default function StyleForm() {
 
         const data = await fetchData(fetchUrl, fetchMethod, {}, uploadData);
 
-        updateFormData({ sharedUrl: data.shareUrl });
+        updateFormData({
+          sharedUrl: data.sharedUrl,
+        });
 
         setIsStyleValid(true);
       }

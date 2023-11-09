@@ -226,7 +226,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
           </video>
         ) : hasAudio ? (
           <audio controls>
-            <source src={previewAudio} type="audio/mpeg"></source>
+            <source src={previewAudio} type="audio/mpeg" />
           </audio>
         ) : (
           <div className={styles.text__preview}>{formData.text}</div>
@@ -293,7 +293,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   ))}
                 {previewImage && (
                   <div className={styles.preview__image}>
-                    <img src={previewImage} alt={`이미지`} />
+                    <img src={previewImage} alt="이미지" />
                     <IoTrashBin
                       size="14"
                       className={styles.icon__delete}
