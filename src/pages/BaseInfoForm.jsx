@@ -16,6 +16,7 @@ import styles from './BaseInfoForm.module.scss';
 export default function BaseInfoForm() {
   const { user } = useAuthContext();
   const { calendarId } = useParams();
+  const localId = localStorage.getItem('id');
 
   const { fetchData, isLoading, setIsLoading, error, navigate } =
     useFetchData();
@@ -101,16 +102,34 @@ export default function BaseInfoForm() {
           'Content-Type': 'application/json',
         };
 
-        const data = await fetchData(
-          fetchUrl,
-          fetchMethod,
-          fetchHeaders,
-          JSON.stringify(payload),
-        );
+        const localData = JSON.parse(localStorage.getItem(localId));
 
-        const postCalendarId = await data.calendarId;
+        if (localData) {
+          const { dailyBoxes } = localData;
 
-        navigate(`/custom/daily-boxes/${calendarId || postCalendarId}`);
+          const updatedPayload = {
+            ...payload,
+            localDailyBox: dailyBoxes,
+          };
+
+          const data = await fetchData(
+            fetchUrl,
+            fetchMethod,
+            fetchHeaders,
+            JSON.stringify(updatedPayload),
+          );
+          const postCalendarId = await data.calendarId;
+          navigate(`/custom/daily-boxes/${calendarId || postCalendarId}`);
+        } else {
+          const data = await fetchData(
+            fetchUrl,
+            fetchMethod,
+            fetchHeaders,
+            JSON.stringify(payload),
+          );
+          const postCalendarId = await data.calendarId;
+          navigate(`/custom/daily-boxes/${calendarId || postCalendarId}`);
+        }
       }
     } catch (error) {
       redirectErrorPage(navigate, error);
@@ -139,24 +158,11 @@ export default function BaseInfoForm() {
     }
 
     function getLocalBaseInfo(calendarId) {
-      const localCalendarId = localStorage.getItem('id');
-
-      if (localCalendarId !== calendarId) {
+      if (localId !== calendarId) {
         redirectErrorPage(navigate, undefined, ERRORS.AUTH.UNAUTHORIZED, 401);
       }
-      const localBaseInfo = JSON.parse(localStorage.getItem(localCalendarId));
 
-      if (localBaseInfo) {
-        const { title, creator, startDate, endDate, options } = localBaseInfo;
-
-        updateFormData({
-          title,
-          creator,
-          startDate: formatDateKrTime(startDate),
-          endDate: formatDateKrTime(endDate),
-          options,
-        });
-      }
+      getLocalStorageBaseInfo(localId);
     }
 
     if (calendarId && !isLoaded) {
@@ -167,7 +173,26 @@ export default function BaseInfoForm() {
       }
       setIsLoaded(true);
     }
+    if (localId) {
+      getLocalStorageBaseInfo(localId);
+    }
   }, [calendarId, user]);
+
+  function getLocalStorageBaseInfo(localId) {
+    const localBaseInfo = JSON.parse(localStorage.getItem(localId));
+
+    if (localBaseInfo) {
+      const { title, creator, startDate, endDate, options } = localBaseInfo;
+
+      updateFormData({
+        title,
+        creator,
+        startDate: formatDateKrTime(startDate),
+        endDate: formatDateKrTime(endDate),
+        options,
+      });
+    }
+  }
 
   return (
     <div className={styles.container}>
