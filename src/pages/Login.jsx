@@ -39,7 +39,7 @@ export default function Login() {
       setIsLoading(false);
 
       login(data.accessToken);
-      navigate('/');
+      navigate('/custom/base-info');
     } catch (error) {
       setIsLoading(false);
       setError(
