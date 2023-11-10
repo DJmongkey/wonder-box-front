@@ -34,6 +34,9 @@ export default function StyleForm() {
 
   const { user } = useAuthContext();
   const { calendarId } = useParams();
+
+  const localCalendarId = localStorage.getItem('id');
+
   const { fetchData, isLoading, setIsLoading, navigate, error } =
     useFetchData();
 
@@ -96,6 +99,11 @@ export default function StyleForm() {
 
         updateFormData({ sharedUrl: data.sharedUrl });
 
+        if (localCalendarId) {
+          localStorage.removeItem(localCalendarId);
+          localStorage.removeItem('id');
+        }
+
         setIsOpen(true);
       }
 
@@ -113,7 +121,6 @@ export default function StyleForm() {
           },
         };
 
-        const localCalendarId = JSON.parse(localStorage.getItem('id'));
         const localCalendar = JSON.parse(localStorage.getItem(localCalendarId));
 
         setIsLoading(true);
@@ -153,7 +160,6 @@ export default function StyleForm() {
             image,
             box,
           } = data.style;
-
           setPreviewImage(image);
 
           updateFormData({
@@ -169,43 +175,19 @@ export default function StyleForm() {
 
           setExistingStyleData(true);
         }
+        if (localCalendarId) {
+          getLocalData();
+        }
       } catch (error) {
         redirectErrorPage(navigate, error);
       }
     }
 
     function getLocalStyle(calendarId) {
-      const localCalendarId = localStorage.getItem('id');
-
       if (localCalendarId !== calendarId) {
         redirectErrorPage(navigate, undefined, ERRORS.AUTH.UNAUTHORIZED, 401);
       }
-
-      const localCalendar = JSON.parse(localStorage.getItem(localCalendarId));
-
-      if (localCalendar && localCalendar.style) {
-        const { titleFont, titleColor, borderColor, backgroundColor, image } =
-          localCalendar.style;
-
-        const { font, color, bgColor } = localCalendar.style.box;
-
-        if (image) {
-          setPreviewImage(image);
-        } else {
-          setPreviewImage('');
-        }
-
-        updateFormData({
-          titleFont,
-          titleColor,
-          borderColor,
-          backgroundColor,
-          image,
-          font,
-          color,
-          bgColor,
-        });
-      }
+      getLocalData();
     }
 
     if (user) {
@@ -215,16 +197,37 @@ export default function StyleForm() {
     }
   }, [calendarId, user]);
 
-
-  function handleClose() {
-    setIsStyleValid(true);
-    setIsOpen(false);
-  }
-
   function handleCopyClipBoard(text) {
     navigator.clipboard.writeText(text);
   }
 
+  function getLocalData() {
+    const localCalendar = JSON.parse(localStorage.getItem(localCalendarId));
+
+    if (localCalendar && localCalendar.style) {
+      const { titleFont, titleColor, borderColor, backgroundColor, image } =
+        localCalendar.style;
+
+      const { font, color, bgColor } = localCalendar.style.box;
+
+      if (image) {
+        setPreviewImage(image);
+      } else {
+        setPreviewImage('');
+      }
+
+      updateFormData({
+        titleFont,
+        titleColor,
+        borderColor,
+        backgroundColor,
+        image,
+        font,
+        color,
+        bgColor,
+      });
+    }
+  }
 
   return (
     <div className={styles.container}>
