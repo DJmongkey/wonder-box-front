@@ -13,7 +13,6 @@ import { redirectErrorPage } from '../errors/handleError';
 import ERRORS from '../errors/errorMessage';
 import styles from './DailyBoxesForm.module.scss';
 
-
 export default function DailyBoxesForm() {
   const { calendarId } = useParams();
   const { user } = useAuthContext();
@@ -65,6 +64,7 @@ export default function DailyBoxesForm() {
           endDate: dailyBoxes[dailyBoxes.length - 1].date,
           dailyBoxes,
         });
+
         setIsLoading(false);
       } catch (error) {
         redirectErrorPage(navigate, error);
@@ -122,7 +122,7 @@ export default function DailyBoxesForm() {
       </div>
       {isOpen && (
         <Modal isOpen={isOpen} className={styles.modal__notice}>
-          <p>아무것도 입력하지 않은 날짜에는 임의의 사진이 보여집니다.</p>
+          <p>아무것도 입력하지 않은 날짜에는 빈 칸이 보여집니다.</p>
           <p>그래도 저장하시겠습니까?</p>
           <div className={styles.button__block}>
             <Link to={`/custom/style/${calendarId}`} className={styles.moveBtn}>
