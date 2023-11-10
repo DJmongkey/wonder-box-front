@@ -135,7 +135,13 @@ export default function ShareBox({ content, index, date, box, options }) {
         onClick={handleClickBox}
       >
         {isOpen ? (
-          <div className={styles.shareBox__content}>
+          <div
+            className={
+              formData.text
+                ? styles.shareBox__content
+                : styles.shareBox__content__media
+            }
+          >
             {hasImage ? (
               <img src={previewImage} alt="이미지 미리보기" />
             ) : hasVideo ? (
