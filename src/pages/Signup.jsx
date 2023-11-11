@@ -120,7 +120,8 @@ export default function Signup() {
       navigate('/custom/base-info');
     } catch (error) {
       setIsLoading(false);
-      setError(error.message || ERRORS.PROCESS_ERR);
+      setError(ERRORS.PROCESS_ERR);
+      console.error(error.message);
     }
   }
 

@@ -6,6 +6,7 @@ import { useAuthContext } from '../context/AuthContext';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
 import styles from './Login.module.scss';
+import ERRORS from '../errors/errorMessage';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -42,10 +43,8 @@ export default function Login() {
       navigate('/custom/base-info');
     } catch (error) {
       setIsLoading(false);
-      setError(
-        error.message ||
-          '로그인 처리 중 오류가 발생하였습니다. 다시 시도해 주세요.',
-      );
+      setError(ERRORS.PROCESS_ERR);
+      console.log(error);
     }
   }
 
