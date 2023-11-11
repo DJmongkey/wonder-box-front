@@ -147,17 +147,18 @@ export default function ShareBox({ content, index, date, box, options }) {
             ) : hasVideo ? (
               <video width="400" height="240" controls>
                 <source src={previewVideo} type="video/mp4" />
-                <source src={previewVideo} type="'video/x-matroska'" />
-                <source src={previewVideo} type="'video/quicktime'" />
-                <source src={previewVideo} type="'video/webm'" />
+                <source src={previewVideo} type="video/webm" />
+                <source src={previewAudio} type="video/ogg" />
+                <source src={previewVideo} type="video/x-matroska" />
+                <source src={previewVideo} type="video/quicktime" />
               </video>
             ) : hasAudio ? (
               <audio controls>
-                <source src={previewAudio} type="audio/mpeg" />
-                <source src={previewAudio} type="audio/mp4" />
                 <source src={previewAudio} type="audio/mp3" />
+                <source src={previewAudio} type="audio/mp4" />
+                <source src={previewAudio} type="audio/mpeg" />
                 <source src={previewAudio} type="audio/wav" />
-                <source src={previewAudio} type="audio/oog" />
+                <source src={previewAudio} type="audio/ogg" />
               </audio>
             ) : (
               <div className={styles.shareBox__text__only}>{formData.text}</div>
@@ -181,14 +182,19 @@ export default function ShareBox({ content, index, date, box, options }) {
             {hasVideo && (
               <video width="320" height="240" controls>
                 <source src={previewVideo} type="video/mp4" />
-                <source src={previewVideo} type="'video/x-matroska'" />
-                <source src={previewVideo} type="'video/quicktime'" />
-                <source src={previewVideo} type="'video/webm'" />
+                <source src={previewVideo} type="video/webm" />
+                <source src={previewAudio} type="video/ogg" />
+                <source src={previewVideo} type="video/x-matroska" />
+                <source src={previewVideo} type="video/quicktime" />
               </video>
             )}
             {hasAudio && (
               <audio controls>
+                <source src={previewAudio} type="audio/mp3" />
+                <source src={previewAudio} type="audio/mp4" />
                 <source src={previewAudio} type="audio/mpeg" />
+                <source src={previewAudio} type="audio/wav" />
+                <source src={previewAudio} type="audio/ogg" />
               </audio>
             )}
             <div>{formData.text}</div>

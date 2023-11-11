@@ -217,9 +217,10 @@ export default function DailyBox({ dailyBoxId, date, content }) {
         ) : hasVideo ? (
           <video width="320" height="240" controls>
             <source src={previewVideo} type="video/mp4" />
+            <source src={previewVideo} type="video/webm" />
+            <source src={previewAudio} type="video/oog" />
             <source src={previewVideo} type="video/x-matroska" />
             <source src={previewVideo} type="video/quicktime" />
-            <source src={previewVideo} type="video/webm" />
           </video>
         ) : hasAudio ? (
           <audio controls>
@@ -329,7 +330,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   type="file"
                   id="videoFile"
                   name="videoFile"
-                  accept=".mp4, .mkv, .mov, .webm"
+                  accept=".mp4, .webm, .ogg, .mkv, .mov"
                   onChange={handleInputChange}
                   className={styles.input__file}
                   isRequired={false}
@@ -345,9 +346,10 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   <div className={styles.preview__video}>
                     <video width="430" height="240" controls>
                       <source src={previewVideo} type="video/mp4" />
+                      <source src={previewVideo} type="video/webm" />
+                      <source src={previewAudio} type="video/ogg" />
                       <source src={previewVideo} type="video/x-matroska" />
                       <source src={previewVideo} type="video/quicktime" />
-                      <source src={previewVideo} type="video/webm" />
                       해당 브라우저에서 비디오를 재생 할 수 없습니다.
                     </video>
                     <IoTrashBin
@@ -375,7 +377,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   type="file"
                   id="audioFile"
                   name="audioFile"
-                  accept=".mp3, .mp4, .mpeg, .wav, .oog"
+                  accept=".mp3, .mp4, .mpeg, .wav, .ogg"
                   onChange={handleInputChange}
                   className={styles.input__file}
                   isRequired={false}
@@ -391,10 +393,10 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   <div className={styles.preview__audio}>
                     <audio controls>
                       <source src={previewAudio} type="audio/mp3" />
-                      <source src={previewAudio} type="audio/mpeg" />
                       <source src={previewAudio} type="audio/mp4" />
+                      <source src={previewAudio} type="audio/mpeg" />
                       <source src={previewAudio} type="audio/wav" />
-                      <source src={previewAudio} type="audio/oog" />
+                      <source src={previewAudio} type="audio/ogg" />
                       해당 브라우저에서 오디오 파일을 재생 할 수 없습니다.
                     </audio>
                     <IoTrashBin
