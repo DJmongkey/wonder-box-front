@@ -120,8 +120,8 @@ export default function Signup() {
       navigate('/custom/base-info');
     } catch (error) {
       setIsLoading(false);
-      setError(ERRORS.PROCESS_ERR);
-      console.error(error.message);
+      setError(error.message || ERRORS.PROCESS_ERR);
+      console.error(error);
     }
   }
 
@@ -175,7 +175,6 @@ export default function Signup() {
           <div className={styles.error}>{passwordConfirmError}</div>
         )}
         {error && <div className={styles.error}>{error}</div>}
-
         <Button type="submit">회원가입</Button>
       </form>
       <div className={styles.divider} />

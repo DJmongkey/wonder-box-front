@@ -6,19 +6,27 @@ import { useAuthContext } from '../context/AuthContext';
 import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
 import styles from './Login.module.scss';
-import ERRORS from '../errors/errorMessage';
+import useFormInput from '../hooks/useFormInput';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const { login } = useAuthContext();
 
   const navigate = useNavigate();
 
+  const { formData, formErrors, handleInputChange, validateForm } =
+    useFormInput({ email: '', password: '' });
+
+  const { email, password } = formData;
+
   async function handleSubmit(event) {
     event.preventDefault();
+
+    const isValid = validateForm();
+
+    if (!isValid) {
+      return;
+    }
 
     const payload = { email, password };
 
@@ -43,7 +51,6 @@ export default function Login() {
       navigate('/custom/base-info');
     } catch (error) {
       setIsLoading(false);
-      setError(ERRORS.PROCESS_ERR);
       console.log(error);
     }
   }
@@ -60,8 +67,9 @@ export default function Login() {
           <input
             type="email"
             id="email"
+            name="email"
             placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -72,13 +80,18 @@ export default function Login() {
           <input
             type="password"
             id="password"
+            name="password"
             placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleInputChange}
             required
           />
         </div>
-        {error && <div className={styles.error}>{error}</div>}
-
+        {formErrors.email ||
+          (formErrors.password && (
+            <div className={styles.error}>
+              {formErrors.email || formErrors.password}
+            </div>
+          ))}
         <Button type="submit">로그인</Button>
       </form>
       <div className={styles.divider} />
