@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
 import Input from '../components/shared/Input';
 
 describe('Input Component Tests', () => {
@@ -34,6 +35,7 @@ describe('Input Component Tests', () => {
     expect(handleChange).toHaveBeenCalledWith(expect.anything());
     expect(inputElement.value).toBe('Hello, World!');
   });
+
   it('renders date input correctly', () => {
     render(<Input type="date" id="testDate" label="Test Date" />);
 
