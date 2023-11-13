@@ -1,6 +1,6 @@
 @import '../../style.scss';
 
-.modal_overlay {
+.modal__overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,11 +12,12 @@
   @include set-center;
 }
 
-.modal_content {
+.modal__content {
   background-color: $lightGray1;
   padding: 20px;
   border-radius: 5px;
   max-width: 80%;
   width: 400px;
   cursor: auto;
+  z-index: 1000;
 }

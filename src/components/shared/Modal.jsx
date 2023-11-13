@@ -5,8 +5,8 @@ export default function Modal({ children, isOpen, className }) {
     return null;
   }
   return (
-    <div className={styles.modal_overlay}>
-      <div className={`${styles.modal_content} ${className}`}>{children}</div>
+    <div className={styles.modal__overlay}>
+      <div className={`${styles.modal__content} ${className}`}>{children}</div>
     </div>
   );
 }

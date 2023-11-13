@@ -7,9 +7,11 @@ import Button from '../components/shared/Button';
 import Loading from '../components/shared/Loading';
 import styles from './Login.module.scss';
 import useFormInput from '../hooks/useFormInput';
+import ERRORS from '../errors/errorMessage';
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const { login } = useAuthContext();
 
   const navigate = useNavigate();
@@ -51,7 +53,7 @@ export default function Login() {
       navigate('/custom/base-info');
     } catch (error) {
       setIsLoading(false);
-      console.log(error);
+      setError(error.message || ERRORS.PROCESS_ERR);
     }
   }
 
@@ -86,12 +88,11 @@ export default function Login() {
             required
           />
         </div>
-        {formErrors.email ||
-          (formErrors.password && (
-            <div className={styles.error}>
-              {formErrors.email || formErrors.password}
-            </div>
-          ))}
+        {(formErrors.email || formErrors.password || error) && (
+          <div className={styles.error}>
+            {formErrors.email || formErrors.password || error}
+          </div>
+        )}
         <Button type="submit">로그인</Button>
       </form>
       <div className={styles.divider} />

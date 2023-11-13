@@ -12,7 +12,7 @@ const SPECIAL_CHARACTER = `!@#$%^&*()-_=+₩~\\{\\}\\[\\]\\|\\:\\;\\"\\'\\<\\>\\
 
 const validationRules = {
   email: {
-    regex: new RegExp(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$`),
+    regex: new RegExp(`^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$`),
     message: '올바르지 않은 이메일 주소입니다.',
   },
   password: {

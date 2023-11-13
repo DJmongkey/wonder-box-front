@@ -136,16 +136,22 @@ export default function ShareBox({ content, index, date, box, options }) {
       >
         {isOpen ? (
           <div
-            className={
-              formData.text
-                ? styles.shareBox__content
-                : styles.shareBox__content__media
-            }
+            className={styles.shareBox__content}
+            style={{ backgroundColor: bgColor, color, fontFamily: font }}
           >
             {hasImage ? (
-              <img src={previewImage} alt="이미지 미리보기" />
+              <img
+                className={`${styles.preview__image} ${styles.preview}`}
+                src={previewImage}
+                alt="이미지 미리보기"
+              />
             ) : hasVideo ? (
-              <video width="400" height="240" controls>
+              <video
+                className={`${styles.preview__video} ${styles.preview}`}
+                width="400"
+                height="240"
+                controls
+              >
                 <source src={previewVideo} type="video/mp4" />
                 <source src={previewVideo} type="video/webm" />
                 <source src={previewAudio} type="video/ogg" />
@@ -153,7 +159,10 @@ export default function ShareBox({ content, index, date, box, options }) {
                 <source src={previewVideo} type="video/quicktime" />
               </video>
             ) : hasAudio ? (
-              <audio controls>
+              <audio
+                className={`${styles.preview__audio} ${styles.preview}`}
+                controls
+              >
                 <source src={previewAudio} type="audio/mp3" />
                 <source src={previewAudio} type="audio/mp4" />
                 <source src={previewAudio} type="audio/mpeg" />
@@ -164,13 +173,15 @@ export default function ShareBox({ content, index, date, box, options }) {
               <div className={styles.shareBox__text__only}>{formData.text}</div>
             )}
             {displayedMedia && formData.text && (
-              <div className={styles.shareBox__text}>{formData.text}</div>
+              <div className={styles.shareBox__text__hover}>
+                {formData.text}
+              </div>
             )}
           </div>
         ) : (
           <div
-            className={styles.shareBox__close}
-            style={{ color, fontFamily: font }}
+            className={styles.date}
+            style={{ backgroundColor: bgColor, color, fontFamily: font }}
           >
             {formatDateMMDD(date)}
           </div>
@@ -178,29 +189,33 @@ export default function ShareBox({ content, index, date, box, options }) {
         {isLoading && <Loading />}
         {isBoxOpen && (
           <Modal isOpen={isOpen} className={styles.modal__contents}>
-            {hasImage && <img src={previewImage} alt="이미지" />}
-            {hasVideo && (
-              <video width="320" height="240" controls>
-                <source src={previewVideo} type="video/mp4" />
-                <source src={previewVideo} type="video/webm" />
-                <source src={previewAudio} type="video/ogg" />
-                <source src={previewVideo} type="video/x-matroska" />
-                <source src={previewVideo} type="video/quicktime" />
-              </video>
-            )}
-            {hasAudio && (
-              <audio controls>
-                <source src={previewAudio} type="audio/mp3" />
-                <source src={previewAudio} type="audio/mp4" />
-                <source src={previewAudio} type="audio/mpeg" />
-                <source src={previewAudio} type="audio/wav" />
-                <source src={previewAudio} type="audio/ogg" />
-              </audio>
-            )}
-            <div>{formData.text}</div>
-            <span onClick={handleModalClose} className={styles.icon__close}>
-              <IoClose />
-            </span>
+            <div className={styles.contents__wrapper}>
+              <div onClick={handleModalClose} className={styles.icon__close}>
+                <IoClose />
+              </div>
+              {hasImage && <img src={previewImage} alt="이미지" />}
+              {hasVideo && (
+                <video width="320" height="240" controls>
+                  <source src={previewVideo} type="video/mp4" />
+                  <source src={previewVideo} type="video/webm" />
+                  <source src={previewAudio} type="video/ogg" />
+                  <source src={previewVideo} type="video/x-matroska" />
+                  <source src={previewVideo} type="video/quicktime" />
+                </video>
+              )}
+              {hasAudio && (
+                <audio controls>
+                  <source src={previewAudio} type="audio/mp3" />
+                  <source src={previewAudio} type="audio/mp4" />
+                  <source src={previewAudio} type="audio/mpeg" />
+                  <source src={previewAudio} type="audio/wav" />
+                  <source src={previewAudio} type="audio/ogg" />
+                </audio>
+              )}
+              <div className={styles.modal__text} style={{ fontFamily: font }}>
+                {formData.text}
+              </div>
+            </div>
           </Modal>
         )}
       </div>

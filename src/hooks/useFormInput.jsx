@@ -105,6 +105,8 @@ export default function useFormInput(initialValues) {
       [name]: value,
     });
 
+    console.log('error', error);
+
     setFormErrors((prevFormErrors) => ({
       ...prevFormErrors,
       [name]: error,

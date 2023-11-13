@@ -259,6 +259,7 @@
       .preview__audio {
         @include set-center($direction: row);
       }
+
       button {
         background-color: $softRed;
         color: $white;
