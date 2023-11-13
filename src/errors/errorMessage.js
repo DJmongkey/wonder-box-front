@@ -9,6 +9,7 @@ const ERRORS = {
     EXISTING_EMAIL: '이미 가입된 이메일 주소입니다.',
     UNMATCHED_PW: '비밀번호와 일치하지 않습니다.',
     WRONG_EMAIL_PW: '이메일 주소 또는 비밀번호를 잘못 입력하셨습니다.',
+    INVALID_EMAIL: '유효한 이메일 형식이 아닙니다.',
     USER_NOT_FOUND: '사용자를 찾을 수 없습니다.',
     UNAUTHORIZED: '접근 권한이 없습니다.',
     NOT_FOUND_TOKEN:

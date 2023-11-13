@@ -1,72 +1,84 @@
 @import '../../style.scss';
 
 .shareBox__container {
+  position: relative;
   width: 300px;
   height: 250px;
-  border: 1px solid black;
-  border-radius: 10px;
+  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.76);
+  border-radius: 20px;
   flex-grow: 1;
-  position: relative;
+  overflow: hidden;
 
   &:hover,
   &:focus {
     cursor: pointer;
   }
 
-  .shareBox__content__media {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 0 0 10px 10px;
-    overflow: hidden;
-
-    img,
-    video,
-    audio {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 0 0 10px 10px;
-    }
-  }
-
   .shareBox__content {
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: 0 0 10px 10px;
+    border-radius: 20px;
     overflow: hidden;
 
-    img,
-    video,
-    audio {
+    .preview {
       display: block;
       width: 100%;
-      height: calc(100% - 40px - 6px);
+      height: 100%;
       object-fit: cover;
-      border-radius: 0 0 10px 10px;
+      opacity: 1;
+      transition: all 0.2s ease-in-out;
+
+      &:hover,
+      &:focus {
+        opacity: 0.6;
+      }
     }
 
-    .shareBox__text {
-      width: 100%;
-      height: calc(100% - 40px - 6px);
-      color: $black;
-      padding: 10px;
-      font-weight: 500;
-      text-align: center;
+    .preview__audio {
+      width: 90%;
+      height: 60%;
+      margin: 0 auto;
     }
 
     .shareBox__text__only {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: $size-2;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+      font-weight: 500;
+      text-align: center;
+      transition: opacity 0.3s;
+    }
+
+    &:hover .shareBox__text__only {
+      opacity: 1;
+    }
+
+    .shareBox__text__hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      transition: opacity 0.3s;
+      padding: 10px;
+      opacity: 0;
+      font-weight: 500;
+      text-align: center;
+      @include set-center;
+    }
+
+    &:hover .shareBox__text__hover {
+      opacity: 1;
     }
   }
 
-  .shareBox__close {
+  .date {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -74,45 +86,62 @@
     font-size: $size-3;
     font-weight: bold;
   }
-}
 
-.modal__contents {
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 80%;
-  max-width: 600px;
-  padding: 0;
-  padding-bottom: 20px;
-  border-radius: 6px;
-  overflow-y: scroll;
+  .modal__contents {
+    position: relative;
+    margin: 0 auto;
+    width: 80%;
+    max-width: 600px;
+    height: 80%;
+    border-radius: 15px;
 
-  img,
-  video,
-  audio {
-    display: block;
-    width: 97%;
-    height: 450px;
-    object-fit: cover;
-    border-radius: 0 0 10px 10px;
-    margin: auto;
-    margin-left: 15px;
-  }
+    .contents__wrapper {
+      position: absolute;
+      width: 100%;
+      height: 95%;
+      padding: 20px;
+      padding-top: 40px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: auto;
+      margin: auto 0;
+      @include set-center;
 
-  img {
-    object-fit: contain;
-  }
+      img,
+      video,
+      audio {
+        width: 95%;
+        margin: 20px auto;
+      }
 
-  .icon__close {
-    font-size: $size-3;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        max-height: 500px;
+      }
 
-    &:hover,
-    &:focus {
-      color: $green;
+      .modal__text {
+        margin: 20px auto;
+      }
+
+      .icon__close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-right: 15px;
+        font-size: $size-3;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        text-align: right;
+
+        &:hover,
+        &:focus {
+          color: $green;
+        }
+      }
     }
   }
 }
