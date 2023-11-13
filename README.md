@@ -70,15 +70,6 @@
 
 ### 2. 백엔드 배포의 어려움
 
-cookie에 Refresh Token 저장 하기위해 secure https
-
-### 3. Refresh Token 해결
-
-처음에 AccessToken을 local storage에 저장하도록 했는데 자바스크립트로 접근이 매우 쉽기 때문에 보안에 취약하다. <br />
-유효시간을 1시간으로 두어HttpOnly와 Secure 옵션을 사용해서 어느정도 보안을 가능하게 했고
-RefreshToken을 추가하여
-cookie
-
 ### 3. Vercel 배포후 프론트엔드 SPA 문제로 새로고침, URL 공유 기능 404 페이지로 뜸
 
 ## 추후 추가하고 싶은 기능

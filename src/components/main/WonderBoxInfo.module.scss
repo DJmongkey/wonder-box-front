@@ -1,24 +1,22 @@
 @import '../../style.scss';
 
 .wonderBox_info {
-  width: 80%;
+  max-width: 1000px;
+  width: 70%;
   background-color: $lightGray1;
-  padding: 20px;
-  border: 1px solid #ddd;
+  padding: 25px 40px;
+  border: 1px solid $lightGray2;
   border-radius: 5px;
-  margin: 20px auto;
+  margin: 30px auto;
   text-align: center;
+  color: #555;
 
   & > div {
     margin-bottom: 18px;
-    font-size: 1.2rem;
+    font-size: $size-1;
 
-    &:first-child {
-      color: #555;
-    }
-
-    &:nth-child(2) {
-      color: #555;
+    & > p {
+      margin-bottom: 10px;
     }
   }
 }
@@ -29,23 +27,27 @@
   margin: 20px;
   text-align: center;
   font-size: 1.5rem;
-}
 
-.container strong {
-  font-weight: bold;
-  color: #333;
-}
+  strong {
+    font-weight: bold;
+    color: $black;
+  }
 
-.button {
-  background-color: $green;
-  color: $white;
-  border: none;
-  margin-left: 20px;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition:
-    background-color 0.2s,
-    font-weight 0.2s;
+  .main__button {
+    width: auto;
+    background-color: $green;
+    margin-left: 20px;
+    padding: 10px 15px;
+    transition: all 0.2s;
+    font-family: $enSubFont;
+
+    &:hover,
+    &:focus {
+      background-color: $softGreen-light;
+    }
+  }
+
+  p {
+    line-height: 2.5;
+  }
 }

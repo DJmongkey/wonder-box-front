@@ -185,6 +185,9 @@ export default function StyleEditor({
             isRequired={false}
             className={styles.file__box__upload}
           />
+          {formErrors.imageFile && (
+            <div className={styles.error}>{formErrors.imageFile}</div>
+          )}
           {!user && (
             <div className={styles.error}>
               비회원은 URL 첨부만 이용 가능 합니다
@@ -201,9 +204,6 @@ export default function StyleEditor({
           </div>
         )}
       </div>
-      {formErrors.image && (
-        <div className={styles.error}>{formErrors.image}</div>
-      )}
     </section>
   );
 }

@@ -11,7 +11,15 @@ import ERRORS from '../../errors/errorMessage';
 import { formatDateKrTime, formatDateMMDD } from '../../utils/date';
 import styles from './ShareBox.module.scss';
 
-export default function ShareBox({ content, index, date, box, options }) {
+export default function ShareBox({
+  content,
+  index,
+  date,
+  box,
+  options,
+  dayCount,
+  setDayCount,
+}) {
   const initialValues = {
     text: '',
     imageFile: null,
@@ -39,7 +47,6 @@ export default function ShareBox({ content, index, date, box, options }) {
 
   const [isBoxOpen, setIsBoxOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [dayCount, setDayCount] = useState(0);
   const { notification, showNotification, hideNotification } =
     useNotification();
 
@@ -77,13 +84,12 @@ export default function ShareBox({ content, index, date, box, options }) {
   function handleClickBox() {
     switch (options[0]) {
       case 'current':
-        const todayDate = formatDateKrTime(Date.now());
-        if (
-          formatDateKrTime(date) === todayDate ||
-          formatDateKrTime(date) < todayDate
-        ) {
+        const today = formatDateKrTime(Date.now());
+        const boxDate = formatDateKrTime(date);
+
+        if (boxDate === today || boxDate < today) {
           setIsOpen(true);
-          setIsBoxOpen(!isBoxOpen);
+          setIsBoxOpen(true);
           setIsLoading(true);
         } else {
           showNotification('error', ERRORS.CALENDAR.NOT_TODAY);
@@ -92,30 +98,26 @@ export default function ShareBox({ content, index, date, box, options }) {
       case 'sequence':
         if (index === dayCount) {
           setIsOpen(true);
-          setIsBoxOpen(!isBoxOpen);
+          setIsBoxOpen(true);
+          setDayCount(dayCount + 1);
         } else {
           showNotification('error', ERRORS.CALENDAR.MUST_SELECT_IN_ORDER);
         }
 
         if (isOpen) {
-          setIsBoxOpen(!isBoxOpen);
+          setIsBoxOpen(true);
           setIsLoading(true);
         }
         break;
       case 'anytime':
         setIsOpen(true);
-        setIsBoxOpen(!isBoxOpen);
+        setIsBoxOpen(true);
         setIsLoading(true);
         break;
       default:
         setIsOpen(!isOpen);
     }
     setIsLoading(false);
-    setDayCount((count) => count + 1);
-  }
-
-  function handleModalClose() {
-    setIsBoxOpen(false);
   }
 
   return (
@@ -190,7 +192,13 @@ export default function ShareBox({ content, index, date, box, options }) {
         {isBoxOpen && (
           <Modal isOpen={isOpen} className={styles.modal__contents}>
             <div className={styles.contents__wrapper}>
-              <div onClick={handleModalClose} className={styles.icon__close}>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsBoxOpen(false);
+                }}
+                className={styles.icon__close}
+              >
                 <IoClose />
               </div>
               {hasImage && <img src={previewImage} alt="이미지" />}

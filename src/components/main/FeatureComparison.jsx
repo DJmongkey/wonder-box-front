@@ -29,7 +29,10 @@ export default function FeatureComparison() {
             Simple Wonder Box - <span>For free</span>
           </th>
           <th>
-            <Button onClick={handleSimpleClick}>
+            <Button
+              customClass={styles.main__table__button}
+              onClick={handleSimpleClick}
+            >
               Simple Wonder Box - For free
             </Button>
           </th>
@@ -62,7 +65,10 @@ export default function FeatureComparison() {
             Awesome Wonder Box - <span>For free</span> / 회원가입 필요
           </th>
           <th>
-            <Button onClick={handleAwesomeClick}>
+            <Button
+              customClass={`${styles.main__table__button} ${styles.button__awesome}`}
+              onClick={handleAwesomeClick}
+            >
               Awesome Wonder Box 만들러 가기
             </Button>
           </th>
@@ -70,7 +76,9 @@ export default function FeatureComparison() {
       </thead>
       <tbody>
         <tr>
-          <td colSpan={2}>+ Simple Wonder Box의 모든 기능</td>
+          <td colSpan={2}>
+            <strong>+ Simple Wonder Box의 모든 기능</strong>
+          </td>
         </tr>
         <tr>
           <td className={styles.td_border_right}>업로드 가능한 미디어</td>
@@ -80,7 +88,7 @@ export default function FeatureComparison() {
         </tr>
         <tr>
           <td colSpan={2}>
-            완성된 Wonder Box 캘린더 <strong>저장</strong>, 완성 후{' '}
+            완성된 Wonder Box 캘린더 <strong>저장</strong>, 완성 후
             <strong>수정</strong>
           </td>
         </tr>

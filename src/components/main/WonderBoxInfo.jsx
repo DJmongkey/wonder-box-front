@@ -13,29 +13,35 @@ export default function WonderBoxInfo() {
     <>
       <div className={styles.wonderBox_info}>
         <div>
-          <div>
-            크리스마스 달력, 혹은 홀리데이 캘린더라고 불리는 어드벤트 캘린더를
-            아시나요?
-          </div>
-          <div>
-            12월 1일부터 24일 혹은 25일까지, 크리스마스를 기다리면서 하나씩
-            선물을 열어보는 형식의 달력을 어드벤트 캘린더라고 합니다!
-          </div>
+          <p>🎄 크리스마스 어드벤트 캘린더(Advent Calendar)를 아시나요?</p>
+          <p>
+            12월 1일부터 24일 또는 25일까지 각 날짜에 해당하는 작은 문이나 칸이
+            있는 달력입니다.🗓️
+          </p>
+          <p>
+            🎁 매일 하나씩 다양한 선물이 들어있는 날짜 칸을 열어보며
+            크리스마스까지의 시간을 더욱더 즐겁게 보낼 수 있도록 도와주는 일종의
+            이벤트 캘린더입니다.
+          </p>
         </div>
         <div>
-          사진, 동영상, 메세지를 업로드해서 나만의 어드벤트 캘린더를 만들어
-          소중한 사람들에게 공유하세요!
+          <strong>
+            나만의 어드벤트 캘린더에 사진, 동영상, 음악, 메세지를 담아 소중한
+            사람들에게 공유하세요 ❤️
+          </strong>
         </div>
       </div>
       <div className={styles.container}>
         <div>
           Wonder Box는 <strong>무료</strong> 서비스 입니다.
-          <Button className={styles.button} onClick={handleClick}>
+          <Button customClass={styles.main__button} onClick={handleClick}>
             Simple Wonder Box - For free
           </Button>
         </div>
-        회원가입 유무에 따라 Awesome Wonder Box의 모든 기능을 이용하실 수
-        있어요!
+        <p>
+          회원가입 유무에 따라 Awesome Wonder Box의 모든 기능을 이용하실 수
+          있어요!
+        </p>
       </div>
     </>
   );
