@@ -160,7 +160,10 @@ export default function StyleEditor({
       </div>
       <div className={styles.file__container}>
         <div className={styles.file__input}>
-          <div className={styles.sub__title__bg}>전체 배경 사진 (필수)</div>
+          <div className={styles.sub__title__bg}>전체 배경 사진</div>
+          <div className={styles.sub__title__bg__text}>
+            미입력시 검은색 배경화면으로 보입니다.
+          </div>
           <Input
             type="text"
             id="image"

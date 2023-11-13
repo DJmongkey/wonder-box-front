@@ -11,8 +11,14 @@
     font-size: $size-2;
     font-weight: 600;
     margin-top: 30px;
-    margin-bottom: 20px;
     width: 85%;
+  }
+
+  .sub__title__bg__text {
+    font-size: $size-0;
+    color: $red;
+    margin: 10px 0;
+    margin-left: 65px;
   }
 
   .custom__container {
