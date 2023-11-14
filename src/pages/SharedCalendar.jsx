@@ -12,6 +12,7 @@ export default function SharedCalendar() {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [dayCount, setDayCount] = useState(0);
 
   const { formData, updateFormData } = useFormInput({
     calendar: {},
@@ -92,6 +93,8 @@ export default function SharedCalendar() {
               date={box.date}
               box={boxes}
               options={options}
+              dayCount={dayCount}
+              setDayCount={setDayCount}
             />
           ))}
         </section>

@@ -2,8 +2,8 @@ import { isDateValid } from '../utils/date';
 import ERRORS from './errorMessage';
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/;
-const fontRegex = /^[a-zA-Z\s]+$/;
-const colorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/;
+const fontRegex = /^[a-zA-Z0-9\s-]+$/;
+const colorRegex = /^#([0-9a-fA-F]{3})([0-9a-fA-F]{3})?$/;
 
 export function validateInput(name, value, formData) {
   const newFormData = { ...formData, [name]: value };

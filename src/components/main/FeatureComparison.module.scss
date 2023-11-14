@@ -1,10 +1,22 @@
 @import '../../style.scss';
 
 table {
-  width: 80%;
+  max-width: 1000px;
+  width: 70%;
   border-collapse: collapse;
-  margin: 5rem auto;
-  border: 1px solid $lightGreen;
+  margin: 30px auto;
+  border: 1px solid $softRed;
+
+  th {
+    font-weight: bold;
+    border-bottom: 1px solid $softRed;
+    font-size: $size-1;
+
+    span {
+      font-weight: bold;
+      color: $lightGreen;
+    }
+  }
 
   th,
   td {
@@ -14,47 +26,44 @@ table {
 
   tr {
     td {
-      border-bottom: 1px solid $lightGray1;
+      border-bottom: 1px solid $lightGray2;
     }
-  }
-
-  th {
-    font-weight: bold;
-
-    span {
-      font-weight: bold;
-      color: $lightGreen;
-    }
-  }
-
-  th {
-    width: 50%;
-    border-bottom: 1px solid $lightGreen;
   }
 
   strong {
     color: $red;
   }
 
-  button {
+  .main__table__button {
+    width: auto;
     background-color: $green;
-    color: #fff;
-    border: none;
     margin-left: 20px;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition:
-      background-color 0.2s,
-      font-weight 0.2s;
+    padding: 10px 15px;
+    transition: all 0.2s;
+    font-family: $enSubFont;
+
+    &:hover,
+    &:focus {
+      font-family: $enSubFont;
+      background-color: $softGreen-light;
+    }
+  }
+
+  .button__awesome {
+    background-color: $softRed;
+
+    &:hover,
+    &:focus {
+      font-family: $enSubFont;
+      background-color: $red;
+    }
   }
 }
 
 .td_border_bottom {
-  border-bottom: 1px solid $lightGreen;
+  border-bottom: 1px solid $softRed;
 }
 
 .td_border_right {
-  border-right: 1px solid $lightGray1;
+  border-right: 1px solid $lightGray2;
 }
