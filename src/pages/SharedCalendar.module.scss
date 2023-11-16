@@ -53,18 +53,18 @@
       padding-right: 50px;
       padding-bottom: 80px;
       margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-rows: auto;
+      justify-content: center;
+      place-items: center;
+      grid-gap: 50px;
       text-align: center;
-      justify-content: flex-start;
-      align-items: flex-start;
 
       .wonderBox__title {
         width: 330px;
         height: 150px;
         border-radius: 10px;
-        flex-grow: 1;
         padding: 8px 5px;
         margin-top: 35px;
 
@@ -79,31 +79,5 @@
         }
       }
     }
-  }
-}
-
-@include laptop {
-  .dailyBoxes__container {
-    gap: 30px;
-    max-width: 700px;
-  }
-}
-
-@include tablet {
-  .dailyBoxes__container {
-    justify-content: center;
-    align-items: flex-start;
-    flex-basis: 0;
-    max-width: 430px;
-    gap: 30px;
-  }
-}
-
-@include mobile {
-  .dailyBoxes__container {
-    display: flex;
-    flex-direction: column;
-    max-width: 460px;
-    gap: 40px;
   }
 }
