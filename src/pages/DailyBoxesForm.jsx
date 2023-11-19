@@ -12,6 +12,7 @@ import { useAuthContext } from '../context/AuthContext';
 import { redirectErrorPage } from '../errors/handleError';
 import ERRORS from '../errors/errorMessage';
 import styles from './DailyBoxesForm.module.scss';
+import { formatDateKrTime } from '../utils/date';
 
 export default function DailyBoxesForm() {
   const { calendarId } = useParams();
@@ -57,14 +58,9 @@ export default function DailyBoxesForm() {
 
         setIsLoading(true);
 
-        const { dailyBoxes } = data;
+        const { dailyBoxes, startDate, endDate } = data;
 
-        updateFormData({
-          startDate: dailyBoxes[0].date,
-          endDate: dailyBoxes[dailyBoxes.length - 1].date,
-          dailyBoxes,
-        });
-
+        updateFormData({ ...formData, startDate, endDate, dailyBoxes });
         setIsLoading(false);
       } catch (error) {
         redirectErrorPage(navigate, error);
