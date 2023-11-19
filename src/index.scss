@@ -1,6 +1,28 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=Playpen+Sans:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
 
+@font-face {
+  font-family: 'NPSfontBold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/NPSfontBold.woff2')
+    format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'NPSfontExtraBold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/NPSfontExtraBold.woff2')
+    format('woff2');
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'NPSfontRegular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/NPSfontRegular.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
 *,
 *::before,
 *::after {
@@ -8,7 +30,8 @@
 }
 
 html {
-  font-family: 'Noto Sans KR', 'Roboto', sans-serif, 'Playpen Sans', cursive;
+  font-family: 'Noto Sans KR', 'NPSfontBold', 'Roboto', sans-serif,
+    'Playpen Sans', cursive;
   font-size: 1rem;
   font-weight: normal;
   line-height: 1.5;
