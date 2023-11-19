@@ -250,35 +250,37 @@ export default function BaseInfoForm() {
               {formErrors.startDate || formErrors.endDate}
             </div>
           )}
-          <Input />
           <div className={styles.options}>
-            <Input
-              type="radio"
-              id="current"
-              name="options"
-              value="current"
-              onChange={handleInputChange}
-              label="실제 해당 날짜가 되어야만 열 수 있다."
-              checkedOption={options === 'current'}
-            />
-            <Input
-              type="radio"
-              id="sequence"
-              name="options"
-              value="sequence"
-              onChange={handleInputChange}
-              label="날짜 순서라면 실제 시간 상관없이 열 수 있다."
-              checkedOption={options === 'sequence'}
-            />
-            <Input
-              type="radio"
-              id="anytime"
-              name="options"
-              value="anytime"
-              onChange={handleInputChange}
-              label="날짜, 시간 상관없이 마음대로 열 수 있다."
-              checkedOption={options === 'anytime'}
-            />
+            <div className={styles.option__category}>날짜 박스 오픈 옵션</div>
+            <div className={styles.option}>
+              <Input
+                type="radio"
+                id="current"
+                name="options"
+                value="current"
+                onChange={handleInputChange}
+                label="실제 해당 날짜에만 오픈 가능"
+                checkedOption={options === 'current'}
+              />
+              <Input
+                type="radio"
+                id="sequence"
+                name="options"
+                value="sequence"
+                onChange={handleInputChange}
+                label="실제 날짜와는 상관없이 순서대로 오픈 가능"
+                checkedOption={options === 'sequence'}
+              />
+              <Input
+                type="radio"
+                id="anytime"
+                name="options"
+                value="anytime"
+                onChange={handleInputChange}
+                label="날짜, 순서 상관없이 마음대로 오픈 가능"
+                checkedOption={options === 'anytime'}
+              />
+            </div>
           </div>
           {formErrors.options && (
             <div className={styles.error}>{formErrors.options}</div>
