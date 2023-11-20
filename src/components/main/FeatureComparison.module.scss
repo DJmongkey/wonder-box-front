@@ -1,69 +1,130 @@
 @import '../../style.scss';
 
-table {
-  max-width: 1000px;
-  width: 70%;
-  border-collapse: collapse;
-  margin: 30px auto;
-  border: 1px solid $softRed;
+.plan__container {
+  width: 100%;
+  padding-top: 100px;
+  padding-bottom: 50px;
+  font-family: $krSubFont1;
+  @include set-center;
 
-  th {
-    font-weight: bold;
-    border-bottom: 1px solid $softRed;
-    font-size: $size-1;
+  h1 {
+    font-family: $krSubFont2;
+    font-size: $size-3;
+    margin-bottom: 20px;
 
     span {
-      font-weight: bold;
-      color: $lightGreen;
-    }
-  }
-
-  th,
-  td {
-    padding: 10px;
-    text-align: center;
-  }
-
-  tr {
-    td {
-      border-bottom: 1px solid $lightGray2;
-    }
-  }
-
-  strong {
-    color: $red;
-  }
-
-  .main__table__button {
-    width: auto;
-    background-color: $green;
-    margin-left: 20px;
-    padding: 10px 15px;
-    transition: all 0.2s;
-    font-family: $enSubFont;
-
-    &:hover,
-    &:focus {
       font-family: $enSubFont;
-      background-color: $softGreen-light;
+      font-weight: 800;
+      color: $green;
+    }
+
+    strong {
+      color: $softRed;
     }
   }
 
-  .button__awesome {
-    background-color: $softRed;
+  .plans {
+    max-width: 800px;
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+    @include set-center;
 
-    &:hover,
-    &:focus {
-      font-family: $enSubFont;
-      background-color: $red;
+    .plan__header {
+      display: flex;
+      justify-content: end;
+      width: 100%;
+      margin-bottom: 10px;
+
+      .plan {
+        width: 60%;
+        display: flex;
+
+        button {
+          width: 30%;
+          height: 100px;
+          font-family: $enSubFont;
+          font-weight: 500;
+          font-size: $size-1;
+          padding: 18px;
+          margin: 0 6%;
+          border-radius: 5px;
+          color: $white;
+          transition: all 0.2s;
+        }
+
+        .plan__simple {
+          background-color: $softGreen-light;
+
+          &:hover,
+          &:focus {
+            background-color: $softGreen;
+          }
+        }
+
+        .plan__awesome {
+          background-color: $softRed;
+
+          &:hover,
+          &:focus {
+            background-color: $red;
+          }
+        }
+      }
+    }
+
+    table {
+      width: 100%;
+      display: block;
+
+      tbody {
+        display: flex;
+        flex-direction: column;
+
+        tr {
+          border-bottom: 1px solid $lightGray2;
+          min-height: 50px;
+          @include set-center($direction: row);
+
+          th {
+            width: 30%;
+            display: flex;
+            text-align: left;
+            align-items: center;
+
+            .icon {
+              margin-right: 5px;
+              font-size: 18px;
+            }
+          }
+
+          td {
+            width: 25%;
+            display: block;
+          }
+        }
+
+        tr:first-child,
+        tr:nth-child(3) {
+          td:nth-child(2) {
+            color: $lightGreen;
+          }
+
+          td:last-child {
+            color: $red;
+          }
+        }
+
+        tr:nth-child(n + 6) {
+          td:nth-child(2) {
+            color: #a3a3a3;
+          }
+
+          td:last-child {
+            color: $red;
+          }
+        }
+      }
     }
   }
-}
-
-.td_border_bottom {
-  border-bottom: 1px solid $softRed;
-}
-
-.td_border_right {
-  border-right: 1px solid $lightGray2;
 }

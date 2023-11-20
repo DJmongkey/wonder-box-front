@@ -62,9 +62,19 @@
 
       .options {
         display: flex;
-        flex-direction: column;
-        align-items: end;
-        margin: 20px 0;
+        margin-top: 30px;
+
+        .option__category {
+          width: 310px;
+          font-weight: 500;
+        }
+
+        .option {
+          display: flex;
+          flex-direction: column;
+          align-items: start;
+          width: 100%;
+        }
       }
     }
 

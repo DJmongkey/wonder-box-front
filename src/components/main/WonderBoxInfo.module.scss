@@ -1,53 +1,97 @@
 @import '../../style.scss';
 
-.wonderBox_info {
-  max-width: 1000px;
-  width: 70%;
-  background-color: $lightGray1;
-  padding: 25px 40px;
-  border: 1px solid $lightGray2;
-  border-radius: 5px;
-  margin: 30px auto;
-  text-align: center;
-  color: #555;
+.bg_image {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 70px);
+  object-fit: cover;
 
-  & > div {
-    margin-bottom: 18px;
-    font-size: $size-1;
-
-    & > p {
-      margin-bottom: 10px;
-    }
-  }
+  background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 10%,
+      rgba(255, 255, 255, 0.5) 90%,
+      rgba(255, 255, 255, 0.7) 95%,
+      rgba(255, 255, 255, 0.9) 99%,
+      rgba(255, 255, 255, 1) 100%
+    ),
+    url('https://images.unsplash.com/photo-1606482608486-90b78aac2bea?q=80&w=2946&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.container {
-  padding: 15px;
-  border-radius: 5px;
-  margin: 20px;
-  text-align: center;
-  font-size: 1.5rem;
+.wonderBox__info {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.686);
+  width: 100%;
+  height: calc(100vh - 70px);
+  object-fit: cover;
 
-  strong {
-    font-weight: bold;
-    color: $black;
-  }
+  .advent_calendar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 1200px;
+    width: 80%;
+    color: $white;
+    margin: 0 auto;
+    font-family: $krSubFont1;
+    line-height: 1.7;
+    @include set-center;
 
-  .main__button {
-    width: auto;
-    background-color: $green;
-    margin-left: 20px;
-    padding: 10px 15px;
-    transition: all 0.2s;
-    font-family: $enSubFont;
+    .advent_calendar__description {
+      display: flex;
+      font-size: 16px;
 
-    &:hover,
-    &:focus {
-      background-color: $softGreen-light;
+      .img__wrapper {
+        margin-right: 30px;
+
+        img {
+          min-width: 15rem;
+          height: 30vh;
+          box-shadow: 0px 0px 20px 5px #0000007e;
+          object-fit: cover;
+        }
+      }
+
+      .advent_calendar__description__text {
+        padding-left: 20px;
+        @include set-center($align: start, $justify: start);
+
+        h1 {
+          font-size: $size-2;
+          font-family: $krSubFont2;
+          margin-bottom: 20px;
+          color: #5bbd7c;
+          text-shadow: 1px 1px 5px #000;
+        }
+
+        & > p {
+          text-align: start;
+          margin-bottom: 8px;
+        }
+      }
     }
-  }
 
-  p {
-    line-height: 2.5;
+    .wonderBox__description {
+      font-size: $size-1;
+      margin-top: 50px;
+
+      strong {
+        font-family: $krSubFont2;
+        color: #f7b9b9;
+      }
+
+      .wonderBox__text {
+        font-family: $enSubFont;
+        font-size: $size-2;
+        font-weight: 600;
+        color: #ffa6a6;
+        text-shadow: 1px 1px 5px #000;
+      }
+    }
   }
 }

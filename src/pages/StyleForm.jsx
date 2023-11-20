@@ -97,10 +97,7 @@ export default function StyleForm() {
 
         const data = await fetchData(fetchUrl, fetchMethod, {}, uploadData);
 
-        updateFormData((prevData) => ({
-          ...prevData,
-          sharedUrl: data.sharedUrl,
-        }));
+        updateFormData({ ...formData, sharedUrl: data.sharedUrl });
 
         if (localCalendarId) {
           localStorage.removeItem(localCalendarId);

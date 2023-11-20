@@ -1,48 +1,46 @@
-import { useNavigate } from 'react-router-dom';
-
-import Button from '../shared/Button';
 import styles from './WonderBoxInfo.module.scss';
 
 export default function WonderBoxInfo() {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate('/custom/base-info');
-  };
   return (
     <>
-      <div className={styles.wonderBox_info}>
-        <div>
-          <p>🎄 크리스마스 어드벤트 캘린더(Advent Calendar)를 아시나요?</p>
-          <p>
-            12월 1일부터 24일 또는 25일까지 각 날짜에 해당하는 작은 문이나 칸이
-            있는 달력입니다.🗓️
-          </p>
-          <p>
-            🎁 매일 하나씩 다양한 선물이 들어있는 날짜 칸을 열어보며
-            크리스마스까지의 시간을 더욱더 즐겁게 보낼 수 있도록 도와주는 일종의
-            이벤트 캘린더입니다.
-          </p>
+      <div className={styles.bg_image}></div>
+      <section className={styles.wonderBox__info}>
+        <div className={styles.advent_calendar}>
+          <div className={styles.advent_calendar__description}>
+            <div className={styles.img__wrapper}>
+              <img src="/image/advent-calendar.jpeg" alt="Advent Calendar" />
+            </div>
+            <div className={styles.advent_calendar__description__text}>
+              <h1>What is Advent Calendar?!</h1>
+              <p>
+                12월 1일부터 24일 또는 25일까지 각 날짜에 해당하는 작은 문이나
+                칸이 있는 달력입니다
+              </p>
+              <p>
+                전통적으로는 종교적인 의미를 가졌으나,
+                <br /> 현재는 🍭사탕, 🍫초콜릿,🪆장난감,🧴화장품 같은 다양한
+                선물이 들어있어
+              </p>
+              <p>
+                매일 하나씩 날짜 칸을 열어보며 🎁
+                <br /> 🎄 크리스마스 전의 시간을 더욱더 즐겁게 보낼 수 있도록
+                도와주는, 일종의 이벤트 캘린더입니다 ✨
+              </p>
+            </div>
+          </div>
+          <div className={styles.wonderBox__description}>
+            <p>
+              <strong className={styles.wonderBox__text}>Wonder Box</strong>는
+              기간을 자유롭게 설정할 수 있는{' '}
+              <strong>나만의 어드벤트 캘린더</strong>를 만들어
+            </p>
+            <p>
+              🎅🏻 <strong>사진, 동영상, 음악, 메세지</strong>를 담아 <br />
+              언제든지 소중한 사람들에게 공유할 수 있는 서비스 입니다 ❤️
+            </p>
+          </div>
         </div>
-        <div>
-          <strong>
-            나만의 어드벤트 캘린더에 사진, 동영상, 음악, 메세지를 담아 소중한
-            사람들에게 공유하세요 ❤️
-          </strong>
-        </div>
-      </div>
-      <div className={styles.container}>
-        <div>
-          Wonder Box는 <strong>무료</strong> 서비스 입니다.
-          <Button customClass={styles.main__button} onClick={handleClick}>
-            Simple Wonder Box - For free
-          </Button>
-        </div>
-        <p>
-          회원가입 유무에 따라 Awesome Wonder Box의 모든 기능을 이용하실 수
-          있어요!
-        </p>
-      </div>
+      </section>
     </>
   );
 }

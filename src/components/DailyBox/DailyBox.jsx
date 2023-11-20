@@ -255,9 +255,15 @@ export default function DailyBox({ dailyBoxId, date, content }) {
             </header>
             <section>
               {user ? (
-                <p className={styles.notice}>
-                  <strong>파일 또는 URL</strong> 한가지만 업로드 가능 합니다.
-                </p>
+                <>
+                  <p className={styles.notice}>
+                    <strong>파일 또는 URL</strong> 한가지만 업로드 가능 합니다.
+                  </p>
+                  <p className={styles.notice}>
+                    <strong>파일 업로드 가능 최대 용량</strong> - 이미지,
+                    오디오: 10MB, 동영상: 50MB
+                  </p>
+                </>
               ) : (
                 <p className={styles.notice}>
                   비회원은 <strong>텍스트와 이미지 URL</strong>만 업로드 가능
@@ -281,6 +287,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   type="file"
                   id="imageFile"
                   name="imageFile"
+                  label="( jpeg, jpg, png, gif )"
                   accept=".jpeg, .jpg, .png, .gif"
                   onChange={handleInputChange}
                   className={styles.input__file}
@@ -330,6 +337,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   type="file"
                   id="videoFile"
                   name="videoFile"
+                  label="( mp4, webm, ogg, mkv, mov )"
                   accept=".mp4, .webm, .ogg, .mkv, .mov"
                   onChange={handleInputChange}
                   className={styles.input__file}
@@ -377,6 +385,7 @@ export default function DailyBox({ dailyBoxId, date, content }) {
                   type="file"
                   id="audioFile"
                   name="audioFile"
+                  label="( mp3, mp4, mpeg, wav, ogg )"
                   accept=".mp3, .mp4, .mpeg, .wav, .ogg"
                   onChange={handleInputChange}
                   className={styles.input__file}
