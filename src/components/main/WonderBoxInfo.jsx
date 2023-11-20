@@ -8,7 +8,10 @@ export default function WonderBoxInfo() {
         <div className={styles.advent_calendar}>
           <div className={styles.advent_calendar__description}>
             <div className={styles.img__wrapper}>
-              <img src="/image/advent-calendar.jpeg" alt="Advent Calendar" />
+              <img
+                src="https://github.com/selene-cho/wonder-box-front-dev/blob/develop/image/advent-calendar.jpeg?raw=true"
+                alt="Advent Calendar"
+              />
             </div>
             <div className={styles.advent_calendar__description__text}>
               <h1>What is Advent Calendar?!</h1>

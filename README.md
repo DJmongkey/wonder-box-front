@@ -1,13 +1,13 @@
 # 목차
 
-0. [Wonder Box 소개](#wonder-box-🎁)
+0. [Wonder Box 🎁](#wonder-box-🎁)
 1. [프로젝트 기획 동기](#프로젝트-기획-동기)
 2. [기술 스택](#기술-스택)
 3. [프로젝트 기간](#프로젝트-기간)
-4. [시연 영상](#시연영상)
+4. [시연 영상](#시연-영상)
 5. [도전 및 문제 해결](#도전-및-문제-해결)
 6. [Wonder Box 실행 명령어](#wonder-box-실행-명령어)
-7. [팀원 구성](#dj멍키-🐶🐵)
+7. [팀원 구성](#팀원-구성)
 
 <br />
 
@@ -95,7 +95,7 @@ https://github.com/DJmongkey/wonder-box-back.git
 
 <br />
 
-## 시연영상
+## 시연 영상
 
 | 메인 페이지                       | 기본정보 페이지                      |
 | --------------------------------- | ------------------------------------ |
@@ -172,7 +172,7 @@ AWS Route53에서 http를 https로 바꿔 줄 수 있는데 그러려면 도메�
 그렇게 알게된 것이 Route53에서 호스팅 영역 등록시, 하나의 도메인으로 서브도메인을 설정할 수 있다는 것이 었습니다.<br />
 
 우선 **AWS Certificate Manager**에서 도메인 인증시 \*.my-wonderbox.co.kr로 요청한 후<br />
-**Route53**에서 백엔드는 api.my-wonderbox.co.kr, 프론트엔드는 www.my-wonderbox.co.kr 이렇게 설정해 주는 것이 었습니다.<br />
+**Route53**에서 백엔드는 api.my-wonderbox.co.kr, 프론트엔드는 www.my-wonderbox.co.kr 이렇게 설정해 주는 것이었습니다.<br />
 그리고 **EC2의 로드밸런서**를 이용해서 http로 들어오는 요청들을 https로 redirection 해주고, https로 들어오면 위에서 설정한 백엔드 서브도메인으로 전달되도록 해주었습니다.
 
 간단한 프론트 배포만 해보다가 프론트, 백엔드 모두 연결하여 배포하려다 보니 CORS 문제 등 여러가지 생각해야할 부분들이 많았고,
@@ -221,7 +221,9 @@ $ npm start
 
 <br />
 
-## DJ멍키 🐶🐵
+## 팀원 구성
+
+### DJ멍키 🐶🐵
 
 - D 🐵 - `조다희` selene.cho29@gmail.com
 - J 🐶 - `이정민` yoyo3302@gmail.com
